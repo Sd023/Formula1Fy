@@ -27,7 +27,7 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
     }
 
     fun initDB(){
-        db = DbHandler(applicationContext,"F1db.sqlite")
+        db = DbHandler(applicationContext,"sd_f1.sqlite")
         db.createDB()
         db.openDB()
     }

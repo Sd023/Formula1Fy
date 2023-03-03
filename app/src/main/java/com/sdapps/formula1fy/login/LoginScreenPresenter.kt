@@ -8,6 +8,7 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.core.StringHelper
 import org.json.JSONObject
 
 class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
@@ -15,6 +16,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
     private var driverList: ArrayList<DriverBO>? = null
     private lateinit var requestQueue: RequestQueue
     private lateinit var db: DbHandler
+    private lateinit var stringHandler: StringHelper
 
     override fun fetchDriverData() {
         requestQueue = Volley.newRequestQueue(context)
@@ -65,16 +67,27 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
     }
 
     override fun fetchConstructorData(list:ArrayList<DriverBO>) {
-        db = DbHandler(context.applicationContext,"F1db.sqlite")
+        db = DbHandler(context.applicationContext,"sd_f1.sqlite")
+        stringHandler = StringHelper()
         db.createDB()
         db.openDB()
-        val col = "driverId"
-        for(driverDetails in list)
-        {
-            val values = driverDetails.driverId
-            db.insertSQL("DriverMaster",col,values)
-            Log.d("DHANUSH_TEST", "values : $values")
+
+        val col = "driverId,driverCode,driverName,driverNumber"
+
+        for(i in 0 until list.size){
+            val bo = list.get(i)
+            Log.d("TAG", "driverName -> " + bo.driverName)
+            val values = getDriverDetails(bo)
+            db.insertSQL("DriverMaster", col,values.toString())
         }
+
+       /* for(driverDetails in list)
+        {
+            val bo = list.get(0)
+            val values = getDriverDetails(list)
+            db.insertSQL("DriverMaster",col,values.toString())
+            Log.d("DHANUSH_TEST", "values : $values")
+        }*/
 
         db.closeDB()
     }
@@ -85,8 +98,20 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         TODO("Not yet implemented")
     }
 
-    override fun getDriverValues(tblName: String, columns: String, values: String): String {
-        TODO("Not yet implemented")
+    private fun getDriverDetails(driverBO: DriverBO) : StringBuffer{
+        val sb = StringBuffer()
+
+        val driverId = driverBO.driverId
+        val driverCode = driverBO.driverCode
+        val driverName = driverBO.driverName
+        val driverNumber = driverBO.driverNumber
+
+        sb.append(stringHandler.getQueryFormat(driverId))
+        sb.append("," + stringHandler.getQueryFormat(driverCode))
+        sb.append("," + stringHandler.getQueryFormat(driverName))
+        sb.append("," + stringHandler.getQueryFormat(driverNumber))
+
+        return sb
     }
 
 

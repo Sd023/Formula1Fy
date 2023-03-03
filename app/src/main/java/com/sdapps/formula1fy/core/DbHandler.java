@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class DbHandler extends SQLiteOpenHelper {
 
@@ -45,7 +47,7 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     public void insertSQL(String tableName, String columns, String content){
-        final String sql = "insert into " + tableName + " (" + columns + ") values ('" + content + "')";
+        final String sql = "insert into " + tableName + " (" + columns + ") values (" + content + ")";
         Log.d("SQL", "Sql -<> " + sql);
         db.execSQL(sql);
     }
@@ -58,11 +60,8 @@ public class DbHandler extends SQLiteOpenHelper {
 
     public void createDB(){
         final boolean isDBexist = dbCheck();
-        if(isDBexist){
-            getWritableDatabase();
-        }
-        else{
-            getWritableDatabase();
+        getWritableDatabase();
+        if(!isDBexist){
             try{
                 copyDB();
                 DBHelper.INSTANCE.createTables(this);
@@ -74,9 +73,13 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     public void copyDB() throws IOException {
-
         final InputStream input = context.getAssets().open(DB_NAME);
-        final OutputStream output = new FileOutputStream(DB_PATH);
+        final OutputStream output;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            output = Files.newOutputStream(Paths.get(DB_PATH));
+        }else{
+            output = new FileOutputStream(DB_PATH);
+        }
 
         final byte[] buffer = new byte[1024];
         int length;

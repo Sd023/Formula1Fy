@@ -10,7 +10,6 @@ interface LoginContractor {
        fun fetchDriverData()
        fun fetchConstructorData(list:ArrayList<DriverBO>)
        fun fetchCircuitData()
-       fun getDriverValues(tblName : String, columns: String, values: String):String
     }
 
 }
