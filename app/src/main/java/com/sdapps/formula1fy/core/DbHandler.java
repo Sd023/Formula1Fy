@@ -149,6 +149,7 @@ public class DbHandler extends SQLiteOpenHelper {
 
     public void exe(final String sql){
         db.execSQL(sql);
+        Log.d("TAG","Create :> " + sql);
     }
 
     @Override

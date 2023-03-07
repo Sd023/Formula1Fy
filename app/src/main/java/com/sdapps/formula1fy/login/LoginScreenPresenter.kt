@@ -40,8 +40,8 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
 
                         val driver = DriverBO().apply {
                             driverPosition = driverData.getString("position")
-                            totalPoints = driverData.getString("points")
-                            wins = driverData.getString("wins")
+                            totalPoints = driverData.getString("points").toInt()
+                            wins = driverData.getString("wins").toInt()
                             driverId = details.getString("driverId")
                             driverName =
                                 details.getString("givenName") + " " + details.getString("familyName")
@@ -49,16 +49,15 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
                             driverNationality = details.getString("nationality")
                             driverNumber = details.getString("permanentNumber").toInt()
                             driverCode = details.optString("code", "")
-                            constructorName =
+                            constructorId =
                                 driverData.getJSONArray("Constructors").getJSONObject(0)
-                                    .getString("name")
+                                    .getString("constructorId")
                         }
 
                         driverList.add(driver)
                     }
 
                     insertDriverDatasToDB(driverList)
-                    Log.d("LIST SIZE", "driverList: -> " + driverList.size)
 
                 } catch (ex: Exception) {
                     ex.printStackTrace()
@@ -76,7 +75,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         db.createDB()
         db.openDB()
 
-        val col = "driver_id,driver_code,driver_name,driver_number"
+        val col = "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points"
         for (i in 0 until list.size) {
             val bo = list.get(i)
             val values = getDriverDetails(bo)
@@ -154,6 +153,9 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         sb.append("," + stringHandler.getQueryFormat(driverBO.driverCode))
         sb.append("," + stringHandler.getQueryFormat(driverBO.driverName))
         sb.append("," + driverBO.driverNumber)
+        sb.append("," + stringHandler.getQueryFormat(driverBO.constructorId))
+        sb.append("," + driverBO.wins)
+        sb.append("," + driverBO.totalPoints)
 
         return sb
     }

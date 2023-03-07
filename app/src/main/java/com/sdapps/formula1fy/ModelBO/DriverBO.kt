@@ -9,8 +9,8 @@ class DriverBO {
     var driverId: String?=null
     var driverPosition: String?=null
     var driverDOB : String?=null
-    var constructorName: String?=null
-    var totalPoints:String?=null
-    var wins:String?=null
+    var constructorId: String?=null
+    var totalPoints:Int?=null
+    var wins:Int?=null
     var isDataExists:Boolean?=null
 }
