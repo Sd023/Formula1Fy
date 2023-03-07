@@ -1,11 +1,14 @@
 package com.sdapps.formula1fy.login
 
+import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.DbHandler
 
@@ -29,7 +32,6 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
     fun initDB(){
         db = DbHandler(applicationContext,"sd_f1.sqlite")
         db.createDB()
-        db.openDB()
     }
 
 

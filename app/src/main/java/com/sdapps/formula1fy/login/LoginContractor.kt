@@ -1,5 +1,8 @@
 package com.sdapps.formula1fy.login
 
+import com.sdapps.formula1fy.ModelBO.ConstructorBO
+import com.sdapps.formula1fy.ModelBO.DriverBO
+
 interface LoginContractor {
     interface View{
         fun showAlert()
@@ -8,8 +11,12 @@ interface LoginContractor {
 
     interface Presenter{
        fun fetchDriverData()
-       fun fetchConstructorData(list:ArrayList<DriverBO>)
+       fun insertDriverDatasToDB(list:ArrayList<DriverBO>)
+       fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>)
        fun fetchCircuitData()
+
+       fun fetchConstructorData()
+
     }
 
 }

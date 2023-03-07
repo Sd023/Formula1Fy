@@ -1,13 +1,16 @@
 package com.sdapps.formula1fy.core;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,6 +56,7 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     public void startUpgradingDB(int version){
+        exportDB(version);
         boolean delete = context.deleteDatabase(DB_NAME);
         if(delete)
             createDB();
@@ -106,6 +110,39 @@ public class DbHandler extends SQLiteOpenHelper {
 
     }
 
+    private void exportDB(int newVersion){
+        String loc = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/formula1fy/";
+
+        File file;
+        file = new File(loc);
+        if(!file.exists()){
+            file.mkdir();
+        }
+
+        File path = new File(loc);
+        if(!path.exists()){
+            path.mkdir();
+        }
+
+        try{
+            File currentDB = new File(DB_PATH);
+            InputStream input = new FileInputStream(currentDB);
+            byte[] data = new byte[input.available()];
+            input.read(data);
+
+            OutputStream out = new FileOutputStream(loc
+                    + "/"
+                    + "formula1fy_old"
+                    + newVersion);
+            out.write(data);
+            out.flush();
+            input.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void closeDB(){
         this.db.close();
     }
@@ -118,5 +155,9 @@ public class DbHandler extends SQLiteOpenHelper {
     public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
         db.disableWriteAheadLogging();
+    }
+
+    public Cursor selectSql(final String sql){
+        return db.rawQuery(sql,null);
     }
 }
