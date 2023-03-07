@@ -16,8 +16,6 @@ import org.json.JSONObject
 
 class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
 
-    private var driverList: ArrayList<DriverBO>? = null
-    private var constructorList: ArrayList<ConstructorBO>? = null
     private lateinit var requestQueue: RequestQueue
     private lateinit var db: DbHandler
     private var stringHandler: StringHelper = StringHelper()
