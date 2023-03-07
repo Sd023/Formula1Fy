@@ -5,10 +5,10 @@ public class StringHelper {
     public StringHelper() {
     }
 
-    public String getQueryFormat(final String data){
-        if(data !=null){
+    public String getQueryFormat(final String data) {
+        if (data != null) {
             return "'" + data + "'";
-        }else
-            return  null;
+        } else
+            return null;
     }
 }

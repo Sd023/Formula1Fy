@@ -9,7 +9,9 @@ import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Toast
 import com.sdapps.formula1fy.R
+import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
 
 class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickListener {
@@ -29,13 +31,13 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
         initViews();
     }
 
-    fun initDB(){
-        db = DbHandler(applicationContext,"sd_f1.sqlite")
+    fun initDB() {
+        db = DbHandler(applicationContext, DataMembers.DB_NAME)
         db.createDB()
     }
 
 
-    fun initViews(){
+    fun initViews() {
         loginButton = findViewById(R.id.loginBtn)
         emailEdit = findViewById(R.id.loginEmail)
         passwordEdit = findViewById(R.id.loginPassword)
@@ -49,10 +51,17 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
     }
 
     override fun onError() {
+        Toast.makeText(applicationContext, "Error Fetching Details!", Toast.LENGTH_LONG).show()
 
     }
 
     override fun onClick(p0: View?) {
-        presenter.fetchDriverData()
+        try {
+            presenter.fetchDriverData()
+        } catch (ex: Exception) {
+            onError()
+            ex.printStackTrace()
+        }
+
     }
 }

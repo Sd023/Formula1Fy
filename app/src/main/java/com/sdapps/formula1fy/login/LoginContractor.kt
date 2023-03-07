@@ -4,18 +4,18 @@ import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.ModelBO.DriverBO
 
 interface LoginContractor {
-    interface View{
+    interface View {
         fun showAlert()
         fun onError()
     }
 
-    interface Presenter{
-       fun fetchDriverData()
-       fun insertDriverDatasToDB(list:ArrayList<DriverBO>)
-       fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>)
-       fun fetchCircuitData()
+    interface Presenter {
+        fun fetchDriverData()
+        fun insertDriverDatasToDB(list: ArrayList<DriverBO>)
+        fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>)
+        fun fetchCircuitData()
 
-       fun fetchConstructorData()
+        fun fetchConstructorData()
 
     }
 

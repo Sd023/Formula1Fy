@@ -1,7 +1,6 @@
 package com.sdapps.formula1fy.login
 
 import android.content.Context
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
@@ -9,9 +8,9 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.ModelBO.DriverBO
+import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
 import com.sdapps.formula1fy.core.StringHelper
-import com.sdapps.formula1fy.core.DataMembers
 import org.json.JSONObject
 
 class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
@@ -19,7 +18,6 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
     private lateinit var requestQueue: RequestQueue
     private lateinit var db: DbHandler
     private var stringHandler: StringHelper = StringHelper()
-    private var dataMembers: DataMembers = DataMembers()
 
     override fun fetchDriverData() {
         requestQueue = Volley.newRequestQueue(context)
@@ -71,22 +69,23 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
     }
 
     override fun insertDriverDatasToDB(list: ArrayList<DriverBO>) {
-        db = DbHandler(context.applicationContext, dataMembers.DB_NAME)
+        db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
         db.createDB()
         db.openDB()
 
-        val col = "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points"
+        val col =
+            "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points"
         for (i in 0 until list.size) {
             val bo = list.get(i)
             val values = getDriverDetails(bo)
-            db.insertSQL(dataMembers.tbl_driverMaster, col, values.toString())
+            db.insertSQL(DataMembers.tbl_driverMaster, col, values.toString())
         }
         db.closeDB()
 
     }
 
     override fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>) {
-        db = DbHandler(context.applicationContext, dataMembers.DB_NAME)
+        db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
         db.createDB()
         db.openDB()
 
@@ -95,7 +94,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         for (i in 0 until list.size) {
             val co = list.get(i)
             val constructorValues = getConstructorDetails(co)
-            db.insertSQL(dataMembers.tbl_constructorMaster, col, constructorValues.toString())
+            db.insertSQL(DataMembers.tbl_constructorMaster, col, constructorValues.toString())
 
         }
         db.closeDB()
