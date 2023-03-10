@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "337380832171",
+    "project_id": "formula1fy",
+    "storage_bucket": "formula1fy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337380832171:android:9ab2edf5e643d45c9798ee",
+        "android_client_info": {
+          "package_name": "com.sdapps.formula1fy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337380832171-vl38cebq0idntib7q7cacmk9spkah52o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sdapps.formula1fy",
+            "certificate_hash": "a88f589a4f6c43e8aedb6376923c427ccf53eb33"
+          }
+        },
+        {
+          "client_id": "337380832171-99ptgackeb3836a2bkhqad3ih91pm92g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBO4tPReHJtcsB1gADcDCb0PzZu89Lmxgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337380832171-99ptgackeb3836a2bkhqad3ih91pm92g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,11 +1,15 @@
 package com.sdapps.formula1fy.login
 
 import android.content.Context
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.ModelBO.DriverBO
 import com.sdapps.formula1fy.core.DataMembers
@@ -18,6 +22,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
     private lateinit var requestQueue: RequestQueue
     private lateinit var db: DbHandler
     private var stringHandler: StringHelper = StringHelper()
+    private lateinit var authFirebase : FirebaseAuth
 
     override fun fetchDriverData() {
         requestQueue = Volley.newRequestQueue(context)
@@ -100,11 +105,6 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         db.closeDB()
     }
 
-
-    override fun fetchCircuitData() {
-        TODO("Not yet implemented")
-    }
-
     override fun fetchConstructorData() {
         val url = "https://ergast.com/api/f1/current/constructorStandings.json"
         val constructorList = ArrayList<ConstructorBO>()
@@ -145,6 +145,25 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
 
     }
 
+    override fun performLogin(email: String, password: String) {
+        authFirebase = Firebase.auth
+        try{
+            authFirebase.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                if(it.isSuccessful){
+                    fetchDriverData()
+                }else{
+                    onError(it.exception!!.message)
+                }
+            }
+        }catch (ex: Exception){
+            Log.d("TAG", "Could not able to login! -> $ex")
+        }
+    }
+
+    override fun onError(msg: String?) {
+        Log.d("TAG_LOGIN", "Login Error msg -> $msg")
+    }
+
 
     private fun getDriverDetails(driverBO: DriverBO): StringBuffer {
         val sb = StringBuffer()
@@ -172,5 +191,10 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         return sb
 
     }
+
+    override fun fetchCircuitData() {
+        TODO("Not yet implemented")
+    }
+
 
 }

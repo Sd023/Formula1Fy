@@ -7,6 +7,9 @@ interface LoginContractor {
     interface View {
         fun showAlert()
         fun onError()
+
+        fun showLoading()
+        fun hideLoading()
     }
 
     interface Presenter {
@@ -16,6 +19,10 @@ interface LoginContractor {
         fun fetchCircuitData()
 
         fun fetchConstructorData()
+
+        fun performLogin(email: String, password : String)
+
+        fun onError(msg : String?);
 
     }
 

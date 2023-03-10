@@ -1,6 +1,9 @@
 package com.sdapps.formula1fy.login
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -10,9 +13,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.home.HomeScreenActivity
 
 class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickListener {
 
@@ -22,6 +29,8 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
     private lateinit var emailEdit: EditText
     private lateinit var passwordEdit: EditText
     private lateinit var db: DbHandler
+    private lateinit var auth: FirebaseAuth
+    private lateinit var progressDialog: Dialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +47,13 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
 
 
     fun initViews() {
+        progressDialog = Dialog(this)
         loginButton = findViewById(R.id.loginBtn)
         emailEdit = findViewById(R.id.loginEmail)
         passwordEdit = findViewById(R.id.loginPassword)
         presenter = LoginScreenPresenter(this)
         loginButton.setOnClickListener(this)
+        auth = Firebase.auth
     }
 
 
@@ -55,9 +66,20 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
 
     }
 
+    override fun showLoading() {
+        progressDialog.show()
+    }
+
+    override fun hideLoading() {
+        progressDialog.hide()
+    }
+
     override fun onClick(p0: View?) {
         try {
-            presenter.fetchDriverData()
+            val email = emailEdit.text.toString()
+            val password = passwordEdit.text.toString()
+            presenter.performLogin(email,password)
+
         } catch (ex: Exception) {
             onError()
             ex.printStackTrace()
