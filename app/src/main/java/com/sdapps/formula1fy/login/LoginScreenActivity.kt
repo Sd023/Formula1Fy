@@ -81,6 +81,11 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
         progressDialog.hide()
     }
 
+    override fun moveToNextScreen() {
+        val i = Intent(this@LoginScreenActivity, HomeScreenActivity::class.java)
+        startActivity(i)
+    }
+
     override fun onClick(p0: View?) {
         try {
             val email = emailEdit.text.toString()

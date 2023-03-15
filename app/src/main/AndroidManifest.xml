@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Formula1fy"
         tools:targetApi="31">
         <activity
-            android:name=".HomeScreenActivity"
+            android:name=".home.HomeScreenActivity"
             android:exported="false" />
         <activity
             android:name=".login.LoginScreenActivity"

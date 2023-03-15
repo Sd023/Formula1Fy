@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Formula1fy</string>
+    <string name="drivers">Drivers</string>
+    <string name="constructors">Constructors</string>
 </resources>

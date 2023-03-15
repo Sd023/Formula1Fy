@@ -15,6 +15,7 @@ import com.sdapps.formula1fy.ModelBO.DriverBO
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
 import com.sdapps.formula1fy.core.StringHelper
+import com.sdapps.formula1fy.home.HomeScreenPresenter
 import org.json.JSONObject
 
 class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
@@ -196,6 +197,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         }
         db.closeDB()
         view?.hideLoading()
+        view?.moveToNextScreen()
     }
 
     override fun onError(msg: String?) {

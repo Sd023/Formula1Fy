@@ -10,6 +10,8 @@ interface LoginContractor {
 
         fun showLoading()
         fun hideLoading()
+
+        fun moveToNextScreen()
     }
 
     interface Presenter {
