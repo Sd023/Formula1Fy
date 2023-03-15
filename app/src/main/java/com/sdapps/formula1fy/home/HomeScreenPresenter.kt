@@ -10,18 +10,18 @@ import com.sdapps.formula1fy.core.DbHandler
 class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter {
 
     private var view: HomeScreenInteractor.View? = null
-    private var driverList: ArrayList<DriverBO>? = null
+    private lateinit var driverList: ArrayList<DriverBO>
     private var constructorList: ArrayList<ConstructorBO>? = null
     override fun setupView(view: HomeScreenInteractor.View) {
         this.view = view
     }
 
-    override fun getDriverData(dbHandler: DbHandler): ArrayList<DriverBO>? {
+    override fun getDriverData(dbHandler: DbHandler): ArrayList<DriverBO> {
         driverList = ArrayList<DriverBO>()
         try {
             dbHandler.openDB()
             val cursor =
-                dbHandler.selectSql("SELECT driver_id,driver_code,driver_name,driver_number, driver_constructor,wins,total_points from DriverMaster")
+                dbHandler.selectSql("SELECT driver_id,driver_code,driver_name,driver_number, driver_constructor,wins,total_points from DriverMaster ORDER BY total_points DESC")
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     val driverBO = DriverBO()
@@ -35,7 +35,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
                     driverList!!.add(driverBO)
                 }
             }
-            cursor!!.close()
+            cursor.close()
             dbHandler.closeDB()
 
         } catch (ex: Exception) {

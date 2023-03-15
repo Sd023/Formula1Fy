@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
+import com.sdapps.formula1fy.BuildConfig;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -51,7 +53,9 @@ public class DbHandler extends SQLiteOpenHelper {
 
     public void insertSQL(String tableName, String columns, String content) {
         final String sql = "insert into " + tableName + " (" + columns + ") values (" + content + ")";
-        Log.d("SQL", "Sql -<> " + sql);
+        if(BuildConfig.DEBUG){
+            Log.d(this.getClass().getName(), sql);
+        }
         db.execSQL(sql);
     }
 
@@ -150,8 +154,10 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     public void exe(final String sql) {
+        if(BuildConfig.DEBUG){
+            Log.d(this.getClass().getName(), sql);
+        }
         db.execSQL(sql);
-        Log.d("TAG", "Create :> " + sql);
     }
 
     @Override
@@ -161,6 +167,9 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     public Cursor selectSql(final String sql) {
+        if(BuildConfig.DEBUG){
+            Log.d(this.getClass().getName(), sql);
+        }
         return db.rawQuery(sql, null);
     }
 }

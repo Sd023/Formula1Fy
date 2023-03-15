@@ -4,9 +4,12 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.home.homeadapter.DriverAdapter
 
 class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
 
@@ -15,6 +18,7 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
     private lateinit var presenter: HomeScreenPresenter
     private lateinit var driverText: TextView
     private lateinit var consText: TextView
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +28,7 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
 
 
     private fun initAll() {
-        driverText = findViewById(R.id.driverList)
-        consText = findViewById(R.id.constList)
+        recyclerView = findViewById(R.id.driver_recyclerView)
         presenter = HomeScreenPresenter(this)
         progressDialog = ProgressDialog(this)
         presenter.setupView(this)
@@ -37,6 +40,12 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
     override fun loadScreen() {
         val driverList = presenter.getDriverData(db)
         val constructorList = presenter.getConstructorData(db)
+
+        recyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val cardAdapter = DriverAdapter(driverList, applicationContext)
+        recyclerView.adapter = cardAdapter
+        progressDialog.dismiss()
     }
 
 

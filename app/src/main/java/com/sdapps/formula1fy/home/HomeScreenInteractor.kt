@@ -13,7 +13,7 @@ interface HomeScreenInteractor {
     }
 
     interface Presenter{
-        fun getDriverData(db:DbHandler): ArrayList<DriverBO>?
+        fun getDriverData(db:DbHandler): ArrayList<DriverBO>
         fun getConstructorData(db: DbHandler) : ArrayList<ConstructorBO>?
 
         fun setupView(view : View)
