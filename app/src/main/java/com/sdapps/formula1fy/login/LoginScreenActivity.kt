@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.google.android.material.dialog.MaterialDialogs
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -30,7 +31,7 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
     private lateinit var passwordEdit: EditText
     private lateinit var db: DbHandler
     private lateinit var auth: FirebaseAuth
-    private lateinit var progressDialog: Dialog
+    private lateinit var progressDialog: ProgressDialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +48,12 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
 
 
     fun initViews() {
-        progressDialog = Dialog(this)
+        progressDialog = ProgressDialog(this)
         loginButton = findViewById(R.id.loginBtn)
         emailEdit = findViewById(R.id.loginEmail)
         passwordEdit = findViewById(R.id.loginPassword)
         presenter = LoginScreenPresenter(this)
+        presenter.attachView(this)
         loginButton.setOnClickListener(this)
         auth = Firebase.auth
     }
@@ -67,7 +69,12 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
     }
 
     override fun showLoading() {
-        progressDialog.show()
+        progressDialog.apply {
+            setTitle("Formula1Fy")
+            setMessage("Fetching Data...")
+            setCancelable(false)
+            show()
+        }
     }
 
     override fun hideLoading() {
@@ -78,7 +85,7 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
         try {
             val email = emailEdit.text.toString()
             val password = passwordEdit.text.toString()
-            presenter.performLogin(email,password)
+            presenter.performLogin(email, password)
 
         } catch (ex: Exception) {
             onError()

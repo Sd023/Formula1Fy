@@ -5,8 +5,8 @@ plugins {
 
 }
 
-def fetchCommitDetails(){
-    def result = "git rev-parse --short=8 HEAD".execute([],project.rootDir).text.trim()
+def fetchCommitDetails() {
+    def result = "git rev-parse --short=8 HEAD".execute([], project.rootDir).text.trim()
     return result.toString()
 }
 
@@ -24,8 +24,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs{
-        release{
+    signingConfigs {
+        release {
             def StorePassword = "23012301"
             def password = "23012301"
             def alias = "key0"
@@ -44,19 +44,21 @@ android {
             signingConfig signingConfigs.release
         }
 
-        debug{
+        debug {
             debuggable true
-            testCoverageEnabled  = true
+            testCoverageEnabled = true
 
         }
     }
 
-    applicationVariants.all { variant -> variant.outputs.all {
-        def flavor = variant.name
-        def versionName = variant.versionName
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def flavor = variant.name
+            def versionName = variant.versionName
 
-        outputFileName = "Formula1Fy_${flavor}_${versionName}_${fetchCommitDetails()}.apk"
-    }}
+            outputFileName = "Formula1Fy_${flavor}_${versionName}_${fetchCommitDetails()}.apk"
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -98,4 +100,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
+
+    implementation 'com.google.android.material:material:1.8.0'
 }

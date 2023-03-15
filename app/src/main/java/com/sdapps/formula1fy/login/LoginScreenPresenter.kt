@@ -22,7 +22,32 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
     private lateinit var requestQueue: RequestQueue
     private lateinit var db: DbHandler
     private var stringHandler: StringHelper = StringHelper()
-    private lateinit var authFirebase : FirebaseAuth
+    private lateinit var authFirebase: FirebaseAuth
+    private var view: LoginContractor.View? = null
+
+    override fun attachView(view: LoginContractor.View) {
+        this.view = view
+    }
+
+    override fun detachView() {
+        this.view = null
+    }
+
+    override fun performLogin(email: String, password: String) {
+        view?.showLoading()
+        authFirebase = Firebase.auth
+        try {
+            authFirebase.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    fetchDriverData()
+                } else {
+                    onError(it.exception!!.message)
+                }
+            }
+        } catch (ex: Exception) {
+            Log.d("TAG", "Could not able to login! -> $ex")
+        }
+    }
 
     override fun fetchDriverData() {
         requestQueue = Volley.newRequestQueue(context)
@@ -73,38 +98,6 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         fetchConstructorData()
     }
 
-    override fun insertDriverDatasToDB(list: ArrayList<DriverBO>) {
-        db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
-        db.createDB()
-        db.openDB()
-
-        val col =
-            "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points"
-        for (i in 0 until list.size) {
-            val bo = list.get(i)
-            val values = getDriverDetails(bo)
-            db.insertSQL(DataMembers.tbl_driverMaster, col, values.toString())
-        }
-        db.closeDB()
-
-    }
-
-    override fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>) {
-        db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
-        db.createDB()
-        db.openDB()
-
-        val col =
-            "constructor_id,constructor_name,constructor_wins,constructor_points,constructor_position,constructor_nationality"
-        for (i in 0 until list.size) {
-            val co = list.get(i)
-            val constructorValues = getConstructorDetails(co)
-            db.insertSQL(DataMembers.tbl_constructorMaster, col, constructorValues.toString())
-
-        }
-        db.closeDB()
-    }
-
     override fun fetchConstructorData() {
         val url = "https://ergast.com/api/f1/current/constructorStandings.json"
         val constructorList = ArrayList<ConstructorBO>()
@@ -145,26 +138,6 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
 
     }
 
-    override fun performLogin(email: String, password: String) {
-        authFirebase = Firebase.auth
-        try{
-            authFirebase.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                if(it.isSuccessful){
-                    fetchDriverData()
-                }else{
-                    onError(it.exception!!.message)
-                }
-            }
-        }catch (ex: Exception){
-            Log.d("TAG", "Could not able to login! -> $ex")
-        }
-    }
-
-    override fun onError(msg: String?) {
-        Log.d("TAG_LOGIN", "Login Error msg -> $msg")
-    }
-
-
     private fun getDriverDetails(driverBO: DriverBO): StringBuffer {
         val sb = StringBuffer()
         sb.append(stringHandler.getQueryFormat(driverBO.driverId))
@@ -191,6 +164,44 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         return sb
 
     }
+
+    override fun insertDriverDatasToDB(list: ArrayList<DriverBO>) {
+        db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
+        db.createDB()
+        db.openDB()
+
+        val col =
+            "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points"
+        for (i in 0 until list.size) {
+            val bo = list.get(i)
+            val values = getDriverDetails(bo)
+            db.insertSQL(DataMembers.tbl_driverMaster, col, values.toString())
+        }
+        db.closeDB()
+
+    }
+
+    override fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>) {
+        db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
+        db.createDB()
+        db.openDB()
+
+        val col =
+            "constructor_id,constructor_name,constructor_wins,constructor_points,constructor_position,constructor_nationality"
+        for (i in 0 until list.size) {
+            val co = list.get(i)
+            val constructorValues = getConstructorDetails(co)
+            db.insertSQL(DataMembers.tbl_constructorMaster, col, constructorValues.toString())
+
+        }
+        db.closeDB()
+        view?.hideLoading()
+    }
+
+    override fun onError(msg: String?) {
+        Log.d("TAG_LOGIN", "Login Error msg -> $msg")
+    }
+
 
     override fun fetchCircuitData() {
         TODO("Not yet implemented")

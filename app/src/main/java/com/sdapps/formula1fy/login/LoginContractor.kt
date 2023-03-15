@@ -20,10 +20,13 @@ interface LoginContractor {
 
         fun fetchConstructorData()
 
-        fun performLogin(email: String, password : String)
+        fun performLogin(email: String, password: String)
 
-        fun onError(msg : String?);
+        fun onError(msg: String?);
 
+        fun attachView(view: LoginContractor.View)
+
+        fun detachView()
     }
 
 }
