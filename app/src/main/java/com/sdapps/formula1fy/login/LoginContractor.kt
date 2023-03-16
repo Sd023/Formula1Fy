@@ -2,6 +2,7 @@ package com.sdapps.formula1fy.login
 
 import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.ModelBO.DriverBO
+import com.sdapps.formula1fy.ModelBO.UserBO
 
 interface LoginContractor {
     interface View {
@@ -11,16 +12,18 @@ interface LoginContractor {
         fun showLoading()
         fun hideLoading()
 
-        fun moveToNextScreen()
+        fun moveToNextScreen(userBO: UserBO)
+
+        fun checkCurrentUser()
     }
 
     interface Presenter {
-        fun fetchDriverData()
+        fun fetchDriverData(userBO: UserBO)
         fun insertDriverDatasToDB(list: ArrayList<DriverBO>)
-        fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>)
+        fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>, userBO: UserBO)
         fun fetchCircuitData()
 
-        fun fetchConstructorData()
+        fun fetchConstructorData(userBO: UserBO)
 
         fun performLogin(email: String, password: String)
 

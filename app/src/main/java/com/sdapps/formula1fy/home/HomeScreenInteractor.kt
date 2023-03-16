@@ -7,8 +7,7 @@ import com.sdapps.formula1fy.core.DbHandler
 interface HomeScreenInteractor {
     interface View{
         fun loadScreen()
-        fun showLoading()
-        fun hideLoading()
+        fun getMessageFromDead()
 
     }
 

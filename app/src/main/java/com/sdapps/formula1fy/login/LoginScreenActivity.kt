@@ -17,6 +17,7 @@ import com.google.android.material.dialog.MaterialDialogs
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.sdapps.formula1fy.ModelBO.UserBO
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
@@ -78,12 +79,23 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
     }
 
     override fun hideLoading() {
-        progressDialog.hide()
+        progressDialog.dismiss()
     }
 
-    override fun moveToNextScreen() {
+    override fun moveToNextScreen(userBO:UserBO) {
         val i = Intent(this@LoginScreenActivity, HomeScreenActivity::class.java)
+        i.putExtra("USER",userBO.userId)
         startActivity(i)
+        finish()
+    }
+
+    override fun checkCurrentUser() {
+        if(auth.currentUser !=null){
+            startActivity(Intent(this@LoginScreenActivity, HomeScreenActivity::class.java))
+            finish()
+        }else{
+            Toast.makeText(applicationContext, "Session Time Out! Please Login Again", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onClick(p0: View?) {
@@ -97,5 +109,15 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
             ex.printStackTrace()
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkCurrentUser()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        checkCurrentUser()
     }
 }

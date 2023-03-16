@@ -8,10 +8,12 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.ModelBO.DriverBO
+import com.sdapps.formula1fy.ModelBO.UserBO
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
 import com.sdapps.formula1fy.core.StringHelper
@@ -25,6 +27,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
     private var stringHandler: StringHelper = StringHelper()
     private lateinit var authFirebase: FirebaseAuth
     private var view: LoginContractor.View? = null
+    private lateinit var userBO: UserBO
 
     override fun attachView(view: LoginContractor.View) {
         this.view = view
@@ -35,12 +38,17 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
     }
 
     override fun performLogin(email: String, password: String) {
-        view?.showLoading()
+        userBO = UserBO()
         authFirebase = Firebase.auth
         try {
+            view?.showLoading()
             authFirebase.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    fetchDriverData()
+                    val currentUser = it.result.user
+                    userBO.apply {
+                        userId = currentUser?.getIdToken(true).toString()
+                    }
+                    fetchDriverData(userBO)
                 } else {
                     onError(it.exception!!.message)
                 }
@@ -50,7 +58,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         }
     }
 
-    override fun fetchDriverData() {
+    override fun fetchDriverData(userBO: UserBO) {
         requestQueue = Volley.newRequestQueue(context)
         val url = "https://ergast.com/api/f1/current/driverStandings.json"
         val driverList = ArrayList<DriverBO>()
@@ -96,10 +104,10 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
 
         requestQueue.add(jsonReq)
 
-        fetchConstructorData()
+        fetchConstructorData(userBO)
     }
 
-    override fun fetchConstructorData() {
+    override fun fetchConstructorData(userBO: UserBO) {
         val url = "https://ergast.com/api/f1/current/constructorStandings.json"
         val constructorList = ArrayList<ConstructorBO>()
         val jsonReq = JsonObjectRequest(Request.Method.GET, url, null,
@@ -127,7 +135,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
                         constructorList.add(constructor)
                     }
 
-                    insertConstructorDataTODB(constructorList)
+                    insertConstructorDataTODB(constructorList, userBO)
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                 }
@@ -182,7 +190,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
 
     }
 
-    override fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>) {
+    override fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>, userBO: UserBO) {
         db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
         db.createDB()
         db.openDB()
@@ -195,9 +203,9 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
             db.insertSQL(DataMembers.tbl_constructorMaster, col, constructorValues.toString())
 
         }
-        db.closeDB()
         view?.hideLoading()
-        view?.moveToNextScreen()
+        db.closeDB()
+        view?.moveToNextScreen(userBO)
     }
 
     override fun onError(msg: String?) {
