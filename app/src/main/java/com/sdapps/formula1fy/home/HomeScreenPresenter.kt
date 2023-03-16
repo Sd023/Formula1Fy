@@ -3,8 +3,6 @@ package com.sdapps.formula1fy.home
 import android.content.Context
 import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.ModelBO.DriverBO
-import com.sdapps.formula1fy.core.DBHelper
-import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
 
 class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter {
@@ -21,7 +19,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
         try {
             dbHandler.openDB()
             val cursor =
-                dbHandler.selectSql("SELECT driver_id,driver_code,driver_name,driver_number, driver_constructor,wins,total_points from DriverMaster ORDER BY total_points DESC")
+                dbHandler.selectSql("SELECT driver_id,driver_code,driver_name,driver_number, driver_constructor,wins,total_points,driver_position from DriverMaster ORDER BY driver_position ASC")
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     val driverBO = DriverBO()
@@ -32,7 +30,8 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
                     driverBO.constructorId = cursor.getString(4)
                     driverBO.wins = cursor.getInt(5)
                     driverBO.totalPoints = cursor.getInt(6)
-                    driverList!!.add(driverBO)
+                    driverBO.driverPosition = cursor.getString(7)
+                    driverList.add(driverBO)
                 }
             }
             cursor.close()

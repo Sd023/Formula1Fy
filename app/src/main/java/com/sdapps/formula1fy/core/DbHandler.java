@@ -53,7 +53,7 @@ public class DbHandler extends SQLiteOpenHelper {
 
     public void insertSQL(String tableName, String columns, String content) {
         final String sql = "insert into " + tableName + " (" + columns + ") values (" + content + ")";
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             Log.d(this.getClass().getName(), sql);
         }
         db.execSQL(sql);
@@ -154,9 +154,7 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     public void exe(final String sql) {
-        if(BuildConfig.DEBUG){
-            Log.d(this.getClass().getName(), sql);
-        }
+        Log.d(this.getClass().getName(), sql);
         db.execSQL(sql);
     }
 
@@ -167,7 +165,7 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     public Cursor selectSql(final String sql) {
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             Log.d(this.getClass().getName(), sql);
         }
         return db.rawQuery(sql, null);

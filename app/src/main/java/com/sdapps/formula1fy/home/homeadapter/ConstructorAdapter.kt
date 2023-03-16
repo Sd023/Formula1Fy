@@ -1,7 +1,6 @@
 package com.sdapps.formula1fy.home.homeadapter
 
 import android.content.Context
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.R
 
-class ConstructorAdapter(private val data : ArrayList<ConstructorBO>) : RecyclerView.Adapter<ConstructorAdapter.ViewHolder>(){
+class ConstructorAdapter(private val data: ArrayList<ConstructorBO>) :
+    RecyclerView.Adapter<ConstructorAdapter.ViewHolder>() {
 
-   private lateinit var context: Context
-   private lateinit var viewGroup : ViewGroup
+    private lateinit var context: Context
+    private lateinit var viewGroup: ViewGroup
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -27,11 +27,11 @@ class ConstructorAdapter(private val data : ArrayList<ConstructorBO>) : Recycler
     }
 
     override fun getItemCount(): Int {
-       return data.size
+        return data.size
     }
 
 
-    class ViewHolder(view : View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 
     }

@@ -5,17 +5,17 @@ import com.sdapps.formula1fy.ModelBO.DriverBO
 import com.sdapps.formula1fy.core.DbHandler
 
 interface HomeScreenInteractor {
-    interface View{
+    interface View {
         fun loadScreen()
         fun getMessageFromDead()
 
     }
 
-    interface Presenter{
-        fun getDriverData(db:DbHandler): ArrayList<DriverBO>
-        fun getConstructorData(db: DbHandler) : ArrayList<ConstructorBO>?
+    interface Presenter {
+        fun getDriverData(db: DbHandler): ArrayList<DriverBO>
+        fun getConstructorData(db: DbHandler): ArrayList<ConstructorBO>?
 
-        fun setupView(view : View)
+        fun setupView(view: View)
 
     }
 }

@@ -8,7 +8,6 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sdapps.formula1fy.ModelBO.ConstructorBO
@@ -17,7 +16,6 @@ import com.sdapps.formula1fy.ModelBO.UserBO
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
 import com.sdapps.formula1fy.core.StringHelper
-import com.sdapps.formula1fy.home.HomeScreenPresenter
 import org.json.JSONObject
 
 class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
@@ -156,6 +154,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         sb.append("," + stringHandler.getQueryFormat(driverBO.constructorId))
         sb.append("," + driverBO.wins)
         sb.append("," + driverBO.totalPoints)
+        sb.append("," + driverBO.driverPosition)
 
         return sb
     }
@@ -180,7 +179,7 @@ class LoginScreenPresenter(val context: Context) : LoginContractor.Presenter {
         db.openDB()
 
         val col =
-            "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points"
+            "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points,driver_position"
         for (i in 0 until list.size) {
             val bo = list.get(i)
             val values = getDriverDetails(bo)
