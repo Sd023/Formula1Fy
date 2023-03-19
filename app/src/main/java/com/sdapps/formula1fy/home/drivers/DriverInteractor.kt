@@ -5,7 +5,7 @@ import com.sdapps.formula1fy.core.DbHandler
 
 interface DriverInteractor {
 
-    interface View{
+    interface View {
         fun showLoading()
         fun hideLoading()
 
@@ -13,7 +13,7 @@ interface DriverInteractor {
 
     }
 
-    interface Presenter{
+    interface Presenter {
         fun getDriverData(db: DbHandler): ArrayList<DriverBO>
         fun attachView(view: View)
 

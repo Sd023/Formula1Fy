@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.home.homeadapter
+package com.sdapps.formula1fy.home.constructors
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -25,18 +25,18 @@ class ConstructorAdapter(private val data: ArrayList<ConstructorBO>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       try{
-           val stringBuilder = StringBuilder()
-           holder.standing.text = data[position].position
-           holder.driverName.text = stringBuilder.append(data[position].name)
-           holder.points.text = data[position].points.toString()
-       }catch (ex:Exception){
-           ex.printStackTrace()
-       }
+        try {
+            val stringBuilder = StringBuilder()
+            holder.standing.text = data[position].position
+            holder.driverName.text = stringBuilder.append(data[position].name)
+            holder.points.text = data[position].points.toString()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return data.size
     }
 
 
@@ -52,7 +52,6 @@ class ConstructorAdapter(private val data: ArrayList<ConstructorBO>) :
             points = itemView.findViewById(R.id.points) as TextView
             standing = itemView.findViewById(R.id.driverPosition) as TextView
         }
-
 
 
     }
