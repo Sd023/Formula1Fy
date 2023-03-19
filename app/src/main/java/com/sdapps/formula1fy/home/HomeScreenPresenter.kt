@@ -9,7 +9,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
 
     private var view: HomeScreenInteractor.View? = null
     private lateinit var driverList: ArrayList<DriverBO>
-    private var constructorList: ArrayList<ConstructorBO>? = null
+    private lateinit var constructorList: ArrayList<ConstructorBO>
     override fun setupView(view: HomeScreenInteractor.View) {
         this.view = view
     }
@@ -44,7 +44,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
         return driverList
     }
 
-    override fun getConstructorData(db: DbHandler): ArrayList<ConstructorBO>? {
+    override fun getConstructorData(db: DbHandler): ArrayList<ConstructorBO> {
         constructorList = ArrayList<ConstructorBO>()
         try {
             db.openDB()
@@ -59,7 +59,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
                     bo.points = c.getString(3)
                     bo.position = c.getString(4)
                     bo.nationality = c.getString(5)
-                    constructorList!!.add(bo)
+                    constructorList.add(bo)
                 }
             }
             c!!.close()
