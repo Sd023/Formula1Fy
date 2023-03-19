@@ -1,28 +1,26 @@
 package com.sdapps.formula1fy.home
 
 import android.app.ProgressDialog
+import android.content.Intent
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.sdapps.formula1fy.ModelBO.ConstructorBO
-import com.sdapps.formula1fy.ModelBO.DriverBO
+import com.google.android.material.imageview.ShapeableImageView
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
-import com.sdapps.formula1fy.home.homeadapter.ConstructorAdapter
-import com.sdapps.formula1fy.home.homeadapter.DriverAdapter
+import com.sdapps.formula1fy.home.drivers.DriversActivity
+import com.sdapps.formula1fy.login.LoginScreenActivity
 
-class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
+class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View, View.OnClickListener {
 
     private lateinit var db: DbHandler
     private lateinit var progressDialog: ProgressDialog
     private lateinit var presenter: HomeScreenPresenter
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var constructor_recyclerView: RecyclerView
+    private lateinit var shapeImg : ShapeableImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +30,7 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
 
 
     private fun initAll() {
-        recyclerView = findViewById(R.id.driver_recyclerView)
-        constructor_recyclerView = findViewById(R.id.recyclerView)
+        shapeImg = findViewById(R.id.driversView)
         presenter = HomeScreenPresenter(this)
         progressDialog = ProgressDialog(this)
         presenter.setupView(this)
@@ -44,32 +41,26 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
     }
 
     override fun loadScreen() {
-        val driverList = presenter.getDriverData(db)
-        val constructorList = presenter.getConstructorData(db)
+        val rad = resources.getDimension(R.dimen.corner_radius)
+        val driverImg = shapeImg.shapeAppearanceModel.toBuilder().setAllCornerSizes(rad).build()
+        shapeImg.shapeAppearanceModel = driverImg
 
-        loadDriverView(driverList)
-        loadConstructorView(constructorList)
-
-    }
-
-    private fun loadDriverView(list: ArrayList<DriverBO>){
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val cardAdapter = DriverAdapter(list)
-        recyclerView.adapter = cardAdapter
-        progressDialog.dismiss()
-    }
-
-    private fun loadConstructorView(list:ArrayList<ConstructorBO>){
-        constructor_recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val cardAdapter = ConstructorAdapter(list)
-        constructor_recyclerView.adapter = cardAdapter
-        progressDialog.dismiss()
+        shapeImg.setOnClickListener(this)
 
     }
 
     override fun getMessageFromDead() {
         val userId: String = intent?.getStringExtra("USER").toString()
         Log.d("userID", "---<<<$userId>>>")
+    }
+
+    override fun moveToNextScreen() {
+        val intent = Intent(this@HomeScreenActivity, DriversActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun onClick(p0: View?) {
+        presenter.moveToNextScreen()
     }
 
 }

@@ -9,10 +9,11 @@ interface HomeScreenInteractor {
         fun loadScreen()
         fun getMessageFromDead()
 
+        fun moveToNextScreen()
+
     }
 
     interface Presenter {
-        fun getDriverData(db: DbHandler): ArrayList<DriverBO>
         fun getConstructorData(db: DbHandler): ArrayList<ConstructorBO>?
 
         fun setupView(view: View)
