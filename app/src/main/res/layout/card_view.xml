@@ -6,67 +6,54 @@
     android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
-    android:layout_marginTop="2dp"
+    android:layout_marginTop="10dp"
     android:elevation="20dp"
     app:cardCornerRadius="5dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="6dp">
-
-        <TextView
-            android:id="@+id/points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="@color/black"
-            android:padding="5dp"
-            android:layout_marginStart="25dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/driverName"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/driverName"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
-
-
-        <TextView
-            android:id="@+id/driverName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
-            android:maxLines="2"
-            android:padding="5dp"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/points"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/driverPosition"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
-
 
         <TextView
             android:id="@+id/driverPosition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:padding="5dp"
-            android:textSize="12sp"
+            android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginStart="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/driverName"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            android:textSize="20sp"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            />
+
+        <TextView
+            android:id="@+id/driverName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@+id/driverPosition"
+            android:maxLines="2"
+            android:ems="6"/>
+
+        <TextView
+            android:id="@+id/points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_toEndOf="@+id/driverName"
+            android:layout_marginStart="20dp"
+            android:layout_centerInParent="true"/>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </RelativeLayout>
 
 
 </androidx.cardview.widget.CardView>
