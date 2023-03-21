@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.ModelBO
+package com.sdapps.formula1fy.view.constructors
 
 class ConstructorBO {
     var position: String? = null

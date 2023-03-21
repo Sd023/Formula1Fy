@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.home
+package com.sdapps.formula1fy.view.home
 
 interface HomeScreenInteractor {
     interface View {

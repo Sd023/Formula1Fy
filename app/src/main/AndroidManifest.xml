@@ -14,16 +14,16 @@
         android:theme="@style/Theme.Formula1fy"
         tools:targetApi="31">
         <activity
-            android:name=".home.constructors.ConstructorActivity"
+            android:name=".view.constructors.ConstructorActivity"
             android:exported="false" />
         <activity
-            android:name=".home.drivers.DriversActivity"
+            android:name=".view.drivers.DriversActivity"
             android:exported="false" />
         <activity
-            android:name=".home.HomeScreenActivity"
+            android:name=".view.home.HomeScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".login.LoginScreenActivity"
+            android:name=".view.login.LoginScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

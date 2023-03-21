@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.login
+package com.sdapps.formula1fy.view.login
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -12,11 +12,10 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.sdapps.formula1fy.ModelBO.UserBO
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
-import com.sdapps.formula1fy.home.HomeScreenActivity
+import com.sdapps.formula1fy.view.home.HomeScreenActivity
 
 class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickListener {
 
@@ -77,7 +76,7 @@ class LoginScreenActivity : AppCompatActivity(), LoginContractor.View, OnClickLi
         progressDialog.dismiss()
     }
 
-    override fun moveToNextScreen(userBO:UserBO) {
+    override fun moveToNextScreen(userBO: UserBO) {
         val i = Intent(this@LoginScreenActivity, HomeScreenActivity::class.java)
         i.putExtra("USER",userBO.userId)
         startActivity(i)

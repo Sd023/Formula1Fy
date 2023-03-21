@@ -1,7 +1,6 @@
-package com.sdapps.formula1fy.home.constructors
+package com.sdapps.formula1fy.view.constructors
 
 import android.content.Context
-import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.core.DbHandler
 
 class ConstructorPresenter(private val context: Context) : ConstructorInteractor.Presenter {

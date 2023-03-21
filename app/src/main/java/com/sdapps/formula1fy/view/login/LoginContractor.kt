@@ -1,8 +1,7 @@
-package com.sdapps.formula1fy.login
+package com.sdapps.formula1fy.view.login
 
-import com.sdapps.formula1fy.ModelBO.ConstructorBO
-import com.sdapps.formula1fy.ModelBO.DriverBO
-import com.sdapps.formula1fy.ModelBO.UserBO
+import com.sdapps.formula1fy.view.constructors.ConstructorBO
+import com.sdapps.formula1fy.view.drivers.DriverBO
 
 interface LoginContractor {
     interface View {
@@ -29,7 +28,7 @@ interface LoginContractor {
 
         fun onError(msg: String?);
 
-        fun attachView(view: LoginContractor.View)
+        fun attachView(view: View)
 
         fun detachView()
     }

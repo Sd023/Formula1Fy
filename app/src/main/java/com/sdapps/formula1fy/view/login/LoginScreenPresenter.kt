@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.login
+package com.sdapps.formula1fy.view.login
 
 import android.content.Context
 import android.util.Log
@@ -10,9 +10,8 @@ import com.android.volley.toolbox.Volley
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.sdapps.formula1fy.ModelBO.ConstructorBO
-import com.sdapps.formula1fy.ModelBO.DriverBO
-import com.sdapps.formula1fy.ModelBO.UserBO
+import com.sdapps.formula1fy.view.constructors.ConstructorBO
+import com.sdapps.formula1fy.view.drivers.DriverBO
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
 import com.sdapps.formula1fy.core.StringHelper

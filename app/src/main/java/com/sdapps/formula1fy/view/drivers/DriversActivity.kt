@@ -1,16 +1,12 @@
-package com.sdapps.formula1fy.home.drivers
+package com.sdapps.formula1fy.view.drivers
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.sdapps.formula1fy.ModelBO.DriverBO
 import com.sdapps.formula1fy.R
-import com.sdapps.formula1fy.core.DBHelper
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
-import java.sql.Driver
 
 class DriversActivity : AppCompatActivity(), DriverInteractor.View {
     private lateinit var db: DbHandler

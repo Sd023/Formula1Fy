@@ -1,10 +1,9 @@
-package com.sdapps.formula1fy.home.constructors
+package com.sdapps.formula1fy.view.constructors
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler

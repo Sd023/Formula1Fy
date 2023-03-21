@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.home
+package com.sdapps.formula1fy.view.home
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -8,8 +8,8 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.DataMembers
 import com.sdapps.formula1fy.core.DbHandler
-import com.sdapps.formula1fy.home.constructors.ConstructorActivity
-import com.sdapps.formula1fy.home.drivers.DriversActivity
+import com.sdapps.formula1fy.view.constructors.ConstructorActivity
+import com.sdapps.formula1fy.view.drivers.DriversActivity
 
 class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
 

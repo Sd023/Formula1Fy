@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.ModelBO
+package com.sdapps.formula1fy.view.drivers
 
 class DriverBO {
 

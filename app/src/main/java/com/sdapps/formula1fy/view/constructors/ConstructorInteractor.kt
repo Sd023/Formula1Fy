@@ -1,6 +1,5 @@
-package com.sdapps.formula1fy.home.constructors
+package com.sdapps.formula1fy.view.constructors
 
-import com.sdapps.formula1fy.ModelBO.ConstructorBO
 import com.sdapps.formula1fy.core.DbHandler
 
 interface ConstructorInteractor {
