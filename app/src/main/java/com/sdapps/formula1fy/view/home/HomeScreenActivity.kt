@@ -3,6 +3,7 @@ package com.sdapps.formula1fy.view.home
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.sdapps.formula1fy.R
@@ -46,10 +47,10 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
         constructorImageView.shapeAppearanceModel = driverImg
 
         driverImageView.setOnClickListener {
-            presenter.moveToNextScreen(true)
+            presenter.fetchDriverData()
         }
         constructorImageView.setOnClickListener {
-            presenter.moveToNextScreen(false)
+            presenter.fetchConstructorData()
         }
 
     }
@@ -67,6 +68,22 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
             startActivity(intent)
         }
 
+    }
+
+    override fun showLoading() {
+        progressDialog.setTitle("Formula1Fy")
+        progressDialog.setMessage("Loading Data..")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+    }
+
+    override fun hideLoading() {
+        progressDialog.dismiss()
+    }
+
+    override fun onError() {
+        hideLoading()
+        Toast.makeText(this, "Error Fetching Data! ", Toast.LENGTH_LONG).show()
     }
 
 }

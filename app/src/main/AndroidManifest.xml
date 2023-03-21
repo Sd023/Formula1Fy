@@ -21,9 +21,6 @@
             android:exported="false" />
         <activity
             android:name=".view.home.HomeScreenActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.login.LoginScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

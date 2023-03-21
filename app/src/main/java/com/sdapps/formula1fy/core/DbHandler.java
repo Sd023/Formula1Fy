@@ -9,6 +9,8 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.sdapps.formula1fy.BuildConfig;
+import com.sdapps.formula1fy.view.constructors.ConstructorBO;
+import com.sdapps.formula1fy.view.drivers.DriverBO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,12 +28,14 @@ public class DbHandler extends SQLiteOpenHelper {
     private final String DB_UPGRADE = "Upgrade DB: ";
     private final String DB_PATH;
     private SQLiteDatabase db;
+    private StringHelper sh;
 
     public DbHandler(final Context ctx, final String dbName) {
         super(ctx, dbName, null, 1);
         this.context = ctx;
         this.DB_NAME = dbName;
         this.DB_PATH = context.getDatabasePath(DB_NAME).getPath();
+        sh = new StringHelper();
     }
 
     @Override
@@ -169,5 +173,10 @@ public class DbHandler extends SQLiteOpenHelper {
             Log.d(this.getClass().getName(), sql);
         }
         return db.rawQuery(sql, null);
+    }
+
+    public void updateSQL(String sql) {
+        Log.d(this.getClass().getName().toString(), "Inundation -> " + sql);
+        db.execSQL(sql);
     }
 }
