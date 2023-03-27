@@ -183,7 +183,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
         return false
     }
 
-    public fun moveToNextScreen(isDriver: Boolean) {
+    private fun moveToNextScreen(isDriver: Boolean) {
         view?.moveToNextScreen(isDriver)
     }
 
