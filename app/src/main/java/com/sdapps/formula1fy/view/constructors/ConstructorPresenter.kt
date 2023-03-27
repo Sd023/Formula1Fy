@@ -1,7 +1,7 @@
 package com.sdapps.formula1fy.view.constructors
 
 import android.content.Context
-import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.core.dbUtil.DbHandler
 
 class ConstructorPresenter(private val context: Context) : ConstructorInteractor.Presenter {
     private lateinit var view: ConstructorInteractor.View

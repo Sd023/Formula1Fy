@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.core
+package com.sdapps.formula1fy.core.models
 
 object F1Contants {
     const val RED_BULL = "red_bull"

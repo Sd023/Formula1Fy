@@ -1,6 +1,6 @@
 package com.sdapps.formula1fy.view.drivers
 
-import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.core.dbUtil.DbHandler
 
 interface DriverInteractor {
 

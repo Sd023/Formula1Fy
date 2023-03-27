@@ -1,6 +1,6 @@
 package com.sdapps.formula1fy.view.home
 
-import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.view.constructors.ConstructorBO
 import com.sdapps.formula1fy.view.drivers.DriverBO
 

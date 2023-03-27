@@ -1,6 +1,6 @@
 package com.sdapps.formula1fy.view.constructors
 
-import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.core.dbUtil.DbHandler
 
 interface ConstructorInteractor {
 
@@ -13,7 +13,7 @@ interface ConstructorInteractor {
     }
 
     interface Presenter{
-        fun getConstructorData(db:DbHandler): ArrayList<ConstructorBO>
+        fun getConstructorData(db: DbHandler): ArrayList<ConstructorBO>
         fun attachView(view: View)
 
         fun detachView()

@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.core
+package com.sdapps.formula1fy.core.models
 
 object DataMembers {
     const val tbl_driverMaster: String = "DriverMaster"

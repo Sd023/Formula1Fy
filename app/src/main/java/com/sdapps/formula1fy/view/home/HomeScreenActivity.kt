@@ -7,8 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.sdapps.formula1fy.R
-import com.sdapps.formula1fy.core.DataMembers
-import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.core.models.DataMembers
+import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.view.constructors.ConstructorActivity
 import com.sdapps.formula1fy.view.drivers.DriversActivity
 

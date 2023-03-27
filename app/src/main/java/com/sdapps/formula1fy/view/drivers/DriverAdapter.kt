@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.R
-import com.sdapps.formula1fy.core.Commons
+import com.sdapps.formula1fy.core.utils.Commons
 
 class DriverAdapter(private var data: ArrayList<DriverBO>) :
     RecyclerView.Adapter<DriverAdapter.ViewHolder>() {

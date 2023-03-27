@@ -6,10 +6,10 @@ import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.sdapps.formula1fy.core.Commons
-import com.sdapps.formula1fy.core.DataMembers
-import com.sdapps.formula1fy.core.DbHandler
-import com.sdapps.formula1fy.core.StringHelper
+import com.sdapps.formula1fy.core.utils.Commons
+import com.sdapps.formula1fy.core.models.DataMembers
+import com.sdapps.formula1fy.core.dbUtil.DbHandler
+import com.sdapps.formula1fy.core.utils.StringHelper
 import com.sdapps.formula1fy.view.constructors.ConstructorBO
 import com.sdapps.formula1fy.view.drivers.DriverBO
 import org.json.JSONObject
@@ -18,7 +18,8 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
 
     private lateinit var requestQueue: RequestQueue
     private lateinit var db: DbHandler
-    private var stringHandler: StringHelper = StringHelper()
+    private var stringHandler: StringHelper =
+        StringHelper()
 
     private var view: HomeScreenInteractor.View? = null
     override fun setupView(view: HomeScreenInteractor.View) {

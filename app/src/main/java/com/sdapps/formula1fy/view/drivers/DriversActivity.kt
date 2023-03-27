@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.R
-import com.sdapps.formula1fy.core.DataMembers
-import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.core.models.DataMembers
+import com.sdapps.formula1fy.core.dbUtil.DbHandler
 
 class DriversActivity : AppCompatActivity(), DriverInteractor.View {
     private lateinit var db: DbHandler

@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.core
+package com.sdapps.formula1fy.core.dbUtil
 
 import android.util.Log
 

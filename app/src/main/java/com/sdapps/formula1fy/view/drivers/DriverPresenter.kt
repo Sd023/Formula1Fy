@@ -1,7 +1,7 @@
 package com.sdapps.formula1fy.view.drivers
 
 import android.content.Context
-import com.sdapps.formula1fy.core.DbHandler
+import com.sdapps.formula1fy.core.dbUtil.DbHandler
 
 class DriverPresenter(val context: Context) : DriverInteractor.Presenter {
 
