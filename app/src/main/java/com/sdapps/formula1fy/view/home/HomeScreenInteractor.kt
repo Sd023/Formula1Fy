@@ -25,7 +25,7 @@ interface HomeScreenInteractor {
         fun insertConstructorDataTODB(list: ArrayList<ConstructorBO>)
 
         fun fetchConstructorData()
-        fun isCheckDataAvailable(db: DbHandler): Boolean
+        fun isCheckDataAvailable(flag : Boolean, db: DbHandler): Boolean
 
 
     }

@@ -1,11 +1,14 @@
 package com.sdapps.formula1fy.view.home
 
 import android.content.Context
+import android.database.Cursor
+import android.database.DatabaseUtils
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.sdapps.formula1fy.core.CoroutineUtil
 import com.sdapps.formula1fy.core.utils.Commons
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
@@ -27,58 +30,63 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
     }
 
     override fun fetchDriverData() {
-        db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
         view?.showLoading()
-        requestQueue = Volley.newRequestQueue(context)
-        val url = "https://ergast.com/api/f1/current/driverStandings.json"
-        val driverList = ArrayList<DriverBO>()
-        val jsonReq = JsonObjectRequest(
-            Request.Method.GET, url, null,
-            { response: JSONObject ->
-                try {
-                    val driverStandings = response.getJSONObject("MRData")
-                        .getJSONObject("StandingsTable")
-                        .getJSONArray("StandingsLists")
-                        .getJSONObject(0)
-                        .getJSONArray("DriverStandings")
+        CoroutineUtil.io {
+            db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
+            requestQueue = Volley.newRequestQueue(context)
+            val url = "https://ergast.com/api/f1/current/driverStandings.json"
+            val driverList = ArrayList<DriverBO>()
+            val jsonReq = JsonObjectRequest(
+                Request.Method.GET, url, null,
+                { response: JSONObject ->
+                    try {
+                        val driverStandings = response.getJSONObject("MRData")
+                            .getJSONObject("StandingsTable")
+                            .getJSONArray("StandingsLists")
+                            .getJSONObject(0)
+                            .getJSONArray("DriverStandings")
 
-                    for (i in 0 until driverStandings.length()) {
-                        val driverData = driverStandings.getJSONObject(i)
-                        val details = driverData.getJSONObject("Driver")
+                        for (i in 0 until driverStandings.length()) {
+                            val driverData = driverStandings.getJSONObject(i)
+                            val details = driverData.getJSONObject("Driver")
 
-                        val driver = DriverBO().apply {
-                            driverPosition = driverData.getString("position")
-                            totalPoints = driverData.getString("points").toInt()
-                            wins = driverData.getString("wins").toInt()
-                            driverId = details.getString("driverId")
-                            driverName =
-                                details.getString("givenName") + " " + details.getString("familyName")
-                            driverDOB = details.getString("dateOfBirth")
-                            driverNationality = details.getString("nationality")
-                            driverNumber = details.getString("permanentNumber").toInt()
-                            driverCode = details.optString("code", "")
-                            constructorId =
-                                driverData.getJSONArray("Constructors").getJSONObject(0)
-                                    .getString("constructorId")
+                            val driver = DriverBO().apply {
+                                driverPosition = driverData.getString("position")
+                                totalPoints = driverData.getString("points").toInt()
+                                wins = driverData.getString("wins").toInt()
+                                driverId = details.getString("driverId")
+                                driverName =
+                                    details.getString("givenName") + " " + details.getString("familyName")
+                                driverDOB = details.getString("dateOfBirth")
+                                driverNationality = details.getString("nationality")
+                                driverNumber = details.getString("permanentNumber").toInt()
+                                driverCode = details.optString("code", "")
+                                constructorId =
+                                    driverData.getJSONArray("Constructors").getJSONObject(0)
+                                        .getString("constructorId")
+                            }
+
+                            driverList.add(driver)
                         }
 
-                        driverList.add(driver)
+                        if (!isCheckDataAvailable(true, db)) {
+                            insertDriverDatasToDB(driverList)
+                        } else {
+                            updateDb(driverList, null, true)
+                            moveToNextScreen(true)
+                        }
+
+
+                    } catch (ex: Exception) {
+                        ex.printStackTrace()
                     }
+                },
+                { error: VolleyError -> error.printStackTrace() })
 
-                    if (!isCheckDataAvailable(db)) {
-                        insertDriverDatasToDB(driverList)
-                    } else {
-                        updateDb(driverList, null, true)
-                    }
+            requestQueue.add(jsonReq)
 
+        }
 
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                }
-            },
-            { error: VolleyError -> error.printStackTrace() })
-
-        requestQueue.add(jsonReq)
     }
 
     override fun insertDriverDatasToDB(list: ArrayList<DriverBO>) {
@@ -118,67 +126,74 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
 
 
     override fun fetchConstructorData() {
-        val url = "https://ergast.com/api/f1/current/constructorStandings.json"
-        requestQueue = Volley.newRequestQueue(context)
-        db = DbHandler(context, DataMembers.DB_NAME)
-        val constructorList = ArrayList<ConstructorBO>()
-        val jsonReq = JsonObjectRequest(Request.Method.GET, url, null,
-            { response: JSONObject ->
-                try {
-                    val driverStandings = response.getJSONObject("MRData")
-                        .getJSONObject("StandingsTable")
-                        .getJSONArray("StandingsLists")
-                        .getJSONObject(0)
-                        .getJSONArray("ConstructorStandings")
+        view?.showLoading()
+        CoroutineUtil.io {
+            val url = "https://ergast.com/api/f1/current/constructorStandings.json"
+            requestQueue = Volley.newRequestQueue(context)
+            db = DbHandler(context, DataMembers.DB_NAME)
+            val constructorList = ArrayList<ConstructorBO>()
+            val jsonReq = JsonObjectRequest(Request.Method.GET, url, null,
+                { response: JSONObject ->
+                    try {
+                        val driverStandings = response.getJSONObject("MRData")
+                            .getJSONObject("StandingsTable")
+                            .getJSONArray("StandingsLists")
+                            .getJSONObject(0)
+                            .getJSONArray("ConstructorStandings")
 
-                    for (i in 0 until driverStandings.length()) {
-                        val driverData = driverStandings.getJSONObject(i)
-                        val details = driverData.getJSONObject("Constructor")
+                        for (i in 0 until driverStandings.length()) {
+                            val driverData = driverStandings.getJSONObject(i)
+                            val details = driverData.getJSONObject("Constructor")
 
-                        val constructor = ConstructorBO().apply {
-                            consId = details.getString("constructorId")
-                            name = details.getString("name")
-                            points = driverData.getString("points")
-                            wins = driverData.getString("wins")
-                            position = driverData.getString("position")
-                            nationality = details.getString("nationality")
+                            val constructor = ConstructorBO().apply {
+                                consId = details.getString("constructorId")
+                                name = details.getString("name")
+                                points = driverData.getString("points")
+                                wins = driverData.getString("wins")
+                                position = driverData.getString("position")
+                                nationality = details.getString("nationality")
+                            }
+
+                            constructorList.add(constructor)
                         }
 
-                        constructorList.add(constructor)
+                        if (!isCheckDataAvailable(false, db)) {
+                            insertConstructorDataTODB(constructorList)
+                        } else {
+                            updateDb(null, constructorList, false)
+                            moveToNextScreen(false)
+                        }
+
+                    } catch (ex: Exception) {
+                        ex.printStackTrace()
                     }
+                },
+                { error: VolleyError -> error.printStackTrace() })
 
-                    if (!isCheckDataAvailable(db)) {
-                        insertConstructorDataTODB(constructorList)
-                    } else {
-                        updateDb(null, constructorList, false)
-                    }
+            requestQueue.add(jsonReq)
+        }
 
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                }
-            },
-            { error: VolleyError -> error.printStackTrace() })
-
-        requestQueue.add(jsonReq)
     }
 
-    override fun isCheckDataAvailable(db: DbHandler): Boolean {
+    override fun isCheckDataAvailable(flag: Boolean, db: DbHandler): Boolean {
         db.openDB()
-        val cursor = db.selectSql("Select * from DriverMaster")
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                return true
+        if (flag) {
+            val cursor = db.selectSql("Select * from DriverMaster")
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    return true
+                }
             }
-        }
-        cursor.close()
-
-        val cursor1 = db.selectSql("Select * from ConstructorMaster")
-        if (cursor1 != null) {
-            while (cursor1.moveToNext()) {
-                return true
+            cursor.close()
+        } else {
+            val cursor1 = db.selectSql("Select * from ConstructorMaster")
+            if (cursor1 != null) {
+                while (cursor1.moveToNext()) {
+                    return true
+                }
             }
+            cursor1.close()
         }
-        cursor1.close()
         db.closeDB()
 
         return false
@@ -222,56 +237,61 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
         isDriver: Boolean
     ) {
 
-        if (isDriver) {
-            for (i in 0 until list!!.size) {
-                val points = list[i].totalPoints
-                val wins = list[i].wins
-                val position = list[i].driverPosition
-                val code = list[i].driverCode
-                try {
-                    val sql = "UPDATE ${DataMembers.tbl_driverMaster} set wins = ${
-                        stringHandler.getQueryFormat(wins.toString())
-                    }" +
-                            ", total_points = ${stringHandler.getQueryFormat(points.toString())}, " +
-                            "driver_position = ${stringHandler.getQueryFormat(position)} WHERE driver_code = ${
-                                stringHandler.getQueryFormat(
-                                    code
-                                )
-                            }"
-                    db.updateSQL(sql)
+        CoroutineUtil.io {
+            if (isDriver) {
+                for (i in 0 until list!!.size) {
+                    val points = list[i].totalPoints
+                    val wins = list[i].wins
+                    val position = list[i].driverPosition
+                    val code = list[i].driverCode
+                    try {
+                        val sql = "UPDATE ${DataMembers.tbl_driverMaster} set wins = ${
+                            stringHandler.getQueryFormat(wins.toString())
+                        }" +
+                                ", total_points = ${stringHandler.getQueryFormat(points.toString())}, " +
+                                "driver_position = ${stringHandler.getQueryFormat(position)} WHERE driver_code = ${
+                                    stringHandler.getQueryFormat(
+                                        code
+                                    )
+                                }"
+                        db.updateSQL(sql)
 
-                } catch (exception: Exception) {
-                    view?.onError()
-                    Commons().print(exception.message)
+                    } catch (exception: Exception) {
+                        view?.onError()
+                        Commons().print(exception.message)
+                    }
+
+                }
+            } else {
+                for (i in 0 until consList!!.size) {
+                    val points = consList[i].points
+                    val wins = consList[i].wins
+                    val position = consList[i].position
+                    val code = consList[i].consId
+
+                    try {
+                        val sql =
+                            "UPDATE ${DataMembers.tbl_constructorMaster} set constructor_wins = ${
+                                stringHandler.getQueryFormat(wins.toString())
+                            }" +
+                                    ", constructor_points = ${stringHandler.getQueryFormat(points.toString())}, " +
+                                    "constructor_position = ${stringHandler.getQueryFormat(position)} WHERE constructor_id = ${
+                                        stringHandler.getQueryFormat(
+                                            code
+                                        )
+                                    }"
+                        db.updateSQL(sql)
+
+                    } catch (exception: Exception) {
+                        view?.onError()
+                        Commons().print(exception.message)
+                    }
+
+
                 }
 
             }
-        } else {
-            for (i in 0 until consList!!.size) {
-                val points = consList[i].points
-                val wins = consList[i].wins
-                val position = consList[i].position
-                val code = consList[i].consId
 
-                try {
-                    val sql = "UPDATE ${DataMembers.tbl_constructorMaster} set constructor_wins = ${
-                        stringHandler.getQueryFormat(wins.toString())
-                    }" +
-                            ", constructor_points = ${stringHandler.getQueryFormat(points.toString())}, " +
-                            "constructor_position = ${stringHandler.getQueryFormat(position)} WHERE constructor_id = ${
-                                stringHandler.getQueryFormat(
-                                    code
-                                )
-                            }"
-                    db.updateSQL(sql)
-
-                } catch (exception: Exception) {
-                    view?.onError()
-                    Commons().print(exception.message)
-                }
-
-
-            }
 
         }
 
