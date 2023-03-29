@@ -1,14 +1,12 @@
 package com.sdapps.formula1fy.view.home
 
 import android.content.Context
-import android.database.Cursor
-import android.database.DatabaseUtils
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.sdapps.formula1fy.core.CoroutineUtil
+import com.sdapps.formula1fy.core.utils.CoroutineTools
 import com.sdapps.formula1fy.core.utils.Commons
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
@@ -31,7 +29,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
 
     override fun fetchDriverData() {
         view?.showLoading()
-        CoroutineUtil.io {
+        CoroutineTools.io {
             db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
             requestQueue = Volley.newRequestQueue(context)
             val url = "https://ergast.com/api/f1/current/driverStandings.json"
@@ -127,7 +125,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
 
     override fun fetchConstructorData() {
         view?.showLoading()
-        CoroutineUtil.io {
+        CoroutineTools.io {
             val url = "https://ergast.com/api/f1/current/constructorStandings.json"
             requestQueue = Volley.newRequestQueue(context)
             db = DbHandler(context, DataMembers.DB_NAME)
@@ -237,7 +235,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
         isDriver: Boolean
     ) {
 
-        CoroutineUtil.io {
+        CoroutineTools.io {
             if (isDriver) {
                 for (i in 0 until list!!.size) {
                     val points = list[i].totalPoints

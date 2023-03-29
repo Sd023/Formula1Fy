@@ -5,12 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.imageview.ShapeableImageView
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
+import com.sdapps.formula1fy.core.utils.NetworkTools
 import com.sdapps.formula1fy.view.constructors.ConstructorActivity
 import com.sdapps.formula1fy.view.drivers.DriversActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
 
@@ -19,7 +24,7 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
     private lateinit var presenter: HomeScreenPresenter
     private lateinit var driverImageView: ShapeableImageView
     private lateinit var constructorImageView: ShapeableImageView
-
+    private lateinit var network:NetworkTools
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
@@ -28,6 +33,7 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
 
 
     private fun initAll() {
+        network = NetworkTools()
         driverImageView = findViewById(R.id.driversView)
         constructorImageView = findViewById(R.id.constructorView)
         presenter = HomeScreenPresenter(this)
@@ -47,10 +53,31 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
         constructorImageView.shapeAppearanceModel = driverImg
 
         driverImageView.setOnClickListener {
-            presenter.fetchDriverData()
+            lifecycleScope.launch {
+                if(network.isNetworkAndInternetAvailable(applicationContext)){
+                    presenter.fetchDriverData()
+                }
+                else{
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(applicationContext,"Please Connect To internet!", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
         }
         constructorImageView.setOnClickListener {
-            presenter.fetchConstructorData()
+            lifecycleScope.launch {
+                if(network.isNetworkAndInternetAvailable(applicationContext)){
+                    presenter.fetchConstructorData()
+                }
+                else{
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(applicationContext,"Please Connect To internet!", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+
         }
 
     }

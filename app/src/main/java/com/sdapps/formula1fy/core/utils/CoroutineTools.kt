@@ -1,10 +1,10 @@
-package com.sdapps.formula1fy.core
+package com.sdapps.formula1fy.core.utils
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-object CoroutineUtil {
+object CoroutineTools {
 
     fun main(work: suspend (() -> Unit)) = CoroutineScope(Dispatchers.Main).launch {
         work()
