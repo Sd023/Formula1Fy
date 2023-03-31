@@ -26,9 +26,11 @@ class ConstructorAdapter(private val data: ArrayList<ConstructorBO>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             val stringBuilder = StringBuilder()
-            holder.standing.text = data[position].consId
-            holder.driverName.text = stringBuilder.append(data[position].name)
-            holder.points.text = data[position].points.toString()
+            val points = stringBuilder.append(data[position].points.toString() + " pts")
+            holder.points.text = points
+            stringBuilder.clear()
+            holder.driverName.text = data[position].name
+            holder.position.text =  stringBuilder.append("#"+data[position].position)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -42,14 +44,14 @@ class ConstructorAdapter(private val data: ArrayList<ConstructorBO>) :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var driverName: TextView
         var points: TextView
-        var standing: TextView
+        var position: TextView
         var cardView: CardView
 
         init {
             driverName = itemView.findViewById(R.id.driverName) as TextView
             cardView = itemView.findViewById(R.id.cardView)
             points = itemView.findViewById(R.id.points) as TextView
-            standing = itemView.findViewById(R.id.constructorName) as TextView
+            position = itemView.findViewById(R.id.constructorName) as TextView
         }
 
 

@@ -34,9 +34,10 @@ class DriverAdapter(private var data: ArrayList<DriverBO>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             val stringBuilder = StringBuilder()
-            holder.driverName.text = stringBuilder.append(data[position].driverName)
+            val points = stringBuilder.append(data[position].totalPoints.toString() + " pts")
+            holder.driverName.text =data[position].driverName
             holder.constructorName.text = data[position].constructorName
-            holder.points.text = data[position].totalPoints.toString()
+            holder.points.text = points
         } catch (ex: Exception) {
             commons.print(ex.message)
             ex.printStackTrace()
