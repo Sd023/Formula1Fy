@@ -21,7 +21,7 @@ class DriverPresenter(val context: Context) : DriverInteractor.Presenter {
         try {
             db.openDB()
             val cursor =
-                db.selectSql("SELECT driver_id,driver_code,driver_name,driver_number, driver_constructor,wins,total_points,driver_position from DriverMaster ORDER BY driver_position ASC")
+                db.selectSql("SELECT driver_id,driver_code,driver_name,driver_number, driver_constructor,wins,total_points,driver_position,constructor_name from DriverMaster ORDER BY driver_position ASC")
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     val driverBO = DriverBO()
@@ -33,6 +33,7 @@ class DriverPresenter(val context: Context) : DriverInteractor.Presenter {
                     driverBO.wins = cursor.getInt(5)
                     driverBO.totalPoints = cursor.getInt(6)
                     driverBO.driverPosition = cursor.getString(7)
+                    driverBO.constructorName = cursor.getString(8)
                     driverList.add(driverBO)
                 }
             }

@@ -34,8 +34,8 @@ class DriverAdapter(private var data: ArrayList<DriverBO>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             val stringBuilder = StringBuilder()
-            holder.standing.text = data[position].driverPosition
             holder.driverName.text = stringBuilder.append(data[position].driverName)
+            holder.constructorName.text = data[position].constructorName
             holder.points.text = data[position].totalPoints.toString()
         } catch (ex: Exception) {
             commons.print(ex.message)
@@ -46,14 +46,14 @@ class DriverAdapter(private var data: ArrayList<DriverBO>) :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var driverName: TextView
         var points: TextView
-        var standing: TextView
+        var constructorName: TextView
         var cardView: CardView
 
         init {
             driverName = itemView.findViewById(R.id.driverName) as TextView
             cardView = itemView.findViewById(R.id.cardView)
             points = itemView.findViewById(R.id.points) as TextView
-            standing = itemView.findViewById(R.id.driverPosition) as TextView
+            constructorName = itemView.findViewById(R.id.constructorName) as TextView
         }
 
 

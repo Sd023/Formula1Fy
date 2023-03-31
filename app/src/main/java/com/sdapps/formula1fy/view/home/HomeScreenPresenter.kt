@@ -62,6 +62,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
                                 constructorId =
                                     driverData.getJSONArray("Constructors").getJSONObject(0)
                                         .getString("constructorId")
+                                constructorName = driverData.getJSONArray("Constructors").getJSONObject(0).getString("name")
                             }
 
                             driverList.add(driver)
@@ -93,7 +94,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
         db.openDB()
 
         val col =
-            "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points,driver_position"
+            "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points,driver_position,constructor_name"
         for (i in 0 until list.size) {
             val bo = list.get(i)
             val values = getDriverDetails(bo)
@@ -211,6 +212,7 @@ class HomeScreenPresenter(val context: Context) : HomeScreenInteractor.Presenter
         sb.append("," + driverBO.wins)
         sb.append("," + driverBO.totalPoints)
         sb.append("," + driverBO.driverPosition)
+        sb.append("," + stringHandler.getQueryFormat(driverBO.constructorName))
 
         return sb
     }

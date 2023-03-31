@@ -11,4 +11,11 @@ public class StringHelper {
         } else
             return null;
     }
+
+    public String removeWhiteSpaces(final String data){
+        if(data !=null){
+            return data.replaceAll("\\s", "");
+        }else
+            return null;
+    }
 }
