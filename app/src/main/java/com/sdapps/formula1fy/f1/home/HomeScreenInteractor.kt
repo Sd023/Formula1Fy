@@ -1,8 +1,8 @@
-package com.sdapps.formula1fy.view.home
+package com.sdapps.formula1fy.f1.home
 
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
-import com.sdapps.formula1fy.view.constructors.ConstructorBO
-import com.sdapps.formula1fy.view.drivers.DriverBO
+import com.sdapps.formula1fy.f1.bo.ConstructorBO
+import com.sdapps.formula1fy.f1.bo.DriverBO
 
 interface HomeScreenInteractor {
     interface View {

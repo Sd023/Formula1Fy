@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.view.constructors
+package com.sdapps.formula1fy.f1.constructors.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
+import com.sdapps.formula1fy.f1.bo.ConstructorBO
+import com.sdapps.formula1fy.f1.constructors.adapter.ConstructorAdapter
+import com.sdapps.formula1fy.f1.constructors.ConstructorInteractor
+import com.sdapps.formula1fy.f1.constructors.presenter.ConstructorPresenter
 
 class ConstructorActivity : AppCompatActivity(), ConstructorInteractor.View {
     private lateinit var presenter: ConstructorPresenter

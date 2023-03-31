@@ -1,10 +1,9 @@
-package com.sdapps.formula1fy.view.constructors
+package com.sdapps.formula1fy.f1.constructors.presenter
 
 import android.content.Context
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.sdapps.formula1fy.f1.bo.ConstructorBO
+import com.sdapps.formula1fy.f1.constructors.ConstructorInteractor
 
 class ConstructorPresenter(private val context: Context) : ConstructorInteractor.Presenter {
     private lateinit var view: ConstructorInteractor.View

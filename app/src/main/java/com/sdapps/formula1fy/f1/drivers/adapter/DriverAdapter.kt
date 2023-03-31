@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.view.drivers
+package com.sdapps.formula1fy.f1.drivers.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.utils.Commons
+import com.sdapps.formula1fy.f1.bo.DriverBO
 
 class DriverAdapter(private var data: ArrayList<DriverBO>) :
     RecyclerView.Adapter<DriverAdapter.ViewHolder>() {

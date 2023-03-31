@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.view.drivers
+package com.sdapps.formula1fy.f1.drivers.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
+import com.sdapps.formula1fy.f1.bo.DriverBO
+import com.sdapps.formula1fy.f1.drivers.DriverInteractor
+import com.sdapps.formula1fy.f1.drivers.adapter.DriverAdapter
+import com.sdapps.formula1fy.f1.drivers.presenter.DriverPresenter
 
 class DriversActivity : AppCompatActivity(), DriverInteractor.View {
     private lateinit var db: DbHandler

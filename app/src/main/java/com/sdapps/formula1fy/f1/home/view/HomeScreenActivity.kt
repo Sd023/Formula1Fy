@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.view.home
+package com.sdapps.formula1fy.f1.home.view
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -11,8 +11,10 @@ import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.utils.NetworkTools
-import com.sdapps.formula1fy.view.constructors.ConstructorActivity
-import com.sdapps.formula1fy.view.drivers.DriversActivity
+import com.sdapps.formula1fy.f1.constructors.view.ConstructorActivity
+import com.sdapps.formula1fy.f1.drivers.view.DriversActivity
+import com.sdapps.formula1fy.f1.home.HomeScreenInteractor
+import com.sdapps.formula1fy.f1.home.presenter.HomeScreenPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

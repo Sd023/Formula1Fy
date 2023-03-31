@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.view.constructors
+package com.sdapps.formula1fy.f1.constructors.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.R
+import com.sdapps.formula1fy.f1.bo.ConstructorBO
 
 class ConstructorAdapter(private val data: ArrayList<ConstructorBO>) :
     RecyclerView.Adapter<ConstructorAdapter.ViewHolder>() {

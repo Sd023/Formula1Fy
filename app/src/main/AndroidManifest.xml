@@ -16,15 +16,15 @@
         android:theme="@style/Theme.Formula1fy"
         tools:targetApi="31">
         <activity
-            android:name=".view.constructors.ConstructorActivity"
+            android:name=".f1.constructors.view.ConstructorActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".view.drivers.DriversActivity"
+            android:name=".f1.drivers.view.DriversActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".view.home.HomeScreenActivity"
+            android:name=".f1.home.view.HomeScreenActivity"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>

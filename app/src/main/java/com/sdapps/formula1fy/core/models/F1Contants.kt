@@ -35,4 +35,6 @@ object F1Contants {
     const val STROLL = "stroll"
     const val NICK_DE_VRIES = "de_vries"
     const val HULKENBERG = "hulkenberg"
+    const val sargeant = "sargeant"
+    const val piastri = "piastri"
 }
