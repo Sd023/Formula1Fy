@@ -10,11 +10,13 @@ def appVersion = 1
 
 def gitRevision() {
     def result = "git rev-parse --short=8 HEAD".execute([], project.rootDir).text.trim()
+    if(result==null) throw new RuntimeException("Could not fetch the revision!")
     return result.toString()
 }
 
 def gitNumber(){
     def result = "git rev-list --count HEAD".execute([],project.rootDir).text.trim()
+    if(result == null) throw new RuntimeException("Could not fetch the details!")
     return result.toString()
 }
 
@@ -29,6 +31,7 @@ android {
         versionProp.load(new FileInputStream(versionPropsFile))
     }else {
         versionProp['VERSION_CODE'] = 0
+        throw new GradleException("Could not read File!")
     }
     def code = versionProp['VERSION_CODE'].toInteger() + 1
 
@@ -77,10 +80,9 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            def flavor = variant.name
             def versionName = variant.versionName
 
-            outputFileName = "Formula1Fy_${flavor}_${versionName}_${gitRevision()}.apk"
+            outputFileName = "Formula1Fy_${versionName}_${gitRevision()}.apk"
         }
     }
     compileOptions {
@@ -90,10 +92,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    flavorDimensions 'AWS'
+    flavorDimensions 'firebase'
     productFlavors {
-        Formula1FyAWS {
-            dimension 'AWS'
+        firebase {
+            dimension 'firebase'
             targetSdk 33
             minSdk 26
         }
