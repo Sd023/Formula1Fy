@@ -5,8 +5,16 @@ plugins {
 
 }
 
-def fetchCommitDetails() {
+def majorVersion = 1
+def appVersion = 1
+
+def gitRevision() {
     def result = "git rev-parse --short=8 HEAD".execute([], project.rootDir).text.trim()
+    return result.toString()
+}
+
+def gitNumber(){
+    def result = "git rev-list --count HEAD".execute([],project.rootDir).text.trim()
     return result.toString()
 }
 
@@ -14,12 +22,26 @@ android {
     namespace 'com.sdapps.formula1fy'
     compileSdk 33
 
+    def versionPropsFile = file('version.properties')
+    def Properties versionProp = new Properties()
+
+    if(versionPropsFile.canRead()){
+        versionProp.load(new FileInputStream(versionPropsFile))
+    }else {
+        versionProp['VERSION_CODE'] = 0
+    }
+    def code = versionProp['VERSION_CODE'].toInteger() + 1
+
+    versionProp['VERSION_CODE'] = code.toString()
+    versionProp.store(versionPropsFile.newWriter(), null)
+
+
     defaultConfig {
         applicationId "com.sdapps.formula1fy"
         minSdk 22
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode code
+        versionName "${appVersion}.${majorVersion}.${gitNumber()}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,7 +80,7 @@ android {
             def flavor = variant.name
             def versionName = variant.versionName
 
-            outputFileName = "Formula1Fy_${flavor}_${versionName}_${fetchCommitDetails()}.apk"
+            outputFileName = "Formula1Fy_${flavor}_${versionName}_${gitRevision()}.apk"
         }
     }
     compileOptions {
