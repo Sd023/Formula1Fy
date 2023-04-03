@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.imageview.ShapeableImageView
 import com.sdapps.formula1fy.R
@@ -24,8 +25,8 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
     private lateinit var db: DbHandler
     private lateinit var progressDialog: ProgressDialog
     private lateinit var presenter: HomeScreenPresenter
-    private lateinit var driverImageView: ShapeableImageView
-    private lateinit var constructorImageView: ShapeableImageView
+    private lateinit var driverCard: CardView
+    private lateinit var constructorCard: CardView
     private lateinit var network:NetworkTools
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +37,8 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
 
     private fun initAll() {
         network = NetworkTools()
-        driverImageView = findViewById(R.id.driversView)
-        constructorImageView = findViewById(R.id.constructorView)
+        driverCard = findViewById(R.id.driverCardView)
+        constructorCard = findViewById(R.id.constructorCardView)
         presenter = HomeScreenPresenter(this)
         progressDialog = ProgressDialog(this)
         presenter.setupView(this)
@@ -48,37 +49,41 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
     }
 
     override fun loadScreen() {
-        val rad = resources.getDimension(R.dimen.corner_radius)
-        val driverImg =
-            driverImageView.shapeAppearanceModel.toBuilder().setAllCornerSizes(rad).build()
-        driverImageView.shapeAppearanceModel = driverImg
-        constructorImageView.shapeAppearanceModel = driverImg
 
-        driverImageView.setOnClickListener {
+        driverCard.setOnClickListener {
             lifecycleScope.launch {
-                if(network.isNetworkAndInternetAvailable(applicationContext)){
-                    presenter.fetchDriverData()
-                }
-                else{
-                    withContext(Dispatchers.Main){
-                        Toast.makeText(applicationContext,"Please Connect To internet!", Toast.LENGTH_LONG).show()
+                if(presenter.isCheckDataAvailable(true,db)){
+                    moveToNextScreen(true)
+                }else{
+                    if(network.isNetworkAndInternetAvailable(applicationContext)){
+                        presenter.fetchDriverData()
+                    }
+                    else{
+                        withContext(Dispatchers.Main){
+                            Toast.makeText(applicationContext,"Please Connect To internet!", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
+
             }
 
         }
-        constructorImageView.setOnClickListener {
+        constructorCard.setOnClickListener {
             lifecycleScope.launch {
-                if(network.isNetworkAndInternetAvailable(applicationContext)){
-                    presenter.fetchConstructorData()
-                }
-                else{
-                    withContext(Dispatchers.Main){
-                        Toast.makeText(applicationContext,"Please Connect To internet!", Toast.LENGTH_LONG).show()
+                if(presenter.isCheckDataAvailable(false,db)){
+                    moveToNextScreen(false)
+                }else{
+                    if(network.isNetworkAndInternetAvailable(applicationContext)){
+                        presenter.fetchConstructorData()
+                    }
+                    else{
+                        withContext(Dispatchers.Main){
+                            Toast.makeText(applicationContext,"Please Connect To internet!", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
-            }
 
+            }
 
         }
 
