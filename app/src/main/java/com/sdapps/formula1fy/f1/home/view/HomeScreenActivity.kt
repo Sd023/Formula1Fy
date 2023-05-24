@@ -41,7 +41,7 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
         constructorCard = findViewById(R.id.constructorCardView)
         presenter = HomeScreenPresenter(this)
         progressDialog = ProgressDialog(this)
-        presenter.setupView(this)
+
         db = DbHandler(applicationContext, DataMembers.DB_NAME)
         getMessageFromDead()
         db.createDB()
@@ -52,36 +52,14 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
 
         driverCard.setOnClickListener {
             lifecycleScope.launch {
-                if(presenter.isCheckDataAvailable(true,db)){
-                    moveToNextScreen(true)
-                }else{
-                    if(network.isNetworkAndInternetAvailable(applicationContext)){
-                        presenter.fetchDriverData()
-                    }
-                    else{
-                        withContext(Dispatchers.Main){
-                            Toast.makeText(applicationContext,"Please Connect To internet!", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
+                moveToNextScreen(true)
 
             }
 
         }
         constructorCard.setOnClickListener {
             lifecycleScope.launch {
-                if(presenter.isCheckDataAvailable(false,db)){
-                    moveToNextScreen(false)
-                }else{
-                    if(network.isNetworkAndInternetAvailable(applicationContext)){
-                        presenter.fetchConstructorData()
-                    }
-                    else{
-                        withContext(Dispatchers.Main){
-                            Toast.makeText(applicationContext,"Please Connect To internet!", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
+                moveToNextScreen(false)
 
             }
 
@@ -90,7 +68,6 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
     }
 
     override fun getMessageFromDead() {
-        val userId: String = intent?.getStringExtra("USER").toString()
     }
 
     override fun moveToNextScreen(isDriver: Boolean) {

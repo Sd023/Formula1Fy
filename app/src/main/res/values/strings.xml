@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name">Formula1fy</string>
+<string name="app_name">
+<font color = "#FFFFFF">Formula1</font><font color = "#FF2800">FY</font>
+</string>
     <string name="drivers">Drivers</string>
     <string name="constructors">Constructors</string>
     <string name="constructors_image">Constructors Image</string>
     <string name="driver_image">DriverImage</string>
+    <string name="desc">Drivers | Constructors | Stats</string>
+    <string name="formula1fy">Formula1Fy</string>
 </resources>
