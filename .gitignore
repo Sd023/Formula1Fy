@@ -15,6 +15,7 @@ build/
 local.properties
 proguard/
 *.log
+*.json
 
 .navigation/
 
