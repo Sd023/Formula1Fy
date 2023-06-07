@@ -16,6 +16,7 @@ object DBHelper {
                         "constructor_points TEXT,constructor_position TEXT," +
                         "constructor_nationality TEXT)"
             )
+            dbHandler.exe("create table if not exists RaceScheduleMaster (season TEXT, round TEXT, race_name TEXT, date TEXT, time TEXT, circuit_id TEXT,circuit_name TEXT, latitude TEXT, longitude TEXT, locality TEXT, country TEXT)")
         } catch (ex: Exception) {
             Log.d("Exception occurred", ": $ex")
         }

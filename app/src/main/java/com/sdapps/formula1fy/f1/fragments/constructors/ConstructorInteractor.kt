@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.f1.constructors
+package com.sdapps.formula1fy.f1.fragments.constructors
 
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.f1.bo.ConstructorBO

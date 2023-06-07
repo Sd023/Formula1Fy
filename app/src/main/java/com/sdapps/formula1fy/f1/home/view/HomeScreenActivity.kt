@@ -7,13 +7,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.imageview.ShapeableImageView
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.utils.NetworkTools
-import com.sdapps.formula1fy.f1.constructors.view.ConstructorActivity
-import com.sdapps.formula1fy.f1.drivers.view.DriversActivity
 import com.sdapps.formula1fy.f1.home.HomeScreenInteractor
 import com.sdapps.formula1fy.f1.home.presenter.HomeScreenPresenter
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +28,7 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
     private lateinit var driverCard: CardView
     private lateinit var constructorCard: CardView
     private lateinit var network:NetworkTools
+    private lateinit var bottomBar : BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
@@ -37,8 +38,9 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
 
     private fun initAll() {
         network = NetworkTools()
-        driverCard = findViewById(R.id.driverCardView)
-        constructorCard = findViewById(R.id.constructorCardView)
+        bottomBar = findViewById(R.id.bottomView)
+//        driverCard = findViewById(R.id.driverCardView)
+//        constructorCard = findViewById(R.id.constructorCardView)
         presenter = HomeScreenPresenter(this)
         progressDialog = ProgressDialog(this)
 
@@ -46,38 +48,55 @@ class HomeScreenActivity : AppCompatActivity(), HomeScreenInteractor.View {
         getMessageFromDead()
         db.createDB()
         loadScreen()
+        bottomBar.selectedItemId = R.id.driver_menu
+        bottomBar.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.driver_menu -> callDriverFragment()
+                R.id.constructor_menu -> callConsFragment()
+                else -> showToast()
+            }
+        }
+
+
     }
+
+    fun callDriverFragment(): Boolean{
+       val navController = findNavController(R.id.navHostFrag)
+        navController.navigate(R.id.driver_frag)
+        return true
+    }
+    fun callConsFragment(): Boolean{
+        val navController = findNavController(R.id.navHostFrag)
+        navController.navigate(R.id.cons_frag)
+        return true
+
+    }
+    fun showToast(): Boolean{return true}
 
     override fun loadScreen() {
 
-        driverCard.setOnClickListener {
-            lifecycleScope.launch {
-                moveToNextScreen(true)
-
-            }
-
-        }
-        constructorCard.setOnClickListener {
-            lifecycleScope.launch {
-                moveToNextScreen(false)
-
-            }
-
-        }
+//        driverCard.setOnClickListener {
+//            lifecycleScope.launch {
+//                moveToNextScreen(true)
+//
+//            }
+//
+//        }
+//        constructorCard.setOnClickListener {
+//            lifecycleScope.launch {
+//                moveToNextScreen(false)
+//
+//            }
+//
+//        }
 
     }
 
     override fun getMessageFromDead() {
     }
 
+
     override fun moveToNextScreen(isDriver: Boolean) {
-        if (isDriver) {
-            val intent = Intent(this@HomeScreenActivity, DriversActivity::class.java)
-            startActivity(intent)
-        } else {
-            val intent = Intent(this@HomeScreenActivity, ConstructorActivity::class.java)
-            startActivity(intent)
-        }
 
     }
 

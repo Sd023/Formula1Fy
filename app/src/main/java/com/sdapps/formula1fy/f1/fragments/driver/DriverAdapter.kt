@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.f1.drivers.adapter
+package com.sdapps.formula1fy.f1.fragments.driver
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -29,7 +29,7 @@ class DriverAdapter(private var data: ArrayList<DriverBO>) :
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return 5
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

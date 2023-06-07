@@ -7,18 +7,22 @@ import com.sdapps.formula1fy.f1.bo.DriverBO
 
 interface LandingContractor {
 
-    interface View{
+    interface View {
         fun showLoading()
         fun hideLoading()
         fun moveToNextScreen()
         fun initAll()
     }
-    interface Presenter{
+
+    interface Presenter {
         fun attachView(view: LandingContractor.View, context: Context)
         fun detachView()
-        fun getAppString() : SpannableStringBuilder
-        suspend fun fetchAllData()
+        fun getAppString(): SpannableStringBuilder
+        suspend fun fetchDriverData()
         fun insertDriverData(list: ArrayList<DriverBO>)
-        fun insertConstructorData(list : ArrayList<ConstructorBO>)
+        fun insertConstructorData(list: ArrayList<ConstructorBO>)
+
+        suspend fun fetchRaceData()
+        suspend fun fetchConstructorData()
     }
 }

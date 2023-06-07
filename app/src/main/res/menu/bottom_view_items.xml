@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/driver_menu"
+        android:enabled="true"
+        android:title="Driver"
+        android:icon="@drawable/ic_launcher_background"/>
+
+    <item
+        android:id="@+id/constructor_menu"
+        android:enabled="true"
+        android:title="Constructor"
+        android:icon="@drawable/ic_launcher_background"/>
+
+    <item
+        android:id="@+id/race_menu"
+        android:enabled="true"
+        android:title="Race"
+        android:icon="@drawable/ic_launcher_background"/>
+
+</menu>

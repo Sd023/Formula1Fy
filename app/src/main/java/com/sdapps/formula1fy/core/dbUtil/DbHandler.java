@@ -157,6 +157,21 @@ public class DbHandler extends SQLiteOpenHelper {
         db.execSQL(sql);
     }
 
+    public void deleteSQL(final String tblName, final boolean all) {
+        try {
+            final String sql;
+            if (all) {
+                sql = "delete from " + tblName;
+                Log.d("SQL", "" + sql);
+                db.execSQL(sql);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
     @Override
     public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
