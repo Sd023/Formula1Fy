@@ -2,6 +2,7 @@ package com.sdapps.formula1fy.f1.landing
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Handler
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -17,7 +18,9 @@ import com.sdapps.formula1fy.core.utils.CoroutineTools
 import com.sdapps.formula1fy.core.utils.StringHelper
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
+import kotlinx.coroutines.delay
 import org.json.JSONObject
+import java.util.concurrent.TimeUnit
 
 class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
 
@@ -27,6 +30,8 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
     private lateinit var requestQueue: RequestQueue
     private lateinit var db: DbHandler
     private var stringHandler: StringHelper = StringHelper()
+    private  var seasonString : String? = null
+    private  var roundString: String? = null
 
     override fun attachView(view: LandingContractor.View, context: Context) {
       this.view = view
@@ -53,12 +58,14 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
 
     }
 
-    override fun fetchAllData() {
+    override suspend fun fetchAllData() {
+        view?.showLoading()
         CoroutineTools.io {
             db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
             requestQueue = Volley.newRequestQueue(context)
             val url = "https://ergast.com/api/f1/current/driverStandings.json"
             val driverList = ArrayList<DriverBO>()
+
             val jsonReq = JsonObjectRequest(
                 Request.Method.GET, url, null,
                 { response: JSONObject ->
@@ -69,11 +76,21 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
                             .getJSONObject(0)
                             .getJSONArray("DriverStandings")
 
+                        val result = response.getJSONObject("MRData")
+                            .getJSONObject("StandingsTable")
+                            .getJSONArray("StandingsLists")
+
+                        val getBo = result.getJSONObject(0)
+                        seasonString = getBo.getString("season")
+                        roundString = getBo.getString("round")
+
+
                         for (i in 0 until driverStandings.length()) {
                             val driverData = driverStandings.getJSONObject(i)
                             val details = driverData.getJSONObject("Driver")
-
-                            val driver = DriverBO().apply {
+                            val dBO = DriverBO().apply {
+                                season = seasonString
+                                round = roundString
                                 driverPosition = driverData.getString("position")
                                 totalPoints = driverData.getString("points").toInt()
                                 wins = driverData.getString("wins").toInt()
@@ -89,8 +106,7 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
                                         .getString("constructorId")
                                 constructorName = driverData.getJSONArray("Constructors").getJSONObject(0).getString("name")
                             }
-
-                            driverList.add(driver)
+                            driverList.add(dBO)
                         }
 
                         if (!isCheckDataAvailable(true, db)) {
@@ -116,7 +132,9 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
 
     fun getDriverDetails(driverBO: DriverBO) : StringBuffer{
         val sb = StringBuffer()
-        sb.append(stringHandler.getQueryFormat(driverBO.driverId))
+        sb.append(stringHandler.getQueryFormat(driverBO.season))
+        sb.append("," + stringHandler.getQueryFormat(driverBO.round))
+        sb.append("," + stringHandler.getQueryFormat(driverBO.driverId))
         sb.append("," + stringHandler.getQueryFormat(driverBO.driverCode))
         sb.append("," + stringHandler.getQueryFormat(driverBO.driverName))
         sb.append("," + driverBO.driverNumber)
@@ -134,19 +152,17 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
         db.createDB()
         db.openDB()
 
-        val col =
-            "driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points,driver_position,constructor_name"
         for (i in 0 until list.size) {
             val bo = list.get(i)
             val values = getDriverDetails(bo)
-            db.insertSQL(DataMembers.tbl_driverMaster, col, values.toString())
+            db.insertSQL(DataMembers.tbl_driverMaster, DataMembers.tbl_driverMasterCols, values.toString())
         }
         db.closeDB()
     }
 
 
 
-    fun fetchConstructorDataFromServer(){
+    suspend fun fetchConstructorDataFromServer(){
         CoroutineTools.io {
             val url = "https://ergast.com/api/f1/current/constructorStandings.json"
             requestQueue = Volley.newRequestQueue(context)
@@ -161,11 +177,21 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
                             .getJSONObject(0)
                             .getJSONArray("ConstructorStandings")
 
+                        val result = response.getJSONObject("MRData")
+                            .getJSONObject("StandingsTable")
+                            .getJSONArray("StandingsLists")
+
+                        val getBo = result.getJSONObject(0)
+                        seasonString = getBo.getString("season")
+                        roundString = getBo.getString("round")
+
                         for (i in 0 until driverStandings.length()) {
                             val driverData = driverStandings.getJSONObject(i)
                             val details = driverData.getJSONObject("Constructor")
 
-                            val constructor = ConstructorBO().apply {
+                           val constBo = ConstructorBO().apply {
+                                season  = seasonString
+                                round = roundString
                                 consId = details.getString("constructorId")
                                 name = details.getString("name")
                                 points = driverData.getString("points")
@@ -173,9 +199,9 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
                                 position = driverData.getString("position")
                                 nationality = details.getString("nationality")
                             }
-
-                            constructorList.add(constructor)
+                            constructorList.add(constBo)
                         }
+
 
                         if (!isCheckDataAvailable(false, db)) {
                             insertConstructorData(constructorList)
@@ -196,7 +222,9 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
 
     fun getConstructorDetails(constructorBO: ConstructorBO): StringBuffer{
         val sb = StringBuffer()
-        sb.append(stringHandler.getQueryFormat(constructorBO.consId))
+        sb.append(stringHandler.getQueryFormat(constructorBO.season))
+        sb.append("," + stringHandler.getQueryFormat(constructorBO.round))
+        sb.append(","+ stringHandler.getQueryFormat(constructorBO.consId))
         sb.append("," + stringHandler.getQueryFormat(constructorBO.name))
         sb.append("," + stringHandler.getQueryFormat(constructorBO.wins))
         sb.append("," + stringHandler.getQueryFormat(constructorBO.points))
@@ -212,15 +240,14 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
         db.createDB()
         db.openDB()
 
-        val col =
-            "constructor_id,constructor_name,constructor_wins,constructor_points,constructor_position,constructor_nationality"
         for (i in 0 until list.size) {
             val co = list.get(i)
             val constructorValues = getConstructorDetails(co)
-            db.insertSQL(DataMembers.tbl_constructorMaster, col, constructorValues.toString())
+            db.insertSQL(DataMembers.tbl_constructorMaster, DataMembers.tbl_constructorMasterCols, constructorValues.toString())
 
         }
         db.closeDB()
+        view!!.hideLoading()
     }
 
     private fun updateDb(
@@ -236,10 +263,10 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
                     val wins = list[i].wins
                     val position = list[i].driverPosition
                     val code = list[i].driverCode
+                    val season = list[i].season
+                    val round = list[i].round
                     try {
-                        val sql = "UPDATE ${DataMembers.tbl_driverMaster} set wins = ${
-                            stringHandler.getQueryFormat(wins.toString())
-                        }" +
+                        val sql = "UPDATE ${DataMembers.tbl_driverMaster} set season = ${stringHandler.getQueryFormat(season)}, round = ${stringHandler.getQueryFormat(round)}, wins = ${stringHandler.getQueryFormat(wins.toString())}" +
                                 ", total_points = ${stringHandler.getQueryFormat(points.toString())}, " +
                                 "driver_position = ${stringHandler.getQueryFormat(position)} WHERE driver_code = ${
                                     stringHandler.getQueryFormat(
@@ -259,10 +286,12 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
                     val wins = consList[i].wins
                     val position = consList[i].position
                     val code = consList[i].consId
+                    val season = consList[i].season
+                    val round = consList[i].round
 
                     try {
                         val sql =
-                            "UPDATE ${DataMembers.tbl_constructorMaster} set constructor_wins = ${
+                            "UPDATE ${DataMembers.tbl_constructorMaster} set season = ${stringHandler.getQueryFormat(season)}, round = ${stringHandler.getQueryFormat(round)}, constructor_wins = ${
                                 stringHandler.getQueryFormat(wins.toString())
                             }" +
                                     ", constructor_points = ${stringHandler.getQueryFormat(points.toString())}, " +
@@ -283,7 +312,7 @@ class LandingPresenter(val appContext: Context): LandingContractor.Presenter{
 
 
         }
-
+        view!!.hideLoading()
     }
 
     private fun isCheckDataAvailable(flag: Boolean, db: DbHandler): Boolean {

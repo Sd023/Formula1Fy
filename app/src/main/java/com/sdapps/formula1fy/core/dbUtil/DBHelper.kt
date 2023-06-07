@@ -6,7 +6,7 @@ object DBHelper {
     fun createTables(dbHandler: DbHandler) {
         try {
             dbHandler.exe(
-                "create table if not exists DriverMaster (driver_id TEXT, " +
+                "create table if not exists DriverMaster (season TEXT, round TEXT, driver_id TEXT, " +
                         "driver_code TEXT, driverName TEXT, driver_number INTEGER UNIQUE PRIMARY KEY, driver_constructor TEXT,wins INTEGER,total_points INTEGER, driver_position INTEGER, constructor_name TEXT)"
             )
 

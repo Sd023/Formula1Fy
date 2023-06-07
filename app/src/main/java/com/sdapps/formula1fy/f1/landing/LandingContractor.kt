@@ -17,7 +17,7 @@ interface LandingContractor {
         fun attachView(view: LandingContractor.View, context: Context)
         fun detachView()
         fun getAppString() : SpannableStringBuilder
-        fun fetchAllData()
+        suspend fun fetchAllData()
         fun insertDriverData(list: ArrayList<DriverBO>)
         fun insertConstructorData(list : ArrayList<ConstructorBO>)
     }

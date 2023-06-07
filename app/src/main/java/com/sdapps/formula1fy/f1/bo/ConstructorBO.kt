@@ -7,4 +7,6 @@ class ConstructorBO {
     var consId: String? = null
     var name: String? = null
     var nationality: String? = null
+    var season : String? = null
+    var round: String? = null
 }
