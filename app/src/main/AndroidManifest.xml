@@ -31,14 +31,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".f1.constructors.view.ConstructorActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".f1.drivers.view.DriversActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".f1.home.view.HomeScreenActivity"
             android:exported="true"
             android:screenOrientation="portrait">
