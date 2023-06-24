@@ -20,6 +20,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.io.InputStream
+import java.net.URL
+import java.net.URLConnection
 
 class LandingScreenActivity : AppCompatActivity(), LandingContractor.View, BaseInterface.BaseView,
     View.OnClickListener {
@@ -42,6 +45,7 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View, BaseI
         initAll()
 
     }
+
 
     override fun showLoading() {
         pf.setTitle("loading..")

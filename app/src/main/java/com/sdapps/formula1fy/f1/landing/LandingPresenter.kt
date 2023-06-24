@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
@@ -23,9 +24,14 @@ import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
@@ -70,7 +76,7 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
         db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
         requestQueue = Volley.newRequestQueue(context)
 
-        val url = "https://ergast.com/api/f1/current/driverStandings.json"
+        val url = "http://ergast.com/api/f1/current/driverStandings.json"
         val driverList = ArrayList<DriverBO>()
 
         val jsonReq = JsonObjectRequest(
@@ -204,12 +210,11 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
             )
 
         }
-        db.closeDB()
     }
 
     override suspend fun fetchRaceData() {
         db = DbHandler(context, DataMembers.DB_NAME)
-        val url = "https://ergast.com/api/f1/current.json"
+        val url = "http://ergast.com/api/f1/current.json"
         requestQueue = Volley.newRequestQueue(context)
 
         val raceList = ArrayList<RaceScheduleBO>()
@@ -255,12 +260,12 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
             },
             { error: VolleyError -> error.printStackTrace() })
         requestQueue.add(jsonReq)
-
     }
+
 
     override suspend fun fetchConstructorData() {
         db = DbHandler(context, DataMembers.DB_NAME)
-        val url = "https://ergast.com/api/f1/current/constructorStandings.json"
+        val url = "http://ergast.com/api/f1/current/constructorStandings.json"
         requestQueue = Volley.newRequestQueue(context)
 
         val constructorList = ArrayList<ConstructorBO>()
@@ -324,7 +329,6 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
                 }
             }
             cursor.close()
-            db.closeDB()
             return false
 
         } catch (ex: Exception) {
