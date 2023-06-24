@@ -49,7 +49,7 @@ class ConstructorAdapter(private val data: ArrayList<ConstructorBO>) :
         var cardView: CardView
 
         init {
-            driverName = itemView.findViewById(R.id.driverName) as TextView
+            driverName = itemView.findViewById(R.id.name) as TextView
             cardView = itemView.findViewById(R.id.cardView)
             points = itemView.findViewById(R.id.points) as TextView
             position = itemView.findViewById(R.id.constructorName) as TextView

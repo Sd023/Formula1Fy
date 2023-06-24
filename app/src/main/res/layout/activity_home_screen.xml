@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".f1.home.view.HomeScreenActivity">
+    tools:context=".f1.base.view.BaseActivity">
 
    <!-- <androidx.cardview.widget.CardView
         android:id="@+id/driverCardView"

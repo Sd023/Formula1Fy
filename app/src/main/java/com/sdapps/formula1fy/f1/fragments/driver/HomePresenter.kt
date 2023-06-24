@@ -1,19 +1,20 @@
 package com.sdapps.formula1fy.f1.fragments.driver
 
 import android.content.Context
-import android.util.Log
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
+import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
 import java.time.LocalDate
 
-class DriverPresenter(val context: Context) : DriverInteractor.Presenter {
+class HomePresenter(val context: Context) : HomeContractor.Presenter {
 
-    private var view: DriverInteractor.View? = null
+    private var view: HomeContractor.View? = null
     private lateinit var driverList: ArrayList<DriverBO>
     private var nextRoundList = mutableListOf<RaceScheduleBO>()
+    private lateinit var constructorList: ArrayList<ConstructorBO>
 
-    override fun attachView(view: DriverInteractor.View) {
+    override fun attachView(view: HomeContractor.View) {
         this.view = view
     }
 
@@ -21,7 +22,7 @@ class DriverPresenter(val context: Context) : DriverInteractor.Presenter {
         this.view = null
     }
 
-    override fun getNextRound(db: DbHandler): MutableList<RaceScheduleBO> {
+    override suspend fun getNextRound(db: DbHandler): MutableList<RaceScheduleBO> {
         try {
             val currentDate = LocalDate.now()
             val stringDate = mutableListOf<String>()
@@ -64,7 +65,8 @@ class DriverPresenter(val context: Context) : DriverInteractor.Presenter {
         return nextRoundList
     }
 
-    override fun getDriverData(db: DbHandler): ArrayList<DriverBO> {
+    override suspend fun getDriverData(db: DbHandler) {
+
         driverList = ArrayList<DriverBO>()
         try {
             db.openDB()
@@ -84,6 +86,10 @@ class DriverPresenter(val context: Context) : DriverInteractor.Presenter {
                     driverBO.constructorName = cursor.getString(8)
                     driverList.add(driverBO)
                 }
+
+                view?.setDriverAdapter(driverList)
+
+
             }
             cursor.close()
             db.closeDB()
@@ -92,6 +98,38 @@ class DriverPresenter(val context: Context) : DriverInteractor.Presenter {
             ex.printStackTrace()
 
         }
-        return driverList
+
+
+    }
+
+    override suspend fun getConstructorData(db: DbHandler) {
+        constructorList = ArrayList<ConstructorBO>()
+        try {
+            db.openDB()
+            val c =
+                db.selectSql("SELECT constructor_id,constructor_name,constructor_wins,constructor_points,constructor_position,constructor_nationality from ConstructorMaster")
+            if (c != null) {
+                while (c.moveToNext()) {
+                    val bo = ConstructorBO()
+                    bo.consId = c.getString(0)
+                    bo.name = c.getString(1)
+                    bo.wins = c.getString(2)
+                    bo.points = c.getString(3)
+                    bo.position = c.getString(4)
+                    bo.nationality = c.getString(5)
+                    constructorList.add(bo)
+                }
+
+                view?.setConstructorAdapter(constructorList)
+
+            }
+            c!!.close()
+            db.closeDB()
+
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            db.closeDB()
+        }
+
     }
 }

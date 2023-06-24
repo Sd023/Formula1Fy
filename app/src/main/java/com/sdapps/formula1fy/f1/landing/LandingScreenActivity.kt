@@ -14,17 +14,13 @@ import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.utils.NetworkTools
-import com.sdapps.formula1fy.f1.base.BaseInterface
-import com.sdapps.formula1fy.f1.home.view.HomeScreenActivity
+import com.sdapps.formula1fy.f1.base.view.BaseActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.io.InputStream
-import java.net.URL
-import java.net.URLConnection
 
-class LandingScreenActivity : AppCompatActivity(), LandingContractor.View, BaseInterface.BaseView,
+class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
     View.OnClickListener {
 
     private lateinit var appNameTitle: TextView
@@ -61,7 +57,7 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View, BaseI
     }
 
     override fun moveToNextScreen() {
-        startActivity(Intent(this@LandingScreenActivity, HomeScreenActivity::class.java))
+        startActivity(Intent(this@LandingScreenActivity, BaseActivity::class.java))
         finish()
     }
 
@@ -103,7 +99,7 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View, BaseI
         super.onResume()
     }
 
-    override fun hideStatusBar() {
+     fun hideStatusBar() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())

@@ -8,4 +8,5 @@
     <string name="driver_image">DriverImage</string>
     <string name="desc">Drivers | Constructors | Stats</string>
     <string name="formula1fy">Formula1Fy</string>
+    <string name="driver_standings">Driver Standings</string>
 </resources>

@@ -1,10 +1,10 @@
-package com.sdapps.formula1fy.f1.home
+package com.sdapps.formula1fy.f1.base
 
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
 
-interface HomeScreenInteractor {
+interface BaseContractor {
     interface View {
         fun loadScreen()
         fun getMessageFromDead()

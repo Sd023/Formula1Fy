@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".f1.home.view.HomeScreenActivity"
+            android:name=".f1.base.view.BaseActivity"
             android:exported="true"
             android:screenOrientation="portrait">
         </activity>
