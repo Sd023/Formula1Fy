@@ -81,6 +81,11 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
                 }
                 fetchConstructorData.await()
 
+                val latestRaceJson = async(Dispatchers.IO){
+                    landPresenter!!.fetchLatestResults()
+                }
+                latestRaceJson.await()
+
                 val fetchRaceData = async(Dispatchers.IO) {
                     landPresenter!!.fetchRaceData()
                 }

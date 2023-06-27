@@ -6,6 +6,7 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
@@ -22,6 +23,7 @@ import com.sdapps.formula1fy.core.utils.StringHelper
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
+import com.sdapps.formula1fy.f1.bo.Results
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -43,7 +45,7 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
     private var stringHandler: StringHelper = StringHelper()
     private var seasonString: String? = null
     private var roundString: String? = null
-
+    private lateinit var latestRoundResult: MutableList<Results>
     override fun attachView(view: LandingContractor.View, context: Context) {
         this.view = view
         this.context = context
@@ -318,6 +320,93 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
     }
 
+    override suspend fun fetchLatestResults() {
+        db = DbHandler(context, DataMembers.DB_NAME)
+        val url = "http://ergast.com/api/f1/current/last/results.json"
+        requestQueue = Volley.newRequestQueue(context)
+        latestRoundResult = mutableListOf()
+
+        val jsonReq = JsonObjectRequest(Request.Method.GET, url, null,
+            {
+            if(it != null){
+                try{
+                    val latestRaceJson = it.getJSONObject("MRData")
+                        .getJSONObject("RaceTable")
+                        .getJSONArray("Races")
+                        .getJSONObject(0)
+                        .getJSONArray("Results")
+
+                    for(i in 0 until latestRaceJson.length()){
+                        val data = latestRaceJson.getJSONObject(i)
+                        val jsonData = data.getJSONObject("FastestLap")
+
+                        val latestBO = Results().apply {
+                            driverSeasonNumber = data.getInt("number")
+                            position = data.getInt("position")
+                            roundPoint = data.getString("points")
+                            startGrid = data.getString("grid")
+                            totalLaps = data.getString("laps")
+                            status = data.getString("status")
+
+                            rank = jsonData.getString("rank")
+                            fastestLapOn = jsonData.getString("lap")
+                            fastestLapTime = jsonData.getJSONObject("Time").getString("time")
+                            speedUnit = jsonData.getJSONObject("AverageSpeed").getString("units")
+                            avgSpeed = jsonData.getJSONObject("AverageSpeed").getString("speed")
+                        }
+                        latestRoundResult.add(latestBO)
+
+                    }
+                    insertLatestResultsIntoDB(latestRoundResult)
+
+                }catch (ex: Exception){
+                    ex.printStackTrace()
+                }
+            }
+
+            }, {
+                error -> error.printStackTrace()
+            })
+
+
+
+        requestQueue.add(jsonReq)
+
+    }
+
+    override fun insertLatestResultsIntoDB(list: MutableList<Results>) {
+        db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
+        db.createDB()
+        db.openDB()
+
+        try {
+            if (isCheckDataAvailable(DataMembers.tbl_latestResults, db)) {
+                db.deleteSQL(DataMembers.tbl_latestResults, true)
+            }
+
+            for (finalList in list) {
+                val sb = StringBuffer()
+                sb.append(finalList.driverSeasonNumber)
+                sb.append("," + finalList.position)
+                sb.append("," + stringHandler.getQueryFormat(finalList.roundPoint))
+                sb.append("," + stringHandler.getQueryFormat(finalList.startGrid))
+                sb.append("," + stringHandler.getQueryFormat(finalList.totalLaps))
+                sb.append("," + stringHandler.getQueryFormat(finalList.status))
+                sb.append("," + stringHandler.getQueryFormat(finalList.rank))
+                sb.append("," + stringHandler.getQueryFormat(finalList.fastestLapOn))
+                sb.append("," + stringHandler.getQueryFormat(finalList.fastestLapTime))
+                sb.append("," + stringHandler.getQueryFormat(finalList.speedUnit))
+                sb.append("," + stringHandler.getQueryFormat(finalList.avgSpeed))
+
+                db.insertSQL(DataMembers.tbl_latestResults, DataMembers.tbl_latestResultCols, sb.toString())
+
+            }
+        } catch (ex: Exception) {
+            Commons().printException(ex)
+        }
+
+    }
+
     private fun isCheckDataAvailable(tblName: String, db: DbHandler): Boolean {
         try {
             db.openDB()
@@ -370,8 +459,8 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
         sb.append("," + stringHandler.getQueryFormat(rc.raceName))
         sb.append("," + stringHandler.getQueryFormat(rc.date))
         sb.append("," + stringHandler.getQueryFormat(rc.time))
-        sb.append("," + stringHandler.getQueryFormat(rc.circuitName))
         sb.append("," + stringHandler.getQueryFormat(rc.circuitId))
+        sb.append("," + stringHandler.getQueryFormat(rc.circuitName))
         sb.append("," + stringHandler.getQueryFormat(rc.lat))
         sb.append("," + stringHandler.getQueryFormat(rc.long))
         sb.append("," + stringHandler.getQueryFormat(rc.locality))

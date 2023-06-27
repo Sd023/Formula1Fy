@@ -1,7 +1,8 @@
-package com.sdapps.formula1fy.f1.fragments.driver
+package com.sdapps.formula1fy.f1.fragments.home
 
 import android.content.Context
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
+import com.sdapps.formula1fy.core.utils.Commons
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
@@ -22,7 +23,7 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
         this.view = null
     }
 
-    override suspend fun getNextRound(db: DbHandler): MutableList<RaceScheduleBO> {
+    override suspend fun getNextRound(db: DbHandler) {
         try {
             val currentDate = LocalDate.now()
             val stringDate = mutableListOf<String>()
@@ -52,17 +53,16 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
                         raceName = c1.getString(c1.getColumnIndex("race_name"))
                         date = c1.getString(c1.getColumnIndex("date"))
                         time = c1.getString(c1.getColumnIndex("time"))
-                        circuitId = c1.getString(c1.getColumnIndex("circuit_id"))
+                        circuitId = c1.getString(c1.getColumnIndex("circuit_name"))
                     }
                     nextRoundList.add(bo)
                 }
                 c1.close()
             }
         } catch (ex: Exception) {
-            nextRoundList
+            Commons().printException(ex)
         }
-
-        return nextRoundList
+        view!!.setNextRaceAdapter(nextRoundList)
     }
 
     override suspend fun getDriverData(db: DbHandler) {

@@ -10,4 +10,8 @@ class StringHelper {
     fun removeWhiteSpaces(data: String?): String? {
         return data?.replace("\\s".toRegex(), "")
     }
+
+    fun convertValueToString(data: Int?): String? {
+        return data?.toString()
+    }
 }

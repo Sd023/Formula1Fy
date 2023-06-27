@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.f1.fragments.driver
+package com.sdapps.formula1fy.f1.fragments.home
 
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
@@ -14,6 +14,8 @@ interface HomeContractor {
 
         fun setConstructorAdapter(list: ArrayList<ConstructorBO>)
         fun setDriverAdapter(list: ArrayList<DriverBO>)
+
+        fun setNextRaceAdapter(list : MutableList<RaceScheduleBO>)
     }
 
     interface Presenter {
@@ -22,6 +24,6 @@ interface HomeContractor {
         fun attachView(view: View)
 
         fun detachView()
-        suspend fun getNextRound(db: DbHandler): MutableList<RaceScheduleBO>
+        suspend fun getNextRound(db: DbHandler)
     }
 }

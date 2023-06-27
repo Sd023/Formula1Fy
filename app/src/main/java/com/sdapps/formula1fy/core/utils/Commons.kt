@@ -6,4 +6,8 @@ class Commons {
     fun print(data: String?) {
         Log.d(this.javaClass.name, data!!)
     }
+
+    fun printException(data: Throwable?){
+        Log.e(this.javaClass.name, data.toString())
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
+import com.sdapps.formula1fy.f1.bo.Results
 
 interface LandingContractor {
 
@@ -24,5 +25,8 @@ interface LandingContractor {
 
         suspend fun fetchRaceData()
         suspend fun fetchConstructorData()
+
+        suspend fun fetchLatestResults()
+        fun insertLatestResultsIntoDB(list: MutableList<Results>)
     }
 }

@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.f1.fragments.driver
+package com.sdapps.formula1fy.f1.fragments.home
 
 import android.content.Context
 import android.os.Bundle
@@ -10,12 +10,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.databinding.FragmentDriverBinding
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
+import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
 import kotlinx.coroutines.launch
 
 
@@ -25,6 +25,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
     private lateinit var context: Context
 
     private var binding: FragmentDriverBinding? = null
+    private lateinit var nextList : MutableList<RaceScheduleBO>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +61,10 @@ class HomeFragment : Fragment(), HomeContractor.View {
         presenter = HomePresenter(context)
         presenter.attachView(this)
         db = DbHandler(context, DataMembers.DB_NAME)
-       lifecycleScope.launch {
-           presenter.getDriverData(db)
-           presenter.getConstructorData(db)
+        lifecycleScope.launch {
+            presenter.getNextRound(db)
+            presenter.getDriverData(db)
+            presenter.getConstructorData(db)
        }
 
     }
@@ -77,6 +79,23 @@ class HomeFragment : Fragment(), HomeContractor.View {
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val adapter = HomeDriverAdapter(list)
         binding!!.recyclerView.adapter = adapter
+    }
+
+    override fun setNextRaceAdapter(list: MutableList<RaceScheduleBO>) {
+        if(list!=null){
+            binding!!.noDataErr.visibility = View.GONE
+            binding!!.nextRoundLayout.visibility = View.VISIBLE
+            for(data in list){
+                binding!!.nextRound.text = data.raceName
+                binding!!.round.text = data.round
+                binding!!.year.text = data.season
+                binding!!.nextDateTime.text = data.date
+            }
+        }else{
+            binding!!.noDataErr.visibility = View.VISIBLE
+            binding!!.nextRoundLayout.visibility = View.GONE
+        }
+
     }
 
     override fun showLoading() {
