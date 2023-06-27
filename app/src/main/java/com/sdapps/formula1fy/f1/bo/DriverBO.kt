@@ -14,4 +14,6 @@ class DriverBO {
     var wins: Int? = null
     var isDataExists: Boolean? = null
     var constructorName : String? = null
+    var season : String? = null
+    var round : String? = null
 }
