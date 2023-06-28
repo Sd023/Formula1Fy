@@ -36,10 +36,10 @@ class HomeDriverAdapter(private var data: ArrayList<DriverBO>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             val stringBuilder = StringBuilder()
-            val points = stringBuilder.append(data[position].totalPoints.toString() + " pts")
+            val pos = stringBuilder.append(data[position].latestRaceFinish.toString())
             holder.name.text =data[position].driverName
             holder.constructorName.text = data[position].constructorName
-            holder.points.text = points
+            holder.points.text =pos
         } catch (ex: Exception) {
             commons.print(ex.message)
             ex.printStackTrace()

@@ -71,19 +71,33 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
         try {
             db.openDB()
             val cursor =
-                db.selectSql("SELECT driver_id,driver_code,driver_name,driver_number, driver_constructor,wins,total_points,driver_position,constructor_name from DriverMaster ORDER BY driver_position ASC")
+                db.selectSql("SELECT DM.driver_id,DM.driver_code,DM.driver_name,DM.driver_number,DM.driver_constructor,DM.wins,DM.total_points,DM.driver_position," +
+                        "DM.constructor_name,LRM.start_grid,LRM.position,LRM.round_point, " +
+                        "LRM.fastest_lap_time,LRM.fastest_lap,LRM.fastest_lap_avg_speed,LRM.speed_unit,LRM.status " +
+                        "FROM DriverMaster DM INNER JOIN LatestResultMaster LRM WHERE LRM.driver_id = DM.driver_id ORDER BY LRM.position ASC")
             if (cursor != null) {
                 while (cursor.moveToNext()) {
-                    val driverBO = DriverBO()
-                    driverBO.driverId = cursor.getString(0)
-                    driverBO.driverCode = cursor.getString(1)
-                    driverBO.driverName = cursor.getString(2)
-                    driverBO.driverNumber = cursor.getInt(3)
-                    driverBO.constructorId = cursor.getString(4)
-                    driverBO.wins = cursor.getInt(5)
-                    driverBO.totalPoints = cursor.getInt(6)
-                    driverBO.driverPosition = cursor.getString(7)
-                    driverBO.constructorName = cursor.getString(8)
+                    val driverBO = DriverBO().apply {
+                        driverId = cursor.getString(0)
+                        driverCode = cursor.getString(1)
+                        driverName = cursor.getString(2)
+                        driverNumber = cursor.getInt(3)
+                        constructorId = cursor.getString(4)
+                        wins = cursor.getInt(5)
+                        totalPoints = cursor.getInt(6)
+                        driverPosition = cursor.getString(7)
+                        constructorName = cursor.getString(8)
+
+                        latestRaceGridStart = cursor.getString(9)
+                        latestRaceFinish = cursor.getString(10)
+                        latestRoundPoints = cursor.getString(11)
+                        latestRoundFLTime = cursor.getString(12)
+                        latestRoundFLOn = cursor.getString(13)
+                        latestRoundFLSpeed = cursor.getString(14)
+                        speedUnits = cursor.getString(15)
+                        latestRaceStatus = cursor.getString(16)
+                    }
+
                     driverList.add(driverBO)
                 }
 

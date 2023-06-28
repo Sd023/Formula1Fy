@@ -1,6 +1,8 @@
 package com.sdapps.formula1fy.f1.bo
 
 class Results() {
+    var driverPermanentNumber : String? =null
+    var driverId : String? = null
     var driverSeasonNumber : Int? = null
     var position: Int? = null
     var roundPoint: String? = null

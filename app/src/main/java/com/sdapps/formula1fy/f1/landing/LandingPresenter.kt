@@ -72,9 +72,6 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
     }
 
     override suspend fun fetchDriverData() {
-        withContext(Dispatchers.Main) {
-            view!!.showLoading()
-        }
         db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
         requestQueue = Volley.newRequestQueue(context)
 
@@ -343,6 +340,8 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
                         val latestBO = Results().apply {
                             driverSeasonNumber = data.getInt("number")
                             position = data.getInt("position")
+                            driverPermanentNumber = data.getJSONObject("Driver").getString("permanentNumber")
+                            driverId = data.getJSONObject("Driver").getString("driverId")
                             roundPoint = data.getString("points")
                             startGrid = data.getString("grid")
                             totalLaps = data.getString("laps")
@@ -388,6 +387,8 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
                 val sb = StringBuffer()
                 sb.append(finalList.driverSeasonNumber)
                 sb.append("," + finalList.position)
+                sb.append("," + stringHandler.getQueryFormat(finalList.driverId))
+                sb.append("," + stringHandler.getQueryFormat(finalList.driverPermanentNumber))
                 sb.append("," + stringHandler.getQueryFormat(finalList.roundPoint))
                 sb.append("," + stringHandler.getQueryFormat(finalList.startGrid))
                 sb.append("," + stringHandler.getQueryFormat(finalList.totalLaps))
