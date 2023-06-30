@@ -3,33 +3,37 @@
     android:layout_width="match_parent"
     android:padding="5dp"
     android:layout_height="40dp">
+    <TextView
+        android:id="@+id/position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:layout_marginStart="5dp"
+        android:layout_centerVertical="true"
+        android:textSize="14sp"
+        android:fontFamily="@font/regular"
+        android:textColor="@color/black"/>
 
-    <ImageView
-        android:id="@+id/teamBrandColor"
-        android:layout_width="4dp"
-        android:layout_height="30dp"
-        android:background="@color/ferrari_red"/>
-
+    <TextView
+        android:id="@+id/driverName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/position"
+        android:textSize="12sp"
+        android:fontFamily="@font/regular"
+        android:textColor="@color/black"
+        android:layout_marginStart="30dp"
+        android:text="" />
     <TextView
         android:id="@+id/teamName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/teamBrandColor"
-        android:textSize="12sp"
-        android:fontFamily="@font/regular"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:text="" />
-    <TextView
-        android:id="@+id/teamDrivers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/teamBrandColor"
+        android:layout_toEndOf="@+id/position"
         android:textSize="11sp"
         android:fontFamily="@font/regular"
         android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_below="@+id/teamName"
+        android:layout_marginStart="30dp"
+        android:layout_below="@+id/driverName"
         android:text="" />
 
     <TextView
@@ -38,9 +42,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"
-        android:fontFamily="@font/regular"
         android:layout_marginEnd="15dp"
-        android:text="" />
+        android:fontFamily="@font/regular"
+        android:text="214" />
 
 
 
