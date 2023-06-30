@@ -5,6 +5,7 @@ import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.utils.Commons
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
+import com.sdapps.formula1fy.f1.bo.LatestResult
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
 import java.time.LocalDate
 
@@ -14,6 +15,7 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
     private lateinit var driverList: ArrayList<DriverBO>
     private var nextRoundList = mutableListOf<RaceScheduleBO>()
     private lateinit var constructorList: ArrayList<ConstructorBO>
+    private lateinit var latestList: MutableList<LatestResult>
 
     override fun attachView(view: HomeContractor.View) {
         this.view = view
@@ -65,16 +67,49 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
         view!!.setNextRaceAdapter(nextRoundList)
     }
 
+    override suspend fun getLatestRound(db: DbHandler) {
+        latestList = mutableListOf()
+        try{
+            db.openDB()
+            val cursor =
+               db.selectSql("SELECT DISTINCT DM.driver_name,DM.constructor_name,LRM.start_grid,LRM.position,LRM.round_point,LRM.fastest_lap_time,LRM.fastest_lap,LRM.fastest_lap_avg_speed,LRM.speed_unit,LRM.status FROM LatestResultMaster LRM INNER JOIN DRIVERMASTER DM ON DM.driver_id = LRM.driver_id  ORDER BY position ASC;")
+            if(cursor != null){
+                while(cursor.moveToNext()){
+                    val resultBo = LatestResult().apply {
+                        driverName = cursor.getString(0)
+                        teamName = cursor.getString(1)
+                        latestRaceGridStart = cursor.getString(2)
+                        latestRaceFinish = cursor.getString(3)
+                        latestRoundPoints = cursor.getString(4)
+                        latestRoundFLTime = cursor.getString(5)
+                        latestRoundFLOn = cursor.getString(6)
+                        latestRoundFLSpeed = cursor.getString(7)
+                        speedUnits = cursor.getString(8)
+                        latestRaceStatus = cursor.getString(9)
+                    }
+                    latestList.add(resultBo)
+                }
+                view?.setLatestResults(latestList)
+            }
+            cursor.close()
+            db.closeDB()
+
+        }catch (ex: Exception){
+            Commons().printException(ex)
+            db.closeDB()
+        }
+
+
+    }
+
     override suspend fun getDriverData(db: DbHandler) {
 
         driverList = ArrayList<DriverBO>()
         try {
             db.openDB()
             val cursor =
-                db.selectSql("SELECT DM.driver_id,DM.driver_code,DM.driver_name,DM.driver_number,DM.driver_constructor,DM.wins,DM.total_points,DM.driver_position," +
-                        "DM.constructor_name,LRM.start_grid,LRM.position,LRM.round_point, " +
-                        "LRM.fastest_lap_time,LRM.fastest_lap,LRM.fastest_lap_avg_speed,LRM.speed_unit,LRM.status " +
-                        "FROM DriverMaster DM INNER JOIN LatestResultMaster LRM WHERE LRM.driver_id = DM.driver_id ORDER BY LRM.position ASC")
+                db.selectSql("SELECT driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points,driver_position," +
+                        " constructor_name FROM DriverMaster ORDER BY driver_position ASC")
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     val driverBO = DriverBO().apply {
@@ -87,15 +122,6 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
                         totalPoints = cursor.getInt(6)
                         driverPosition = cursor.getString(7)
                         constructorName = cursor.getString(8)
-
-                        latestRaceGridStart = cursor.getString(9)
-                        latestRaceFinish = cursor.getString(10)
-                        latestRoundPoints = cursor.getString(11)
-                        latestRoundFLTime = cursor.getString(12)
-                        latestRoundFLOn = cursor.getString(13)
-                        latestRoundFLSpeed = cursor.getString(14)
-                        speedUnits = cursor.getString(15)
-                        latestRaceStatus = cursor.getString(16)
                     }
 
                     driverList.add(driverBO)

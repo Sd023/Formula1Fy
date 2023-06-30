@@ -1,62 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent" android:layout_width="match_parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-108dp"
-        tools:layout_editor_absoluteY="-1dp">
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/constructorView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/latestResultLbl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:fontFamily="@font/bold"
-            android:text="@string/driver_standings"
+            android:text="Latest Results"
+            android:fontFamily="@font/regular"
             android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0990"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+            android:textSize="14sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/latestResultView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/latestResultLbl"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"/>
+
+
+        <TextView
+            android:id="@+id/nextRaceLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next Race"
+            android:layout_below="@+id/latestResultView"
+            android:textSize="14sp"
+            android:fontFamily="@font/regular"
+            android:textColor="@color/black"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="21dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
             android:elevation="20dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-
+            android:layout_below="@id/nextRaceLbl"
+           >
             <TextView
                 android:id="@+id/noDataErr"
                 android:layout_width="wrap_content"
@@ -70,7 +66,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="10dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -107,58 +103,85 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/nextDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/light"
+                        android:text="123:12:121"
+                        android:textSize="14sp" />
                     <TextView
                         android:id="@+id/year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:fontFamily="@font/regular"
-                        android:text="2023/10/12"
-                        android:textColor="@color/ferrari_red"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/light"
+                        android:text="123:12:121"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/nextDateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/light"
-                    android:text="123:12:121"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
 
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driver Standings"
+            android:fontFamily="@font/regular"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:id="@+id/driverStandingsLbl"
+            android:layout_below="@+id/cardView"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/driverRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/driverStandingsLbl"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Constructor Standings"
+            android:id="@+id/constructorStandingsLbl"
+            android:layout_below="@+id/driverRecyclerView"
+            android:fontFamily="@font/regular"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/constructorRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constructorView" />
+            android:layout_below="@+id/constructorStandingsLbl"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"/>
 
-        <TextView
-            android:id="@+id/constructorView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/bold"
-            android:text="Constructor Standings"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginTop="30dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/constructorRecyclerView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0990"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </RelativeLayout>
+    
 
 </ScrollView>
+

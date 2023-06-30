@@ -17,14 +17,4 @@ class DriverBO {
     var season : String? = null
     var round : String? = null
 
-    var latestRaceGridStart : String? = null
-    var latestRaceFinish : String ?  = null
-    var latestRoundPoints : String ? = null
-    var latestRoundFLTime : String? = null
-    var latestRoundFLOn : String? = null
-    var latestRoundFLSpeed : String? = null
-    var speedUnits:String? = null
-    var latestRaceStatus : String? = null
-
-
 }
