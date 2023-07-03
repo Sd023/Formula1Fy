@@ -7,6 +7,7 @@ import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.bo.LatestResult
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
+import java.sql.Driver
 import java.time.LocalDate
 
 class HomePresenter(val context: Context) : HomeContractor.Presenter {
@@ -16,6 +17,7 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
     private var nextRoundList = mutableListOf<RaceScheduleBO>()
     private lateinit var constructorList: ArrayList<ConstructorBO>
     private lateinit var latestList: MutableList<LatestResult>
+    private lateinit var constructorMap : HashMap<String, ArrayList<String>>
 
     override fun attachView(view: HomeContractor.View) {
         this.view = view
@@ -143,33 +145,70 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
     }
 
     override suspend fun getConstructorData(db: DbHandler) {
+        constructorMap = HashMap()
         constructorList = ArrayList<ConstructorBO>()
         try {
             db.openDB()
-            val c =
-                db.selectSql("SELECT constructor_id,constructor_name,constructor_wins,constructor_points,constructor_position,constructor_nationality from ConstructorMaster")
-            if (c != null) {
-                while (c.moveToNext()) {
-                    val bo = ConstructorBO()
-                    bo.consId = c.getString(0)
-                    bo.name = c.getString(1)
-                    bo.wins = c.getString(2)
-                    bo.points = c.getString(3)
-                    bo.position = c.getString(4)
-                    bo.nationality = c.getString(5)
-                    constructorList.add(bo)
+            try{
+                val c = db.selectSql("SELECT constructor_id,constructor_name,constructor_wins,constructor_points,constructor_position,constructor_nationality FROM ConstructorMaster")
+                if(c != null){
+                    while(c.moveToNext()){
+                        val constructorBO = ConstructorBO().apply {
+                            consId = c.getString(0)
+                            name = c.getString(1)
+                            wins = c.getString(2)
+                            points = c.getString(3)
+                            position = c.getString(4)
+                            nationality = c.getString(5)
+                        }
+                        constructorList.add(constructorBO)
+                    }
+                    c.close()
+                }
+            }catch (ex: Exception){
+                Commons().printException(ex)
+            }
+
+            val c1 =
+                db.selectSql("SELECT DM.driver_name,CM.constructor_id,CM.constructor_name,CM.constructor_wins,CM.constructor_points," +
+                        "CM.constructor_position,CM.constructor_nationality from ConstructorMaster CM INNER JOIN DriverMaster DM ON CM.constructor_id = DM.driver_constructor ORDER BY CM.constructor_position ASC ")
+            if (c1 != null) {
+                var driverLists = arrayListOf<String>()
+                var constructorName = String()
+                while (c1.moveToNext()) {
+                    val driverName = c1.getString(0)
+                    if(constructorName != c1.getString(2)){
+                        if(constructorName.isNotEmpty()){
+                            constructorMap[constructorName] = driverLists
+                            driverLists = arrayListOf<String>()
+                            driverLists.add(driverName)
+                            constructorName = c1.getString(2)
+                        }else{
+                            driverLists.add(driverName)
+                            constructorName = c1.getString(2)
+                        }
+                    }else{
+                        driverLists.add(driverName)
+                    }
+
+
+                }
+                if(driverLists.size > 0){
+                    constructorMap[constructorName] = driverLists
                 }
 
                 view?.setConstructorAdapter(constructorList)
-
+                c1.close()
+                db.closeDB()
             }
-            c!!.close()
-            db.closeDB()
 
         } catch (ex: Exception) {
             ex.printStackTrace()
             db.closeDB()
         }
 
+    }
+    public fun getDriverConstructorMap(): HashMap<String, ArrayList<String>>{
+        return constructorMap
     }
 }

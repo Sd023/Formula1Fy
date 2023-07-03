@@ -27,7 +27,8 @@ class HomeFragment : Fragment(), HomeContractor.View {
     private lateinit var context: Context
 
     private var binding: FragmentDriverBinding? = null
-    private lateinit var nextList : MutableList<RaceScheduleBO>
+    private lateinit var driversNameList : ArrayList<String>
+    private lateinit var listValues : List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +70,9 @@ class HomeFragment : Fragment(), HomeContractor.View {
     }
     override fun setConstructorAdapter(list: ArrayList<ConstructorBO>) {
         binding!!.constructorRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        val homeConstructorAdapter = HomeConstructorAdapter(list)
+        val homeConstructorAdapter = HomeConstructorAdapter(list, driversNameList)
         binding!!.constructorRecyclerView.adapter = homeConstructorAdapter
+
     }
 
     override fun setDriverAdapter(list: ArrayList<DriverBO>) {
@@ -102,7 +104,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
     override fun setLatestResults(list: MutableList<LatestResult>) {
         binding!!.latestResultView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = LatestResultAdapter(list)
+        val adapter = HomeLatestResultAdapter(list)
         binding!!.latestResultView.adapter = adapter
     }
 
