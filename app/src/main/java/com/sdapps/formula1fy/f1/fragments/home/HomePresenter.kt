@@ -175,6 +175,7 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
             if (c1 != null) {
                 var driverLists = arrayListOf<String>()
                 var constructorName = String()
+                var constructorNewBO = ConstructorBO()
                 while (c1.moveToNext()) {
                     val driverName = c1.getString(0)
                     if(constructorName != c1.getString(2)){
@@ -197,7 +198,7 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
                     constructorMap[constructorName] = driverLists
                 }
 
-                view?.setConstructorAdapter(constructorList)
+                view?.setConstructorAdapter(constructorList ,constructorMap)
                 c1.close()
                 db.closeDB()
             }

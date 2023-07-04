@@ -10,4 +10,12 @@
     <string name="formula1fy" tools:ignore="Typos">Formula1Fy</string>
     <string name="driver_standings">Driver Standings</string>
     <string name="no_data_exists">No Data Exists</string>
+    <string name="menu_driver">Driver</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_constructor">Constructor</string>
+    <string name="menu_schedule">Schedule</string>
+    <string name="home_latest_results">Latest Results</string>
+    <string name="home_next_race">Next Race</string>
+    <string name="home_driver_standings">Driver Standings</string>
+    <string name="home_constructor_standings">Constructor Standings</string>
 </resources>

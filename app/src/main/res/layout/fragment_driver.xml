@@ -13,10 +13,10 @@
             android:id="@+id/latestResultLbl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Latest Results"
+            android:text="@string/home_latest_results"
             android:fontFamily="@font/regular"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp" />
 
@@ -33,9 +33,9 @@
             android:id="@+id/nextRaceLbl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next Race"
+            android:text="@string/home_next_race"
             android:layout_below="@+id/latestResultView"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:fontFamily="@font/regular"
             android:textColor="@color/black"
             android:layout_marginStart="20dp"
@@ -58,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:text="@string/no_data_exists" />
 
             <LinearLayout
@@ -66,7 +67,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="10dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -81,7 +82,7 @@
                         android:layout_marginEnd="10dp"
                         android:fontFamily="@font/bold"
                         android:maxLines="2"
-                        android:text="NEXT RACE ROUND"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -98,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/regular"
-                        android:text="Round 8"
+                        android:text=""
                         android:textColor="@color/ferrari_red"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -117,7 +118,7 @@
                         android:layout_marginStart="3dp"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/light"
-                        android:text="123:12:121"
+                        android:text=""
                         android:textSize="14sp" />
                     <TextView
                         android:id="@+id/year"
@@ -126,7 +127,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/light"
-                        android:text="123:12:121"
+                        android:text=""
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -140,9 +141,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Driver Standings"
+            android:text="@string/home_driver_standings"
             android:fontFamily="@font/regular"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textColor="@color/black"
             android:id="@+id/driverStandingsLbl"
             android:layout_below="@+id/cardView"
@@ -160,12 +161,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Constructor Standings"
+            android:text="@string/home_constructor_standings"
             android:id="@+id/constructorStandingsLbl"
             android:layout_below="@+id/driverRecyclerView"
             android:fontFamily="@font/regular"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"/>
 

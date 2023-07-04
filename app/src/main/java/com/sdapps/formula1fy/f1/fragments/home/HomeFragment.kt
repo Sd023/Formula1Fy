@@ -15,6 +15,7 @@ import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.databinding.FragmentDriverBinding
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
+import com.sdapps.formula1fy.f1.bo.ConstructorNewBO
 import com.sdapps.formula1fy.f1.bo.LatestResult
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
 
     private var binding: FragmentDriverBinding? = null
     private lateinit var driversNameList : ArrayList<String>
-    private lateinit var listValues : List<String>
+    private lateinit var listValues : ArrayList<ConstructorNewBO>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,9 +69,15 @@ class HomeFragment : Fragment(), HomeContractor.View {
        }
 
     }
-    override fun setConstructorAdapter(list: ArrayList<ConstructorBO>) {
+    override fun setConstructorAdapter(list: ArrayList<ConstructorBO>, map : HashMap<String, ArrayList<String>>) {
+        listValues = arrayListOf()
+        for(entry in map.entries){
+            val teamBO = ConstructorNewBO(entry.key,entry.value)
+            listValues.add(teamBO)
+        }
         binding!!.constructorRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        val homeConstructorAdapter = HomeConstructorAdapter(list, driversNameList)
+        val homeConstructorAdapter = HomeConstructorAdapter(list, listValues)
+        binding!!.constructorRecyclerView.isNestedScrollingEnabled = false
         binding!!.constructorRecyclerView.adapter = homeConstructorAdapter
 
     }
@@ -79,7 +86,9 @@ class HomeFragment : Fragment(), HomeContractor.View {
         binding!!.driverRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val adapter = HomeDriverAdapter(list)
+        binding!!.driverRecyclerView.isNestedScrollingEnabled = false
         binding!!.driverRecyclerView.adapter = adapter
+
     }
 
     override fun setNextRaceAdapter(list: MutableList<RaceScheduleBO>) {

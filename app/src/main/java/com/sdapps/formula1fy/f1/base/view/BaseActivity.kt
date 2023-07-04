@@ -4,7 +4,7 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sdapps.formula1fy.R
@@ -17,8 +17,6 @@ class BaseActivity : AppCompatActivity(), BaseContractor.View {
 
     private lateinit var db: DbHandler
     private lateinit var progressDialog: ProgressDialog
-    private lateinit var driverCard: CardView
-    private lateinit var constructorCard: CardView
     private lateinit var network:NetworkTools
     private lateinit var bottomBar : BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,19 +29,22 @@ class BaseActivity : AppCompatActivity(), BaseContractor.View {
     private fun initAll() {
         network = NetworkTools()
         bottomBar = findViewById(R.id.bottomView)
-//        driverCard = findViewById(R.id.driverCardView)
-//        constructorCard = findViewById(R.id.constructorCardView)
         progressDialog = ProgressDialog(this)
 
         db = DbHandler(applicationContext, DataMembers.DB_NAME)
         getMessageFromDead()
         db.createDB()
         loadScreen()
-        bottomBar.selectedItemId = R.id.driver_menu
+        bottomBar.selectedItemId = R.id.home_menu
+
+
+
         bottomBar.setOnItemSelectedListener {
             when(it.itemId){
+                R.id.home_menu -> callHomeFragment()
                 R.id.driver_menu -> callDriverFragment()
-                R.id.constructor_menu -> callConsFragment()
+                R.id.constructor_menu -> callConstructorFragment()
+                R.id.schedule_menu -> callScheduleFragment()
                 else -> showToast()
             }
         }
@@ -51,14 +52,20 @@ class BaseActivity : AppCompatActivity(), BaseContractor.View {
 
     }
 
-    fun callDriverFragment(): Boolean{
+    fun callConstructorFragment(): Boolean{
+        return true
+    }
+
+    fun callScheduleFragment(): Boolean{
+        return true
+    }
+
+    fun callHomeFragment(): Boolean{
        val navController = findNavController(R.id.navHostFrag)
         navController.navigate(R.id.driver_frag)
         return true
     }
-    fun callConsFragment(): Boolean{
-        val navController = findNavController(R.id.navHostFrag)
-        navController.navigate(R.id.cons_frag)
+    fun callDriverFragment(): Boolean{
         return true
 
     }
@@ -66,20 +73,6 @@ class BaseActivity : AppCompatActivity(), BaseContractor.View {
 
     override fun loadScreen() {
 
-//        driverCard.setOnClickListener {
-//            lifecycleScope.launch {
-//                moveToNextScreen(true)
-//
-//            }
-//
-//        }
-//        constructorCard.setOnClickListener {
-//            lifecycleScope.launch {
-//                moveToNextScreen(false)
-//
-//            }
-//
-//        }
 
     }
 
@@ -92,14 +85,9 @@ class BaseActivity : AppCompatActivity(), BaseContractor.View {
     }
 
     override fun showLoading() {
-        progressDialog.setTitle("Formula1Fy")
-        progressDialog.setMessage("Loading Data..")
-        progressDialog.setCancelable(false)
-        progressDialog.show()
     }
 
     override fun hideLoading() {
-        progressDialog.dismiss()
     }
 
     override fun onError() {
