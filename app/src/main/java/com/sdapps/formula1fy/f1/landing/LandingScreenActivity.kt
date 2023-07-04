@@ -45,7 +45,8 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
 
     override fun showLoading() {
         pf.setTitle("Formula1Fy")
-        pf.setMessage("Loading data...")
+        pf.setMessage("Fetching data...")
+        pf.setCancelable(false)
         pf.show()
     }
 
