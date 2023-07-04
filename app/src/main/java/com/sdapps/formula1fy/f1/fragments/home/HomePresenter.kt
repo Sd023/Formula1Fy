@@ -14,7 +14,7 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
 
     private var view: HomeContractor.View? = null
     private lateinit var driverList: ArrayList<DriverBO>
-    private var nextRoundList = mutableListOf<RaceScheduleBO>()
+    private var nextRoundList = arrayListOf<RaceScheduleBO>()
     private lateinit var constructorList: ArrayList<ConstructorBO>
     private lateinit var latestList: MutableList<LatestResult>
     private lateinit var constructorMap : HashMap<String, ArrayList<String>>
@@ -27,6 +27,11 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
         this.view = null
     }
 
+    fun roundListNumber(start: Int, count: Int): String{
+        //generating a list of number from the start value. purpose is to get race list data
+        val numberList = List(count){index -> start + index }
+        return numberList.joinToString(",")
+    }
     override suspend fun getNextRound(db: DbHandler) {
         try {
             val currentDate = LocalDate.now()
@@ -41,14 +46,16 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
                 cursor.close()
             }
 
+            /*calculating the next round number by parsing date */
             val roundDate = stringDate.mapNotNull { date -> LocalDate.parse(date) }
             val nextRoundNumber =
                 if (roundDate.isNotEmpty()) {
                     roundDate.indexOfFirst { it > currentDate } + 1
                 } else -1
 
+            val nextRoundValues = roundListNumber(nextRoundNumber, 5)
             val c1 =
-                db.selectSql("SELECT * FROM RaceScheduleMaster WHERE round = ${nextRoundNumber}")
+                db.selectSql("SELECT * FROM RaceScheduleMaster WHERE round IN ($nextRoundValues)")
             if (c1 != null) {
                 while (c1.moveToNext()) {
                     val bo = RaceScheduleBO().apply {

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
@@ -91,22 +92,15 @@ class HomeFragment : Fragment(), HomeContractor.View {
 
     }
 
-    override fun setNextRaceAdapter(list: MutableList<RaceScheduleBO>) {
+    override fun setNextRaceAdapter(list: ArrayList<RaceScheduleBO>) {
         if(list!=null){
-            binding!!.noDataErr.visibility = View.GONE
-            binding!!.nextRoundLayout.visibility = View.VISIBLE
-            val sb : StringBuilder = StringBuilder()
-            for(data in list){
-                sb.append("Round: ").append(data.round)
-                binding!!.nextRound.text = data.raceName
-                binding!!.round.text = sb.toString()
-                binding!!.year.text = data.date
-            }
+            binding!!.nextRaceCard.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            val adapter = HomeNextRaceListAdapter(list)
+            binding!!.nextRaceCard.adapter = adapter
         }else{
-            binding!!.noDataErr.visibility = View.VISIBLE
-            binding!!.nextRoundLayout.visibility = View.GONE
+          Toast.makeText(context,"No Data", Toast.LENGTH_LONG).show()
         }
-
     }
 
     override fun setLatestResults(list: MutableList<LatestResult>) {

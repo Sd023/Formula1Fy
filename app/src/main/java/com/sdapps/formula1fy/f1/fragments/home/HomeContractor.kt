@@ -16,7 +16,7 @@ interface HomeContractor {
         fun setConstructorAdapter(list: ArrayList<ConstructorBO>, map : HashMap<String, ArrayList<String>>)
         fun setDriverAdapter(list: ArrayList<DriverBO>)
 
-        fun setNextRaceAdapter(list : MutableList<RaceScheduleBO>)
+        fun setNextRaceAdapter(list : ArrayList<RaceScheduleBO>)
         fun setLatestResults(list: MutableList<LatestResult>)
     }
 
