@@ -1,7 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-<string name="app_name">
-<font color="#FFFFFF" tools:ignore="Typos">Formula1</font><font color="#FF2800">FY</font>
-</string>
+<string name="app_name">Formula1Fy</string>
     <string name="drivers">Drivers</string>
     <string name="constructors">Constructors</string>
     <string name="constructors_image">Constructors Image</string>
@@ -10,4 +8,16 @@
     <string name="formula1fy" tools:ignore="Typos">Formula1Fy</string>
     <string name="driver_standings">Driver Standings</string>
     <string name="no_data_exists">No Data Exists</string>
+    <string name="menu_driver">Driver</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_constructor">Constructor</string>
+    <string name="menu_schedule">Schedule</string>
+    <string name="home_latest_results">Latest Results</string>
+    <string name="home_next_race">Next Race</string>
+    <string name="home_driver_standings">Driver Standings</string>
+    <string name="home_constructor_standings">Constructor Standings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="driver">Driver</string>
+    <string name="standings">Standings</string>
 </resources>

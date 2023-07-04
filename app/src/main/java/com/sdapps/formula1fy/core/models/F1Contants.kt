@@ -1,5 +1,8 @@
 package com.sdapps.formula1fy.core.models
 
+import android.icu.number.IntegerWidth
+import com.sdapps.formula1fy.R
+
 object F1Contants {
     const val RED_BULL = "red_bull"
     const val MERCEDES = "mercedes"
@@ -11,6 +14,20 @@ object F1Contants {
     const val ALPHATAURI = "alphatauri"
     const val ASTON_MARTIN = "aston_martin"
     const val WILLIAMS = "williams"
+
+    var teamColorMap : HashMap<String, Int> = HashMap()
+    init {
+        teamColorMap.put(RED_BULL, R.color.redbull_racing)
+        teamColorMap.put(MERCEDES, R.color.mercedes)
+        teamColorMap.put(FERRARI, R.color.ferrari_red)
+        teamColorMap.put(ALPINE, R.color.alpine)
+        teamColorMap.put(MCLAREN, R.color.mclaren)
+        teamColorMap.put(ALFA_ROMEO, R.color.alfa_romeo_racing)
+        teamColorMap.put(HAAS, R.color.haas)
+        teamColorMap.put(ALPHATAURI, R.color.alphatauri)
+        teamColorMap.put(ASTON_MARTIN, R.color.aston_martin)
+        teamColorMap.put(WILLIAMS, R.color.williams)
+    }
 
     /*DRIVERS*/
     const val ALBON = "albon"

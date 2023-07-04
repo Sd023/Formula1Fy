@@ -3,6 +3,7 @@ package com.sdapps.formula1fy.f1.fragments.home
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
+import com.sdapps.formula1fy.f1.bo.LatestResult
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
 
 interface HomeContractor {
@@ -12,10 +13,11 @@ interface HomeContractor {
         fun hideLoading()
         fun initAll()
 
-        fun setConstructorAdapter(list: ArrayList<ConstructorBO>)
+        fun setConstructorAdapter(list: ArrayList<ConstructorBO>, map : HashMap<String, ArrayList<String>>)
         fun setDriverAdapter(list: ArrayList<DriverBO>)
 
-        fun setNextRaceAdapter(list : MutableList<RaceScheduleBO>)
+        fun setNextRaceAdapter(list : ArrayList<RaceScheduleBO>)
+        fun setLatestResults(list: MutableList<LatestResult>)
     }
 
     interface Presenter {
@@ -25,5 +27,6 @@ interface HomeContractor {
 
         fun detachView()
         suspend fun getNextRound(db: DbHandler)
+        suspend fun getLatestRound(db: DbHandler)
     }
 }

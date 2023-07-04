@@ -16,4 +16,5 @@ class DriverBO {
     var constructorName : String? = null
     var season : String? = null
     var round : String? = null
+
 }

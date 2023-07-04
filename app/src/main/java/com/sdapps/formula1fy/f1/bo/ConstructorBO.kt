@@ -10,3 +10,5 @@ class ConstructorBO {
     var season : String? = null
     var round: String? = null
 }
+
+data class ConstructorNewBO(val teamName: String, val driversOfTeam : ArrayList<String>)

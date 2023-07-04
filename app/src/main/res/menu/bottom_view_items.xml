@@ -2,21 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/home_menu"
+        android:enabled="true"
+        android:title="@string/menu_home"
+        android:icon="@drawable/menu_home_incon"/>
+
+    <item
         android:id="@+id/driver_menu"
         android:enabled="true"
-        android:title="Driver"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:title="@string/menu_driver"
+        android:icon="@drawable/menu_driver_icon"/>
 
     <item
         android:id="@+id/constructor_menu"
         android:enabled="true"
-        android:title="Constructor"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:title="@string/menu_constructor"
+        android:icon="@drawable/menu_constructor_icon"/>
 
     <item
-        android:id="@+id/race_menu"
+        android:id="@+id/schedule_menu"
         android:enabled="true"
-        android:title="Race"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:title="@string/menu_schedule"
+        android:icon="@drawable/menu_schedule_icon"/>
 
 </menu>
