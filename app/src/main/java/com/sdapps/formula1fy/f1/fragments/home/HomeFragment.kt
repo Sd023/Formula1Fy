@@ -100,8 +100,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
                 sb.append("Round: ").append(data.round)
                 binding!!.nextRound.text = data.raceName
                 binding!!.round.text = sb.toString()
-                binding!!.year.text = data.season
-                binding!!.nextDateTime.text = data.date
+                binding!!.year.text = data.date
             }
         }else{
             binding!!.noDataErr.visibility = View.VISIBLE
