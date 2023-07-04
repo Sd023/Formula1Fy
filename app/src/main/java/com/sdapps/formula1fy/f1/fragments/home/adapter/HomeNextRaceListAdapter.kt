@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.f1.fragments.home
+package com.sdapps.formula1fy.f1.fragments.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.utils.Commons
-import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
 import java.lang.StringBuilder
 

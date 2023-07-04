@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.f1.fragments.home
+package com.sdapps.formula1fy.f1.fragments.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -12,7 +12,6 @@ import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.models.F1Contants
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.ConstructorNewBO
-import com.sdapps.formula1fy.f1.bo.DriverBO
 import java.lang.StringBuilder
 
 class HomeConstructorAdapter(private val data: ArrayList<ConstructorBO>,val listValues : ArrayList<ConstructorNewBO>) :

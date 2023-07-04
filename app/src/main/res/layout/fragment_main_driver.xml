@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".f1.fragments.driver.DriverFragment"
+    tools:context=".f1.fragments.driver.view.DriverFragment"
     tools:ignore="ScrollViewCount">
         <RelativeLayout
             android:id="@+id/screenTitleLayout"
@@ -41,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/screenTitle2"
                 android:layout_marginTop="10dp"
-                android:padding="10dp"
+                android:padding="5dp"
                 />
         </RelativeLayout>
 

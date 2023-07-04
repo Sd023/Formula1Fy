@@ -7,7 +7,7 @@ object DBHelper {
         try {
             dbHandler.exe(
                 "create table if not exists DriverMaster (season TEXT, round TEXT, driver_id TEXT, " +
-                        "driver_code TEXT, driverName TEXT, driver_number INTEGER UNIQUE PRIMARY KEY, driver_constructor TEXT,wins INTEGER,total_points INTEGER, driver_position INTEGER, constructor_name TEXT)"
+                        "driver_code TEXT, driverName TEXT, driver_number INTEGER UNIQUE PRIMARY KEY, driver_constructor TEXT,wins INTEGER,total_points INTEGER, driver_position INTEGER, constructor_name TEXT, date_of_birth TEXT,nationality TEXT)"
             )
 
             dbHandler.exe(

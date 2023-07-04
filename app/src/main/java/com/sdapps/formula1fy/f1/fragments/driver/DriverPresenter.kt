@@ -18,7 +18,7 @@ class DriverPresenter(val context : Context) : DriverInteractor.Presenter{
             db.openDB()
             val cursor =
                 db.selectSql("SELECT driver_id,driver_code,driver_name,driver_number,driver_constructor,wins,total_points,driver_position," +
-                        " constructor_name FROM DriverMaster ORDER BY driver_position ASC")
+                        " constructor_name,date_of_birth,nationality FROM DriverMaster ORDER BY driver_position ASC")
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     val driverBO = DriverBO().apply {
@@ -31,6 +31,8 @@ class DriverPresenter(val context : Context) : DriverInteractor.Presenter{
                         totalPoints = cursor.getInt(6)
                         driverPosition = cursor.getString(7)
                         constructorName = cursor.getString(8)
+                        driverDOB = cursor.getString(9)
+                        driverNationality = cursor.getString(10)
                     }
 
                     driverList.add(driverBO)
@@ -47,5 +49,9 @@ class DriverPresenter(val context : Context) : DriverInteractor.Presenter{
             ex.printStackTrace()
 
         }
+    }
+
+    override suspend fun handleCardClick(driverBO: DriverBO) {
+        view.showToast(driverBO)
     }
 }

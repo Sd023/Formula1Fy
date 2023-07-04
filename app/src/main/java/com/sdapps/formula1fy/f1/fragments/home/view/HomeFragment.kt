@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.f1.fragments.home
+package com.sdapps.formula1fy.f1.fragments.home.view
 
 import android.content.Context
 import android.os.Bundle
@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,8 +18,13 @@ import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.ConstructorNewBO
 import com.sdapps.formula1fy.f1.bo.LatestResult
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
+import com.sdapps.formula1fy.f1.fragments.home.HomeContractor
+import com.sdapps.formula1fy.f1.fragments.home.HomePresenter
+import com.sdapps.formula1fy.f1.fragments.home.adapter.HomeConstructorAdapter
+import com.sdapps.formula1fy.f1.fragments.home.adapter.HomeDriverAdapter
+import com.sdapps.formula1fy.f1.fragments.home.adapter.HomeLatestResultAdapter
+import com.sdapps.formula1fy.f1.fragments.home.adapter.HomeNextRaceListAdapter
 import kotlinx.coroutines.launch
-import java.lang.StringBuilder
 
 
 class HomeFragment : Fragment(), HomeContractor.View {

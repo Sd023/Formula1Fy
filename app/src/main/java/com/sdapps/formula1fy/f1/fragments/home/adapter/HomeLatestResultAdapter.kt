@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.f1.fragments.home
+package com.sdapps.formula1fy.f1.fragments.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

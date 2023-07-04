@@ -151,6 +151,8 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
         sb.append("," + driverBO.totalPoints)
         sb.append("," + driverBO.driverPosition)
         sb.append("," + stringHandler.getQueryFormat(driverBO.constructorName))
+        sb.append("," + stringHandler.getQueryFormat(driverBO.driverDOB))
+        sb.append("," + stringHandler.getQueryFormat(driverBO.driverNationality))
 
         return sb
     }

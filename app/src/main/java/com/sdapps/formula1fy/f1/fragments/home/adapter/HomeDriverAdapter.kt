@@ -1,4 +1,4 @@
-package com.sdapps.formula1fy.f1.fragments.driver
+package com.sdapps.formula1fy.f1.fragments.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,8 +10,8 @@ import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.utils.Commons
 import com.sdapps.formula1fy.f1.bo.DriverBO
 
-class MainDriverAdapter(private var data: ArrayList<DriverBO>) :
-    RecyclerView.Adapter<MainDriverAdapter.ViewHolder>() {
+class HomeDriverAdapter(private var data: ArrayList<DriverBO>) :
+    RecyclerView.Adapter<HomeDriverAdapter.ViewHolder>() {
 
     private lateinit var context: Context
     private lateinit var viewGroup: ViewGroup
@@ -28,7 +28,7 @@ class MainDriverAdapter(private var data: ArrayList<DriverBO>) :
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return 5
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

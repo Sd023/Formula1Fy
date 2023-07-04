@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/home_frag"
-        android:name="com.sdapps.formula1fy.f1.fragments.home.HomeFragment"
+        android:name="com.sdapps.formula1fy.f1.fragments.home.view.HomeFragment"
         android:label="Home Fragment"/>
 
     <fragment
         android:id="@+id/driver_frag"
-        android:name="com.sdapps.formula1fy.f1.fragments.driver.DriverFragment"
+        android:name="com.sdapps.formula1fy.f1.fragments.driver.view.DriverFragment"
         android:label="Driver Fragment"/>
 
     <fragment
