@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sdapps.formula1fy.R
@@ -62,12 +61,13 @@ class BaseActivity : AppCompatActivity(), BaseContractor.View {
 
     fun callHomeFragment(): Boolean{
        val navController = findNavController(R.id.navHostFrag)
-        navController.navigate(R.id.driver_frag)
+        navController.navigate(R.id.home_frag)
         return true
     }
     fun callDriverFragment(): Boolean{
+        val navController = findNavController(R.id.navHostFrag)
+        navController.navigate(R.id.driver_frag)
         return true
-
     }
     fun showToast(): Boolean{return true}
 
