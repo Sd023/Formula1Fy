@@ -48,7 +48,7 @@
         android:backgroundTint="@color/ferrari_red"
         android:fontFamily="@font/regular"
         android:padding="16dp"
-        android:text="Lets Go!" />
+        android:text="@string/lets_go" />
 
 
 </RelativeLayout>

@@ -1,18 +1,25 @@
 package com.sdapps.formula1fy.f1.landing
 
 import android.content.Context
+import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.utils.NetworkTools
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class LandingManager(val presenter: LandingPresenter) {
+class LandingManager(val presenter: LandingPresenter, val dbHandler: DbHandler) {
 
     private lateinit var view : LandingContractor.View
 
-    suspend fun getAllNecessaryData(){
+    fun attachManagerview(view: LandingContractor.View){
+        this.view = view
+    }
+
+    suspend fun getAllNecessaryData(context: Context){
         CoroutineScope(Dispatchers.Main).launch {
+            if(NetworkTools().isNetworkAndInternetAvailable(context)){
+                view.showLoading()
                 val fetchDriverData = async(Dispatchers.IO) {
                     presenter.fetchDriverData()
                 }
@@ -31,6 +38,10 @@ class LandingManager(val presenter: LandingPresenter) {
                     presenter.fetchRaceData()
                 }
                 fetchRaceData.await()
+
+            }else{
+                presenter.checkIfDataIsAvailable(dbHandler)
             }
         }
+    }
 }

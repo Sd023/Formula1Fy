@@ -45,6 +45,8 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
         dbHandler = DbHandler(applicationContext, DataMembers.DB_NAME)
         dbHandler.createDB()
         landPresenter.attachView(this, applicationContext)
+        manager = LandingManager(landPresenter, dbHandler)
+        manager.attachManagerview(this)
         initAll()
 
     }
@@ -72,10 +74,9 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
 
     override fun initAll() {
         startBtn = findViewById(R.id.start)
-        startBtn.setOnClickListener(this)
         appNameTitle = findViewById(R.id.landingAppName)
         appNameTitle.setText(landPresenter?.getAppString(), TextView.BufferType.SPANNABLE)
-        manager = LandingManager(landPresenter)
+        startBtn.setOnClickListener(this)
     }
 
     override fun showDialog() {
@@ -95,24 +96,17 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
 
     override fun onClick(v: View?) {
         CoroutineScope(Dispatchers.Main).launch {
-            if(NetworkTools().isNetworkAndInternetAvailable(applicationContext)){
-                showLoading()
-                manager.getAllNecessaryData()
-            }else if(landPresenter.checkIfDataIsAvailable(dbHandler)){
-               showDialog()
-            }else{
-                showDialog(resources.getString(R.string.unable_to_download))
-            }
+            manager.getAllNecessaryData(applicationContext)
         }
 
 
 
     }
 
-    fun showDialog(msg: String){
+    override fun showAlert(){
         dialog = AlertDialog.Builder(this)
             .setTitle(resources.getString(R.string.no_internet))
-            .setMessage(msg)
+            .setMessage(resources.getString(R.string.unable_to_download))
             .setCancelable(false)
             .setPositiveButton(resources.getString(R.string.ok), DialogInterface.OnClickListener { dialog, i ->
                 dialog.dismiss()

@@ -12,6 +12,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.models.DataMembers.tbl_constructorMaster
@@ -46,6 +47,7 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
     private var seasonString: String? = null
     private var roundString: String? = null
     private lateinit var latestRoundResult: MutableList<Results>
+    private var flag : Boolean = false
     override fun attachView(view: LandingContractor.View, context: Context) {
         this.view = view
         this.context = context
@@ -375,39 +377,43 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
     }
 
-    override fun checkIfDataIsAvailable(db: DbHandler): Boolean {
+    override fun checkIfDataIsAvailable(db: DbHandler){
         try{
             db.openDB()
             val c1 = db.selectSql("SELECT * FROM DriverMaster")
             if(c1 != null){
-                while(!c1.moveToNext()){
-                    return false
+                while(c1.moveToNext()){
+                    flag = true
                 }
             }
             val c2 = db.selectSql("SELECT * FROM ConstructorMaster")
             if(c2 != null){
-                while(!c2.moveToNext()){
-                    return false
+                while(c2.moveToNext()){
+                    flag = true
                 }
             }
 
             val c3 = db.selectSql("SELECT * FROM RaceScheduleMaster")
             if(c3 != null){
-                while(!c3.moveToNext()){
-                    return false
+                while(c3.moveToNext()){
+                    flag = true
                 }
             }
 
             val c4 = db.selectSql("SELECT * FROM LatestResultMaster")
             if(c4 != null){
-                while(!c4.moveToNext()){
-                    return false
+                while(c4.moveToNext()){
+                    flag =  true
                 }
             }
-            return true
+
+            if(flag){
+                view?.showDialog()
+            }else{
+                view?.showAlert()
+            }
         }catch (ex: Exception){
             Commons().printException(ex)
-            return true
         }
     }
 

@@ -26,5 +26,6 @@
     <string name="unable_to_download">Unable to download the data. Please connect to the Internet</string>
     <string name="ok">OK</string>
     <string name="fetching_data">Fetching data…</string>
+    <string name="lets_go">Lets Go!</string>
 
 </resources>

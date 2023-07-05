@@ -16,6 +16,7 @@ interface LandingContractor {
         fun initAll()
 
         fun showDialog()
+        fun showAlert()
     }
 
     interface Presenter {
@@ -31,7 +32,7 @@ interface LandingContractor {
 
         suspend fun fetchLatestResults()
 
-        fun checkIfDataIsAvailable(db: DbHandler): Boolean
+        fun checkIfDataIsAvailable(db: DbHandler)
         fun insertLatestResultsIntoDB(list: MutableList<Results>)
     }
 }
