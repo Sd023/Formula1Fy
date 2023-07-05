@@ -52,10 +52,14 @@ class BaseActivity : AppCompatActivity(), BaseContractor.View {
     }
 
     fun callConstructorFragment(): Boolean{
+        val nav = findNavController(R.id.navHostFrag)
+        nav.navigate(R.id.cons_frag)
         return true
     }
 
     fun callScheduleFragment(): Boolean{
+        val nav = findNavController(R.id.navHostFrag)
+        nav.navigate(R.id.calendar_frag)
         return true
     }
 

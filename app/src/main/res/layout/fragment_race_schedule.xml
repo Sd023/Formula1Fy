@@ -17,7 +17,7 @@
             android:id="@+id/screenTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/constructor"
+            android:text="Race"
             android:textSize="30sp"
             android:fontFamily="@font/regular"
             android:textColor="@color/ferrari_red"
@@ -27,7 +27,7 @@
             android:id="@+id/screenTitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/standings"
+            android:text="Schedule"
             android:layout_toEndOf="@+id/screenTitle"
             android:textSize="30sp"
             android:layout_marginStart="5dp"
@@ -36,7 +36,7 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/constructorRecyclerView"
+            android:id="@+id/raceScheduleView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/screenTitle2"

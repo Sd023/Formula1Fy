@@ -74,8 +74,9 @@ class HomeFragment : Fragment(), HomeContractor.View {
        }
 
     }
-    override fun setConstructorAdapter(list: ArrayList<ConstructorBO>, map : HashMap<String, ArrayList<String>>) {
+    override fun setConstructorAdapter(list: ArrayList<ConstructorBO>) {
         listValues = arrayListOf()
+        val map = presenter.getDriverConstructorMap(db)
         for(entry in map.entries){
             val teamBO = ConstructorNewBO(entry.key,entry.value)
             listValues.add(teamBO)

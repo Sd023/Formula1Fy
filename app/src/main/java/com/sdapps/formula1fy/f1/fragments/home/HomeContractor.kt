@@ -13,7 +13,7 @@ interface HomeContractor {
         fun hideLoading()
         fun initAll()
 
-        fun setConstructorAdapter(list: ArrayList<ConstructorBO>, map : HashMap<String, ArrayList<String>>)
+        fun setConstructorAdapter(list: ArrayList<ConstructorBO>)
         fun setDriverAdapter(list: ArrayList<DriverBO>)
 
         fun setNextRaceAdapter(list : ArrayList<RaceScheduleBO>)

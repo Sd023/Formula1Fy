@@ -11,10 +11,11 @@ interface ConstructorInteractor {
 
         fun initAll()
 
+        fun setAdapter(list: ArrayList<ConstructorBO>, map : HashMap<String, ArrayList<String>>)
     }
 
     interface Presenter{
-        fun getConstructorData(db: DbHandler): ArrayList<ConstructorBO>
+        fun getConstructorData(db: DbHandler)
         fun attachView(view: View)
 
         fun detachView()

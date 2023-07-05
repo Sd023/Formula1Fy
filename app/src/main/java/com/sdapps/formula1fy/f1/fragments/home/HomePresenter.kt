@@ -152,7 +152,6 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
     }
 
     override suspend fun getConstructorData(db: DbHandler) {
-        constructorMap = HashMap()
         constructorList = ArrayList<ConstructorBO>()
         try {
             db.openDB()
@@ -172,51 +171,52 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
                     }
                     c.close()
                 }
+                view?.setConstructorAdapter(constructorList)
             }catch (ex: Exception){
                 Commons().printException(ex)
             }
-
-            val c1 =
-                db.selectSql("SELECT DM.driver_name,CM.constructor_id,CM.constructor_name,CM.constructor_wins,CM.constructor_points," +
-                        "CM.constructor_position,CM.constructor_nationality from ConstructorMaster CM INNER JOIN DriverMaster DM ON CM.constructor_id = DM.driver_constructor ORDER BY CM.constructor_position ASC ")
-            if (c1 != null) {
-                var driverLists = arrayListOf<String>()
-                var constructorName = String()
-                var constructorNewBO = ConstructorBO()
-                while (c1.moveToNext()) {
-                    val driverName = c1.getString(0)
-                    if(constructorName != c1.getString(2)){
-                        if(constructorName.isNotEmpty()){
-                            constructorMap[constructorName] = driverLists
-                            driverLists = arrayListOf<String>()
-                            driverLists.add(driverName)
-                            constructorName = c1.getString(2)
-                        }else{
-                            driverLists.add(driverName)
-                            constructorName = c1.getString(2)
-                        }
-                    }else{
-                        driverLists.add(driverName)
-                    }
-
-
-                }
-                if(driverLists.size > 0){
-                    constructorMap[constructorName] = driverLists
-                }
-
-                view?.setConstructorAdapter(constructorList ,constructorMap)
-                c1.close()
-                db.closeDB()
-            }
-
+            db.closeDB()
         } catch (ex: Exception) {
             ex.printStackTrace()
             db.closeDB()
         }
 
     }
-    public fun getDriverConstructorMap(): HashMap<String, ArrayList<String>>{
+    public fun getDriverConstructorMap(db: DbHandler): HashMap<String, ArrayList<String>>{
+        constructorMap = HashMap()
+        db.openDB()
+        val c1 =
+            db.selectSql("SELECT DM.driver_name,CM.constructor_id,CM.constructor_name,CM.constructor_wins,CM.constructor_points," +
+                    "CM.constructor_position,CM.constructor_nationality from ConstructorMaster CM INNER JOIN DriverMaster DM ON CM.constructor_id = DM.driver_constructor ORDER BY CM.constructor_position ASC ")
+        if (c1 != null) {
+            var driverLists = arrayListOf<String>()
+            var constructorName = String()
+            var constructorNewBO = ConstructorBO()
+            while (c1.moveToNext()) {
+                val driverName = c1.getString(0)
+                if(constructorName != c1.getString(2)){
+                    if(constructorName.isNotEmpty()){
+                        constructorMap[constructorName] = driverLists
+                        driverLists = arrayListOf<String>()
+                        driverLists.add(driverName)
+                        constructorName = c1.getString(2)
+                    }else{
+                        driverLists.add(driverName)
+                        constructorName = c1.getString(2)
+                    }
+                }else{
+                    driverLists.add(driverName)
+                }
+
+
+            }
+            if(driverLists.size > 0){
+                constructorMap[constructorName] = driverLists
+            }
+            c1.close()
+            db.closeDB()
+        }
+
         return constructorMap
     }
 }

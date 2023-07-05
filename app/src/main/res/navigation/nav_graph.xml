@@ -20,4 +20,9 @@
         android:name="com.sdapps.formula1fy.f1.fragments.constructors.ConstructorFragment"
         android:label="Constructor Fragment"/>
 
+    <fragment
+        android:id="@+id/calendar_frag"
+        android:name="com.sdapps.formula1fy.f1.fragments.raceschedule.RaceScheduleFragment"
+        android:label="Race Schedule Fragment"/>
+
 </navigation>

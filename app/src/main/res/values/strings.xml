@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-<string name="app_name">Formula1Fy</string>
+    <string name="app_name">Formula1Fy</string>
     <string name="drivers">Drivers</string>
     <string name="constructors">Constructors</string>
     <string name="constructors_image">Constructors Image</string>
@@ -27,5 +27,6 @@
     <string name="ok">OK</string>
     <string name="fetching_data">Fetching data…</string>
     <string name="lets_go">Lets Go!</string>
+    <string name="constructor">Constructor</string>
 
 </resources>
