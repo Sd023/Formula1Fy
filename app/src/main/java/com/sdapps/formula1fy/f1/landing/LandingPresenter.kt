@@ -375,6 +375,42 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
     }
 
+    override fun checkIfDataIsAvailable(db: DbHandler): Boolean {
+        try{
+            db.openDB()
+            val c1 = db.selectSql("SELECT * FROM DriverMaster")
+            if(c1 != null){
+                while(!c1.moveToNext()){
+                    return false
+                }
+            }
+            val c2 = db.selectSql("SELECT * FROM ConstructorMaster")
+            if(c2 != null){
+                while(!c2.moveToNext()){
+                    return false
+                }
+            }
+
+            val c3 = db.selectSql("SELECT * FROM RaceScheduleMaster")
+            if(c3 != null){
+                while(!c3.moveToNext()){
+                    return false
+                }
+            }
+
+            val c4 = db.selectSql("SELECT * FROM LatestResultMaster")
+            if(c4 != null){
+                while(!c4.moveToNext()){
+                    return false
+                }
+            }
+            return true
+        }catch (ex: Exception){
+            Commons().printException(ex)
+            return true
+        }
+    }
+
     override fun insertLatestResultsIntoDB(list: MutableList<Results>) {
         db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
         db.createDB()
@@ -410,7 +446,7 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
     }
 
-    private fun isCheckDataAvailable(tblName: String, db: DbHandler): Boolean {
+    public fun isCheckDataAvailable(tblName: String, db: DbHandler): Boolean {
         try {
             db.openDB()
             val cursor = db.selectSql("Select * from ${tblName}")

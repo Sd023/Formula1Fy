@@ -1,6 +1,8 @@
 package com.sdapps.formula1fy.f1.landing
 
+import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,8 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.models.DataMembers
@@ -25,8 +29,11 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
 
     private lateinit var appNameTitle: TextView
     private lateinit var startBtn: Button
-    private var landPresenter: LandingPresenter? = null
+    private lateinit var landPresenter: LandingPresenter
     private lateinit var dbHandler: DbHandler
+    private lateinit var manager: LandingManager
+    private lateinit var dialog : AlertDialog.Builder
+    private lateinit var alert : AlertDialog
 
     private lateinit var pf: ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,15 +44,15 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
         landPresenter = LandingPresenter(applicationContext)
         dbHandler = DbHandler(applicationContext, DataMembers.DB_NAME)
         dbHandler.createDB()
-        landPresenter!!.attachView(this, applicationContext)
+        landPresenter.attachView(this, applicationContext)
         initAll()
 
     }
 
 
     override fun showLoading() {
-        pf.setTitle("Formula1Fy")
-        pf.setMessage("Fetching data...")
+        pf.setTitle(resources.getString(R.string.app_name))
+        pf.setMessage(resources.getString(R.string.fetching_data))
         pf.setCancelable(false)
         pf.show()
     }
@@ -68,33 +75,51 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
         startBtn.setOnClickListener(this)
         appNameTitle = findViewById(R.id.landingAppName)
         appNameTitle.setText(landPresenter?.getAppString(), TextView.BufferType.SPANNABLE)
+        manager = LandingManager(landPresenter)
+    }
+
+    override fun showDialog() {
+        dialog = AlertDialog.Builder(this)
+            .setMessage(resources.getString(R.string.offline_mode))
+            .setTitle(resources.getString(R.string.no_internet))
+            .setCancelable(false)
+            .setPositiveButton(resources.getString(R.string.ok), DialogInterface.OnClickListener { dialog, i ->
+                dialog.dismiss()
+                moveToNextScreen()
+
+            })
+
+        alert = dialog.create()
+        alert.show()
     }
 
     override fun onClick(v: View?) {
         CoroutineScope(Dispatchers.Main).launch {
-            showLoading()
-            if (NetworkTools().isNetworkAndInternetAvailable(applicationContext)) {
-                val fetchDriverData = async(Dispatchers.IO) {
-                    landPresenter!!.fetchDriverData()
-                }
-                fetchDriverData.await()
-                val fetchConstructorData = async(Dispatchers.IO) {
-                    landPresenter!!.fetchConstructorData()
-                }
-                fetchConstructorData.await()
-
-                val latestRaceJson = async(Dispatchers.IO){
-                    landPresenter!!.fetchLatestResults()
-                }
-                latestRaceJson.await()
-
-                val fetchRaceData = async(Dispatchers.IO) {
-                    landPresenter!!.fetchRaceData()
-                }
-                fetchRaceData.await()
+            if(NetworkTools().isNetworkAndInternetAvailable(applicationContext)){
+                showLoading()
+                manager.getAllNecessaryData()
+            }else if(landPresenter.checkIfDataIsAvailable(dbHandler)){
+               showDialog()
+            }else{
+                showDialog(resources.getString(R.string.unable_to_download))
             }
         }
 
+
+
+    }
+
+    fun showDialog(msg: String){
+        dialog = AlertDialog.Builder(this)
+            .setTitle(resources.getString(R.string.no_internet))
+            .setMessage(msg)
+            .setCancelable(false)
+            .setPositiveButton(resources.getString(R.string.ok), DialogInterface.OnClickListener { dialog, i ->
+                dialog.dismiss()
+            })
+
+        alert = dialog.create()
+        alert.show()
     }
 
     override fun onDestroy() {

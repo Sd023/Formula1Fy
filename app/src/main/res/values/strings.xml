@@ -20,4 +20,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="driver">Driver</string>
     <string name="standings">Standings</string>
+
+    <string name="offline_mode">Data may not be updated to the latest. Would you like to proceed?</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="unable_to_download">Unable to download the data. Please connect to the Internet</string>
+    <string name="ok">OK</string>
+    <string name="fetching_data">Fetching data…</string>
+
 </resources>
