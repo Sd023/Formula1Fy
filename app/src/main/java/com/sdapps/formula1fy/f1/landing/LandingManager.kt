@@ -17,9 +17,8 @@ class LandingManager(val presenter: LandingPresenter, val dbHandler: DbHandler) 
     }
 
     suspend fun getAllNecessaryData(context: Context){
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             if(NetworkTools().isNetworkAndInternetAvailable(context)){
-                view.showLoading()
                 val fetchDriverData = async(Dispatchers.IO) {
                     presenter.fetchDriverData()
                 }
@@ -38,6 +37,11 @@ class LandingManager(val presenter: LandingPresenter, val dbHandler: DbHandler) 
                     presenter.fetchRaceData()
                 }
                 fetchRaceData.await()
+
+                val fetchAllSeasonData = async(Dispatchers.IO){
+                    presenter.fetchAllCurrentSeasonResult(dbHandler)
+                }
+                fetchAllSeasonData.await()
 
             }else{
                 presenter.checkIfDataIsAvailable(dbHandler)

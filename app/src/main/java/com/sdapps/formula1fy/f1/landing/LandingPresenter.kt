@@ -16,12 +16,15 @@ import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.models.DataMembers.tbl_constructorMaster
+import com.sdapps.formula1fy.core.models.DataMembers.tbl_currentAllResults
+import com.sdapps.formula1fy.core.models.DataMembers.tbl_currentAllResultsCols
 import com.sdapps.formula1fy.core.models.DataMembers.tbl_raceScheduleMaster
 import com.sdapps.formula1fy.core.models.DataMembers.tbl_driverMaster
 import com.sdapps.formula1fy.core.utils.Commons
 import com.sdapps.formula1fy.core.utils.CoroutineTools
 import com.sdapps.formula1fy.core.utils.StringHelper
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
+import com.sdapps.formula1fy.f1.bo.CurrentSeasonBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
 import com.sdapps.formula1fy.f1.bo.Results
@@ -47,6 +50,7 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
     private var seasonString: String? = null
     private var roundString: String? = null
     private lateinit var latestRoundResult: MutableList<Results>
+    private lateinit var currentAllRaceResult : ArrayList<CurrentSeasonBO>
     private var flag : Boolean = false
     override fun attachView(view: LandingContractor.View, context: Context) {
         this.view = view
@@ -377,6 +381,131 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
     }
 
+    override suspend fun fetchAllCurrentSeasonResult(db: DbHandler) {
+        CoroutineTools.io {
+           val url = "http://ergast.com/api/f1/current/results.json?limit=300"
+            currentAllRaceResult = arrayListOf()
+            requestQueue = Volley.newRequestQueue(context)
+
+            val jsonReq = JsonObjectRequest(Request.Method.GET, url, null,
+                {
+                if(it != null){
+                    try{
+                        val responseJson = it.getJSONObject("MRData")
+                            .getJSONObject("RaceTable")
+                            .getJSONArray("Races")
+
+                        for(i in 0 until responseJson.length()){
+                            val resultsJson = responseJson.getJSONObject(i)
+                            val Bo= CurrentSeasonBO().apply{
+                                season = resultsJson.getString("season")
+                                round = resultsJson.getString("round")
+                                raceName = resultsJson.getString("raceName")
+                                date = resultsJson.getString("date")
+                                time = resultsJson.getString("time")
+
+                                circuitId = resultsJson.getJSONObject("Circuit").getString("circuitId")
+                                circuitName= resultsJson.getJSONObject("Circuit").getString("circuitName")
+
+                                val raceResults = resultsJson.getJSONArray("Results")
+
+                                for(j in 0 until raceResults.length()){
+                                    val values = raceResults.getJSONObject(j)
+
+                                    driverNumber = values.getString("number")
+                                    driverPosition = values.getString("position")
+                                    points = values.getString("points")
+
+                                    driverId = values.getJSONObject("Driver").getString("driverId")
+                                    driverCode = values.getJSONObject("Driver").getString("code")
+                                    permanentNumber = values.getJSONObject("Driver").getString("permanentNumber")
+
+                                    startPosition = values.getString("grid")
+
+                                    laps = values.getString("laps")
+                                    raceStatus = values.getString("status")
+
+                                    driverRaceRank = "1" /*values
+                                        .getJSONObject("FastestLap")
+                                        .getString("rank")*/
+
+                                    fastestLapSetOn = "1" /*values
+                                        .getJSONObject("FastestLap")
+                                        .getString("lap")
+*/
+                                    fastestLapTime =  "1" /*values
+                                        .getJSONObject("FastestLap")
+                                        .getJSONObject("Time")
+                                        .getString("time")*/
+
+
+                                    fastestSpeedInKPH = "1" /* values
+                                        .getJSONObject("FastestLap")
+                                        .getJSONObject("AverageSpeed")
+                                        .getString("speed")*/
+
+                                }
+                            }
+                            currentAllRaceResult.add(Bo)
+                        }
+                        insertRecords(currentAllRaceResult, db)
+
+                    }catch(ex: Exception){
+                        view!!.hideLoading()
+                        ex.printStackTrace()
+                    }
+                }
+                }, {
+                    Commons().printException(it)
+                })
+
+            requestQueue.add(jsonReq)
+
+        }
+    }
+
+    private fun insertRecords(list: ArrayList<CurrentSeasonBO>, db: DbHandler){
+        db.createDB()
+        db.openDB()
+
+        try{
+            if (isCheckDataAvailable(DataMembers.tbl_currentAllResults, db)) {
+                db.deleteSQL(DataMembers.tbl_latestResults, true)
+            }
+            for(data in list){
+                val sb = StringBuffer()
+                sb.append(stringHandler.getQueryFormat(data.season))
+                sb.append("," + stringHandler.getQueryFormat(data.round))
+                sb.append("," + stringHandler.getQueryFormat(data.raceName))
+                sb.append("," + stringHandler.getQueryFormat(data.date))
+                sb.append("," + stringHandler.getQueryFormat(data.time))
+                sb.append("," + stringHandler.getQueryFormat(data.circuitId))
+                sb.append("," + stringHandler.getQueryFormat(data.circuitName))
+                sb.append("," + stringHandler.getQueryFormat(data.driverNumber))
+                sb.append("," + stringHandler.getQueryFormat(data.driverPosition))
+                sb.append("," + stringHandler.getQueryFormat(data.points))
+                sb.append("," + stringHandler.getQueryFormat(data.driverId))
+                sb.append("," + stringHandler.getQueryFormat(data.driverCode))
+                sb.append("," + stringHandler.getQueryFormat(data.permanentNumber))
+                sb.append("," + stringHandler.getQueryFormat(data.startPosition))
+                sb.append("," + stringHandler.getQueryFormat(data.laps))
+                sb.append("," + stringHandler.getQueryFormat(data.raceStatus))
+                sb.append("," + stringHandler.getQueryFormat(data.driverRaceRank))
+                sb.append("," + stringHandler.getQueryFormat(data.fastestLapSetOn))
+                sb.append("," + stringHandler.getQueryFormat(data.fastestLapTime))
+                sb.append("," + stringHandler.getQueryFormat(data.fastestSpeedInKPH))
+
+                db.insertSQL(tbl_currentAllResults, tbl_currentAllResultsCols, sb.toString())
+            }
+            doNextSteps()
+
+
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+
+    }
+
     override fun checkIfDataIsAvailable(db: DbHandler){
         try{
             db.openDB()
@@ -490,11 +619,6 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
         }
         db.closeDB()
-
-        CoroutineScope(Dispatchers.Main).launch {
-            view!!.hideLoading()
-            view!!.moveToNextScreen()
-        }
     }
 
     fun getRaceDetails(rc: RaceScheduleBO): StringBuffer {
@@ -511,5 +635,12 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
         sb.append("," + stringHandler.getQueryFormat(rc.locality))
         sb.append("," + stringHandler.getQueryFormat(rc.country))
         return sb
+    }
+
+    fun doNextSteps(){
+       CoroutineTools.main {
+           view!!.hideLoading()
+           view!!.moveToNextScreen()
+       }
     }
 }
