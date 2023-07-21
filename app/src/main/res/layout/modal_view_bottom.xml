@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:id="@+id/mainLayout"
@@ -13,7 +14,8 @@
             android:id="@+id/driverName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="Max verstappen"
+            android:layout_marginTop="30dp"
             android:textSize="30sp"
             android:layout_centerInParent="true"
             android:fontFamily="@font/regular"
@@ -23,25 +25,79 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/dobtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date Of Birth"
+        android:layout_below="@id/mainLayout"
+        android:layout_marginStart="30dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/regular"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
+
+    <TextView
         android:id="@+id/driverDOB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mainLayout"
-        android:layout_margin="40dp"
+        android:layout_below="@id/dobtitle"
+        android:layout_marginStart="30dp"
         android:fontFamily="@font/regular"
-        android:textSize="15sp"
-        android:text="" />
+        android:text="02/09/2000"
+        android:textColor="@color/ferrari_red"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/nationalityTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nationality"
+        android:layout_below="@id/mainLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="40dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/regular"
+        android:textStyle="bold"
+
+        android:textColor="@color/black"
+        />
+
+
 
     <TextView
         android:id="@+id/driverNation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mainLayout"
+        android:layout_below="@id/nationalityTitle"
         android:layout_alignParentEnd="true"
-        android:layout_margin="40dp"
+        android:layout_marginEnd="70dp"
+        android:textColor="@color/ferrari_red"
+        android:layout_marginBottom="40dp"
         android:fontFamily="@font/regular"
-        android:textSize="15sp"
-        android:text="" />
+        android:text="Dutch"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driverNation"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/regular"
+        android:text="Total wins in 2023 season"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="italic" />
+    
+    
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chart"
+        android:layout_below="@+id/title"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"/>
 
 
 
