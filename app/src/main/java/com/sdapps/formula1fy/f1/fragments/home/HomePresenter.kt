@@ -81,7 +81,7 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
         try{
             db.openDB()
             val cursor =
-               db.selectSql("SELECT DISTINCT DM.driver_name,DM.constructor_name,LRM.start_grid,LRM.position,LRM.round_point,LRM.fastest_lap_time,LRM.fastest_lap,LRM.fastest_lap_avg_speed,LRM.speed_unit,LRM.status FROM LatestResultMaster LRM INNER JOIN DRIVERMASTER DM ON DM.driver_id = LRM.driver_id  ORDER BY position ASC;")
+               db.selectSql("SELECT DISTINCT DM.driver_name,DM.constructor_name,LRM.start_grid,LRM.position,LRM.round_point,LRM.fastest_lap_time,LRM.fastest_lap,LRM.fastest_lap_avg_speed,LRM.speed_unit,LRM.status FROM LatestResultMaster LRM INNER JOIN DRIVERMASTER DM ON DM.driver_id = LRM.driver_id  ORDER BY position ASC")
             if(cursor != null){
                 while(cursor.moveToNext()){
                     val resultBo = LatestResult().apply {

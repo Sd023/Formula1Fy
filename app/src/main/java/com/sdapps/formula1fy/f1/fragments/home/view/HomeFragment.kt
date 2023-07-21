@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.models.DataMembers
+import com.sdapps.formula1fy.core.utils.CoroutineTools
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.databinding.FragmentDriverBinding
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
@@ -66,7 +67,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
         presenter = HomePresenter(context)
         presenter.attachView(this)
         db = DbHandler(context, DataMembers.DB_NAME)
-        lifecycleScope.launch {
+        CoroutineTools.io{
             presenter.getNextRound(db)
             presenter.getLatestRound(db)
             presenter.getDriverData(db)

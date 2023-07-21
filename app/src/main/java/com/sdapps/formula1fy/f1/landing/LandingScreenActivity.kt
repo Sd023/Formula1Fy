@@ -63,7 +63,6 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
     override fun hideLoading() {
         try {
             pf.dismiss()
-            Toast.makeText(applicationContext, "Failed to download data!", Toast.LENGTH_LONG).show()
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
