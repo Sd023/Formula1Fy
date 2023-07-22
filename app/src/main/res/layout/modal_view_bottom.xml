@@ -14,7 +14,7 @@
             android:id="@+id/driverName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Max verstappen"
+            android:text=""
             android:layout_marginTop="30dp"
             android:textSize="30sp"
             android:layout_centerInParent="true"
@@ -28,7 +28,7 @@
         android:id="@+id/dobtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date Of Birth"
+        android:text=""
         android:layout_below="@id/mainLayout"
         android:layout_marginStart="30dp"
         android:textSize="16sp"
@@ -44,7 +44,7 @@
         android:layout_below="@id/dobtitle"
         android:layout_marginStart="30dp"
         android:fontFamily="@font/regular"
-        android:text="02/09/2000"
+        android:text=""
         android:textColor="@color/ferrari_red"
         android:textSize="16sp" />
 
@@ -52,7 +52,7 @@
         android:id="@+id/nationalityTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nationality"
+        android:text=""
         android:layout_below="@id/mainLayout"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="40dp"
@@ -64,18 +64,17 @@
         />
 
 
-
     <TextView
         android:id="@+id/driverNation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/nationalityTitle"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="70dp"
-        android:textColor="@color/ferrari_red"
+        android:layout_marginEnd="50dp"
         android:layout_marginBottom="40dp"
         android:fontFamily="@font/regular"
-        android:text="Dutch"
+        android:text=""
+        android:textColor="@color/ferrari_red"
         android:textSize="18sp" />
 
     <TextView
@@ -85,9 +84,9 @@
         android:layout_below="@+id/driverNation"
         android:layout_marginStart="20dp"
         android:fontFamily="@font/regular"
-        android:text="Total wins in 2023 season"
+        android:text="@string/total_wins_in_2023_season"
         android:textColor="@color/black"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="italic" />
     
     
