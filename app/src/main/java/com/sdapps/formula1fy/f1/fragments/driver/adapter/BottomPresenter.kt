@@ -9,7 +9,7 @@ import com.sdapps.formula1fy.f1.bo.DriverBO
 
 interface BottomModalInteractor{
     interface  View{
-        fun setTotalRaceDataToPieChart(map: HashMap<String, Int>)
+        fun sendHashMapData(map: HashMap<String, Int>, list:ArrayList<Int>)
 
     }
     interface Presenter{
@@ -45,24 +45,35 @@ class BottomPresenter() : BottomModalInteractor.Presenter{
                 if(cursor != null){
 
                     while(cursor.moveToNext()){
-                        val startpo = cursor.getString(2)
-                        val endpo = cursor.getString(3)
+                        val startpo = cursor.getString(2).toInt()
+                        val endpo = cursor.getString(3).toInt()
                         raceresults.add(BottomModal.Race(startpo, endpo))
 
                     }
                     cursor.close()
                 }
                 if(raceresults != null){
-                    val raceWon = raceresults.count { it.endPos == "1" }
-                    val topThreeFinish = raceresults.count{it.endPos <= "3"}
+                    val raceWon = raceresults.count { it.endPos == 1 }
+                    val topThreeFinish = raceresults.count{it.endPos <= 3}
                     val totalRace = raceresults.size
+
+                    val worstPosition = raceresults.maxByOrNull { it.endPos }
+                    val bestPosition  = raceresults.minByOrNull { it.endPos }
+
+                    val list : ArrayList<Int> = ArrayList()
+
+                    for(i in raceresults){
+                        list.add(i.endPos)
+                    }
 
                     val myMap = hashMapOf<String, Int>(
                         "total" to totalRace,
                         "won" to raceWon,
-                        "top3" to topThreeFinish
+                        "top3" to topThreeFinish,
+                        "worst" to worstPosition!!.endPos,
+                        "best" to bestPosition!!.endPos
                     )
-                    view.setTotalRaceDataToPieChart(myMap)
+                    view.sendHashMapData(myMap, list)
 
                 }else {
                     onError()
