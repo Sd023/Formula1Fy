@@ -28,5 +28,6 @@
     <string name="fetching_data">Fetching data…</string>
     <string name="lets_go">Lets Go!</string>
     <string name="constructor">Constructor</string>
+    <string name="total_wins_in_2023_season">Total wins in 2023 season</string>
 
 </resources>

@@ -2,4 +2,5 @@
 <resources>
     <string name="desc">Drivers | Constructors | Stats</string>
     <string name="formula1fy">Formula1Fy</string>
+    <string name="total_wins_in_2023_season">Total wins in 2023 season</string>
 </resources>

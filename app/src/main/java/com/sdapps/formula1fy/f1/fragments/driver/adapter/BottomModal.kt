@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -17,14 +18,20 @@ import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.models.F1Contants
 import com.sdapps.formula1fy.databinding.ModalViewBottomBinding
 import com.sdapps.formula1fy.f1.bo.DriverBO
+import com.sdapps.formula1fy.f1.fragments.driver.DriverInteractor
+import com.sdapps.formula1fy.f1.fragments.home.HomeContractor
 
 
-class BottomModal(val driverBo: DriverBO): BottomSheetDialogFragment() {
+class BottomModal(val driverBo: DriverBO): BottomSheetDialogFragment(), BottomModalInteractor.View{
     private lateinit var context : Context
 
     private var binding: ModalViewBottomBinding? = null
     private lateinit var db : DbHandler
-    private lateinit var raceresults: ArrayList<Race>
+    private lateinit var presenter: BottomPresenter
+    data class Race(val startPos: String, val endPos: String)
+    companion object {
+        const val TAG = "BottomModalSheet"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,25 +45,40 @@ class BottomModal(val driverBo: DriverBO): BottomSheetDialogFragment() {
     }
 
     fun initAll(){
+        presenter = BottomPresenter()
+        presenter.attachView(this, context)
         db = DbHandler(context, DataMembers.DB_NAME)
+        presenter.getTheData(driverBo)
+
         binding!!.driverDOB.text = driverBo.driverDOB
         binding!!.driverName.text = driverBo.driverName
         binding!!.driverNation.text = driverBo.driverNationality
-        val data =  getTheData()
-        var dMap : HashMap<String, Int> = hashMapOf()
-        val dList : ArrayList<PieEntry> = arrayListOf()
+    }
 
-        dMap["Wins"] = data
-        dMap["Total"] = 10
-        for(type in dMap.keys){
-            dList.add(PieEntry(dMap[type]!!.toFloat(), type))
+
+    override fun setTotalRaceDataToPieChart(map: HashMap<String, Int>) {
+        try{
+            val dMap : HashMap<String, Int> = hashMapOf()
+            val dList : ArrayList<PieEntry> = arrayListOf()
+
+            dMap["Wins"] = map["won"]!!.toInt()
+            dMap["Total"] =map["total"]!!.toInt()
+            for(type in dMap.keys){
+                dList.add(PieEntry(dMap[type]!!.toFloat(), type))
+            }
+            val teamColorId = driverBo.constructorId
+            val teamColor = F1Contants.teamColorMap.getOrDefault(teamColorId, ContextCompat.getColor(context, R.color.card_color))
+
+            val pieDataSet = PieDataSet(dList,"")
+            setupPiechart(pieDataSet, teamColor)
+        }catch (ex: Exception){
+            ex.printStackTrace()
+            view
         }
-        val teamColorId = driverBo.constructorId
-        val teamColor = F1Contants.teamColorMap.getOrDefault(teamColorId, ContextCompat.getColor(context, R.color.card_color))
+    }
 
 
-
-        val pieDataSet = PieDataSet(dList,"")
+    fun setupPiechart(pieDataSet : PieDataSet, teamColor: Int){
         pieDataSet.valueTextSize = 12f //pie-chart data size
         pieDataSet.colors =
             arrayListOf(ContextCompat.getColor(context, R.color.card_color), ContextCompat.getColor(context,teamColor))
@@ -65,51 +87,12 @@ class BottomModal(val driverBo: DriverBO): BottomSheetDialogFragment() {
         val pieData = PieData(pieDataSet)
         pieData.setDrawValues(true)
 
-        binding!!.chart.data = pieData
-        binding!!.chart.invalidate()
-
-
-    }
-
-    fun getTheData(): Int{
-
-        try{
-            db.openDB()
-            raceresults = arrayListOf()
-            raceresults.clear()
-            val cursor = db.selectSql("select distinct season, round, start_position as gridPos, " +
-                    "driver_position as endPos from CurrentSeasonResults where driver_code = '${driverBo.driverCode}'")
-
-            if(cursor != null){
-
-                while(cursor.moveToNext()){
-                    val round = cursor.getString(1)
-                    val startpo = cursor.getString(2)
-                    val endpo = cursor.getString(3)
-                    raceresults.add(Race(startpo,endpo))
-
-                }
-                cursor.close()
-            }
-            if(raceresults != null){
-                val totalRace = raceresults.size
-                val raceWon = raceresults.count { it.endPos == "1" }
-                return raceWon
-
-            }else {
-                return 0
-            }
-
-
-        }catch (ex: Exception){
-            ex.printStackTrace()
+        if(pieData != null){
+            binding!!.chart.data = pieData
+            binding!!.chart.invalidate()
+        }else{
+            binding!!.chart.visibility = View.GONE
         }
-        return 0
-    }
-    companion object {
-        const val TAG = "BottomModalSheet"
-    }
 
-
-    data class Race(val startPos: String, val endPos: String)
+    }
 }
