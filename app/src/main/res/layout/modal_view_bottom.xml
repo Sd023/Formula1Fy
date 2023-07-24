@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:id="@+id/mainLayout"
@@ -14,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:layout_marginTop="30dp"
             android:textSize="30sp"
             android:layout_centerInParent="true"
             android:fontFamily="@font/regular"
@@ -23,25 +25,102 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/dobtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/date_of_birth"
+        android:layout_below="@id/mainLayout"
+        android:layout_marginStart="30dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/regular"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
+
+    <TextView
         android:id="@+id/driverDOB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mainLayout"
-        android:layout_margin="40dp"
+        android:layout_below="@id/dobtitle"
+        android:layout_marginStart="30dp"
         android:fontFamily="@font/regular"
-        android:textSize="15sp"
-        android:text="" />
+        android:text=""
+        android:textColor="@color/ferrari_red"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/nationalityTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nationality"
+        android:layout_below="@id/mainLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="40dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/regular"
+        android:textStyle="bold"
+
+        android:textColor="@color/black"
+        />
+
 
     <TextView
         android:id="@+id/driverNation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mainLayout"
+        android:layout_below="@id/nationalityTitle"
         android:layout_alignParentEnd="true"
-        android:layout_margin="40dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="40dp"
         android:fontFamily="@font/regular"
-        android:textSize="15sp"
-        android:text="" />
+        android:text=""
+        android:textColor="@color/ferrari_red"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driverNation"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/regular"
+        android:layout_centerHorizontal="true"
+        android:text="@string/total_wins_in_2023_season"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="italic" />
+    
+    
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chart"
+        android:layout_below="@+id/title"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="200dp"
+        android:layout_height="200dp"/>
+
+
+    <TextView
+        android:id="@+id/lineChartTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:fontFamily="@font/regular"
+        android:textSize="14sp"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:layout_below="@+id/chart"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/lineChartTitle"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true"/>
 
 
 

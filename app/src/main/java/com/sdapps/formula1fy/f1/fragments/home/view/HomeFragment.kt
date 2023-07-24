@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.models.DataMembers
+import com.sdapps.formula1fy.core.utils.CoroutineTools
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.databinding.FragmentDriverBinding
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
@@ -66,7 +67,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
         presenter = HomePresenter(context)
         presenter.attachView(this)
         db = DbHandler(context, DataMembers.DB_NAME)
-        lifecycleScope.launch {
+        CoroutineTools.io{
             presenter.getNextRound(db)
             presenter.getLatestRound(db)
             presenter.getDriverData(db)
@@ -81,6 +82,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
             val teamBO = ConstructorNewBO(entry.key,entry.value)
             listValues.add(teamBO)
         }
+        binding!!.constructorStandingsLbl.visibility = View.VISIBLE
         binding!!.constructorRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val homeConstructorAdapter = HomeConstructorAdapter(list, listValues)
         binding!!.constructorRecyclerView.isNestedScrollingEnabled = false
@@ -89,6 +91,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
     }
 
     override fun setDriverAdapter(list: ArrayList<DriverBO>) {
+        binding!!.driverStandingsLbl.visibility = View.VISIBLE
         binding!!.driverRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val adapter = HomeDriverAdapter(list)
@@ -99,6 +102,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
 
     override fun setNextRaceAdapter(list: ArrayList<RaceScheduleBO>) {
         if(list!=null){
+            binding!!.nextRaceLbl.visibility = View.VISIBLE
             binding!!.nextRaceCard.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             val adapter = HomeNextRaceListAdapter(list)
@@ -109,6 +113,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
     }
 
     override fun setLatestResults(list: MutableList<LatestResult>) {
+        binding!!.latestResultLbl.visibility = View.VISIBLE
         binding!!.latestResultView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val adapter = HomeLatestResultAdapter(list)

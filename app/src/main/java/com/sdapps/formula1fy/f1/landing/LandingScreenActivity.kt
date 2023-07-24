@@ -12,6 +12,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.sdapps.formula1fy.R
@@ -95,12 +96,10 @@ class LandingScreenActivity : AppCompatActivity(), LandingContractor.View,
     }
 
     override fun onClick(v: View?) {
-        CoroutineScope(Dispatchers.Main).launch {
+        showLoading()
+        CoroutineScope(Dispatchers.IO).launch {
             manager.getAllNecessaryData(applicationContext)
         }
-
-
-
     }
 
     override fun showAlert(){

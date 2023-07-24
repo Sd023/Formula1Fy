@@ -32,6 +32,7 @@ interface LandingContractor {
 
         suspend fun fetchLatestResults()
 
+        suspend fun fetchAllCurrentSeasonResult(db: DbHandler)
         fun checkIfDataIsAvailable(db: DbHandler)
         fun insertLatestResultsIntoDB(list: MutableList<Results>)
     }

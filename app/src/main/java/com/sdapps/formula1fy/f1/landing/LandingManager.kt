@@ -6,7 +6,9 @@ import com.sdapps.formula1fy.core.utils.NetworkTools
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LandingManager(val presenter: LandingPresenter, val dbHandler: DbHandler) {
 
@@ -19,7 +21,16 @@ class LandingManager(val presenter: LandingPresenter, val dbHandler: DbHandler) 
     suspend fun getAllNecessaryData(context: Context){
         CoroutineScope(Dispatchers.Main).launch {
             if(NetworkTools().isNetworkAndInternetAvailable(context)){
-                view.showLoading()
+                presenter.fetchAllCurrentSeasonResult(dbHandler)
+                presenter.fetchDriverData()
+                presenter.fetchDriverData()
+                presenter.fetchConstructorData()
+                presenter.fetchLatestResults()
+                presenter.fetchRaceData()
+               /* val fetchAllSeasonData = async(Dispatchers.IO){
+                    presenter.fetchAllCurrentSeasonResult(dbHandler)
+                }
+                fetchAllSeasonData.await()
                 val fetchDriverData = async(Dispatchers.IO) {
                     presenter.fetchDriverData()
                 }
@@ -38,7 +49,7 @@ class LandingManager(val presenter: LandingPresenter, val dbHandler: DbHandler) 
                     presenter.fetchRaceData()
                 }
                 fetchRaceData.await()
-
+*/
             }else{
                 presenter.checkIfDataIsAvailable(dbHandler)
             }

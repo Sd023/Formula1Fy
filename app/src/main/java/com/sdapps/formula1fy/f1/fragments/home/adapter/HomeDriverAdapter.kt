@@ -60,4 +60,12 @@ class HomeDriverAdapter(private var data: ArrayList<DriverBO>) :
 
 
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

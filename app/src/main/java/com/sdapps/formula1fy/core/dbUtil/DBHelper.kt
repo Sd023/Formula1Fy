@@ -18,6 +18,10 @@ object DBHelper {
             )
             dbHandler.exe("create table if not exists RaceScheduleMaster (season TEXT, round TEXT, race_name TEXT, date TEXT, time TEXT, circuit_id TEXT,circuit_name TEXT, latitude TEXT, longitude TEXT, locality TEXT, country TEXT)")
             dbHandler.exe("create table if not exists LatestResultMaster (number INTEGER,position INTEGER,driver_id TEXT,permanent_number TEXT,round_point TEXT,start_grid TEXT,total_laps TEXT,status TEXT,rank TEXT,fastest_lap TEXT,fastest_lap_time TEXT,speed_unit TEXT,fastest_lap_avg_speed TEXT)")
+            dbHandler.exe("create table if not exists CurrentSeasonResults  " +
+                    "(season TEXT,round TEXT,race_name TEXT,date TEXT,time TEXT,circuit_id TEXT,circuit_name TEXT," +
+                    "driver_number TEXT,driver_position TEXT,points TEXT,driver_id TEXT,driver_code TEXT,driver_per_number TEXT," +
+                    "start_position TEXT,laps TEXT,race_status TEXT,driver_rank TEXT,fastest_lap_set_on TEXT,fastest_lap_time TEXT,fastest_speed TEXT )")
         } catch (ex: Exception) {
             Log.d("Exception occurred", ": $ex")
         }

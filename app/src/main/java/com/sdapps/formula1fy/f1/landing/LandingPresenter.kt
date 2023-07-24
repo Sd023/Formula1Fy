@@ -5,36 +5,27 @@ import android.graphics.Color
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.util.Log
-import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.sdapps.formula1fy.R
 import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.models.DataMembers
 import com.sdapps.formula1fy.core.models.DataMembers.tbl_constructorMaster
+import com.sdapps.formula1fy.core.models.DataMembers.tbl_currentAllResults
+import com.sdapps.formula1fy.core.models.DataMembers.tbl_currentAllResultsCols
 import com.sdapps.formula1fy.core.models.DataMembers.tbl_raceScheduleMaster
 import com.sdapps.formula1fy.core.models.DataMembers.tbl_driverMaster
 import com.sdapps.formula1fy.core.utils.Commons
 import com.sdapps.formula1fy.core.utils.CoroutineTools
 import com.sdapps.formula1fy.core.utils.StringHelper
 import com.sdapps.formula1fy.f1.bo.ConstructorBO
+import com.sdapps.formula1fy.f1.bo.CurrentSeasonBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
 import com.sdapps.formula1fy.f1.bo.Results
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
 
 class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
@@ -47,7 +38,8 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
     private var seasonString: String? = null
     private var roundString: String? = null
     private lateinit var latestRoundResult: MutableList<Results>
-    private var flag : Boolean = false
+    private lateinit var currentAllRaceResult : ArrayList<CurrentSeasonBO>
+    private var isDataExists : Boolean = false
     override fun attachView(view: LandingContractor.View, context: Context) {
         this.view = view
         this.context = context
@@ -216,54 +208,62 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
     }
 
     override suspend fun fetchRaceData() {
-        db = DbHandler(context, DataMembers.DB_NAME)
-        val url = "http://ergast.com/api/f1/current.json"
-        requestQueue = Volley.newRequestQueue(context)
 
-        val raceList = ArrayList<RaceScheduleBO>()
-        val jsonReq = JsonObjectRequest(Request.Method.GET, url, null,
-            { response: JSONObject ->
+        try {
+            db = DbHandler(context, DataMembers.DB_NAME)
+            val url = "http://ergast.com/api/f1/current.json"
+            requestQueue = Volley.newRequestQueue(context)
 
-                if (response != null) {
-                    try {
-                        val raceJsonData = response.getJSONObject("MRData")
-                            .getJSONObject("RaceTable")
-                            .getJSONArray("Races")
+            val raceList = ArrayList<RaceScheduleBO>()
+            val jsonReq = JsonObjectRequest(Request.Method.GET, url, null,
+                { response: JSONObject ->
 
-                        for (i in 0 until raceJsonData.length()) {
-                            val data = raceJsonData.getJSONObject(i)
-                            val circuitData = data.getJSONObject("Circuit")
-                            val locationData = circuitData.getJSONObject("Location")
+                    if (response != null) {
+                        try {
+                            val raceJsonData = response.getJSONObject("MRData")
+                                .getJSONObject("RaceTable")
+                                .getJSONArray("Races")
 
-                            val raceBO = RaceScheduleBO().apply {
-                                season = data.getString("season")
-                                round = data.getString("round")
-                                raceName = data.getString("raceName")
-                                date = data.getString("date")
-                                time = data.getString("time")
+                            for (i in 0 until raceJsonData.length()) {
+                                val data = raceJsonData.getJSONObject(i)
+                                val circuitData = data.getJSONObject("Circuit")
+                                val locationData = circuitData.getJSONObject("Location")
 
-                                circuitId = circuitData.getString("circuitId")
-                                circuitName = circuitData.getString("circuitName")
+                                val raceBO = RaceScheduleBO().apply {
+                                    season = data.getString("season")
+                                    round = data.getString("round")
+                                    raceName = data.getString("raceName")
+                                    date = data.getString("date")
+                                    time = data.getString("time")
 
-                                lat = locationData.getString("lat")
-                                long = locationData.getString("long")
-                                locality = locationData.getString("locality")
-                                country = locationData.getString("country")
+                                    circuitId = circuitData.getString("circuitId")
+                                    circuitName = circuitData.getString("circuitName")
+
+                                    lat = locationData.getString("lat")
+                                    long = locationData.getString("long")
+                                    locality = locationData.getString("locality")
+                                    country = locationData.getString("country")
+                                }
+                                raceList.add(raceBO)
                             }
-                            raceList.add(raceBO)
-                        }
-                        insertRaceData(raceList)
+                            insertRaceData(raceList)
 
-                    } catch (ex: Exception) {
-                        ex.printStackTrace()
+                        } catch (ex: Exception) {
+                            ex.printStackTrace()
+                        }
+
                     }
 
-                }
+                },
+                { error: VolleyError -> error.printStackTrace() })
+            requestQueue.add(jsonReq)
 
-            },
-            { error: VolleyError -> error.printStackTrace() })
-        requestQueue.add(jsonReq)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
+
+
 
 
     override suspend fun fetchConstructorData() {
@@ -339,7 +339,6 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
                     for(i in 0 until latestRaceJson.length()){
                         val data = latestRaceJson.getJSONObject(i)
-                        val jsonData = data.getJSONObject("FastestLap")
 
                         val latestBO = Results().apply {
                             driverSeasonNumber = data.getInt("number")
@@ -351,11 +350,13 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
                             totalLaps = data.getString("laps")
                             status = data.getString("status")
 
-                            rank = jsonData.getString("rank")
-                            fastestLapOn = jsonData.getString("lap")
-                            fastestLapTime = jsonData.getJSONObject("Time").getString("time")
-                            speedUnit = jsonData.getJSONObject("AverageSpeed").getString("units")
-                            avgSpeed = jsonData.getJSONObject("AverageSpeed").getString("speed")
+                            if(data.has("FastestLap") && !data.isNull("FastestLap")){
+                                rank = data.getJSONObject("FastestLap").getString("rank")
+                                fastestLapOn = data.getJSONObject("FastestLap").getString("lap")
+                                fastestLapTime = data.getJSONObject("FastestLap").getJSONObject("Time").getString("time")
+                                speedUnit = data.getJSONObject("FastestLap").getJSONObject("AverageSpeed").getString("units")
+                                avgSpeed = data.getJSONObject("FastestLap").getJSONObject("AverageSpeed").getString("speed")
+                            }
                         }
                         latestRoundResult.add(latestBO)
 
@@ -377,37 +378,162 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
     }
 
+    //https://ergast.com/api/f1/2019/drivers/hamilton/results.json?limit=600 {to fetch particular driver for specific season results}
+
+    override suspend fun fetchAllCurrentSeasonResult(db: DbHandler) {
+        CoroutineTools.io {
+           val url = "http://ergast.com/api/f1/current/results.json?limit=300"
+            currentAllRaceResult = arrayListOf()
+            requestQueue = Volley.newRequestQueue(context)
+
+            val jsonReq = JsonObjectRequest(Request.Method.GET, url, null,
+                {
+                if(it != null){
+                    try{
+                        val responseJson = it.getJSONObject("MRData")
+                            .getJSONObject("RaceTable")
+                            .getJSONArray("Races")
+
+                        for(i in 0 until responseJson.length()){
+                            val resultsJson = responseJson.getJSONObject(i)
+                            val bo = CurrentSeasonBO()
+
+                            bo.season = resultsJson.getString("season")
+                            bo.round = resultsJson.getString("round")
+                            bo.raceName = resultsJson.getString("raceName")
+                            bo.date = resultsJson.getString("date")
+                            bo.time = resultsJson.getString("time")
+
+                            bo.circuitId = resultsJson.getJSONObject("Circuit").getString("circuitId")
+                            bo.circuitName= resultsJson.getJSONObject("Circuit").getString("circuitName")
+
+                            val raceResults = resultsJson.getJSONArray("Results")
+
+                            for(j in 0 until raceResults.length()){
+                                val values = raceResults.getJSONObject(j)
+                                val newBO = CurrentSeasonBO()
+
+                                newBO.circuitId = bo.circuitId
+                                newBO.circuitName = bo.circuitName
+                                newBO.time = bo.time
+                                newBO.date = bo.date
+                                newBO.season = bo.season
+                                newBO.round = bo.round
+                                newBO.raceName = bo.raceName
+
+                                newBO.driverNumber = values.getString("number")
+                                newBO.driverPosition = values.getString("position")
+                                newBO.points = values.getString("points")
+
+                                newBO.driverId = values.getJSONObject("Driver").getString("driverId")
+                                newBO.driverCode = values.getJSONObject("Driver").getString("code")
+                                newBO.permanentNumber = values.getJSONObject("Driver").getString("permanentNumber")
+
+
+                                newBO.startPosition = values.getString("grid")
+
+                                newBO.laps = values.getString("laps")
+                                newBO.raceStatus = values.getString("status")
+
+
+
+                                if(values.has("FastestLap") && !values.isNull("FastestLap")){
+                                    newBO.driverRaceRank = values.getJSONObject("FastestLap").getString("rank")
+                                    newBO.fastestLapSetOn = values .getJSONObject("FastestLap").getString("lap")
+                                    newBO.fastestLapTime =  values.getJSONObject("FastestLap").getJSONObject("Time").getString("time")
+                                    newBO.fastestSpeedInKPH = values.getJSONObject("FastestLap").getJSONObject("AverageSpeed").getString("speed")
+                                }
+
+                                currentAllRaceResult.clear()
+                                currentAllRaceResult.add(newBO)
+                                insertRecords(currentAllRaceResult, db)
+                            }
+
+                        }
+
+
+                    }catch(ex: Exception){
+                        view!!.hideLoading()
+                        ex.printStackTrace()
+                    }
+                }
+                }, {
+                    Commons().printException(it)
+                })
+
+            requestQueue.add(jsonReq)
+
+        }
+    }
+
+    private fun insertRecords(list: ArrayList<CurrentSeasonBO>, db: DbHandler){
+        db.createDB()
+        db.openDB()
+
+        try{
+            for(data in list) {
+                val sb = StringBuffer()
+                sb.append(stringHandler.getQueryFormat(data.season))
+                sb.append("," + stringHandler.getQueryFormat(data.round))
+                sb.append("," + stringHandler.getQueryFormat(data.raceName))
+                sb.append("," + stringHandler.getQueryFormat(data.date))
+                sb.append("," + stringHandler.getQueryFormat(data.time))
+                sb.append("," + stringHandler.getQueryFormat(data.circuitId))
+                sb.append("," + stringHandler.getQueryFormat(data.circuitName))
+                sb.append("," + stringHandler.getQueryFormat(data.driverNumber))
+                sb.append("," + stringHandler.getQueryFormat(data.driverPosition))
+                sb.append("," + stringHandler.getQueryFormat(data.points))
+                sb.append("," + stringHandler.getQueryFormat(data.driverId))
+                sb.append("," + stringHandler.getQueryFormat(data.driverCode))
+                sb.append("," + stringHandler.getQueryFormat(data.permanentNumber))
+                sb.append("," + stringHandler.getQueryFormat(data.startPosition))
+                sb.append("," + stringHandler.getQueryFormat(data.laps))
+                sb.append("," + stringHandler.getQueryFormat(data.raceStatus))
+                sb.append("," + stringHandler.getQueryFormat(data.driverRaceRank))
+                sb.append("," + stringHandler.getQueryFormat(data.fastestLapSetOn))
+                sb.append("," + stringHandler.getQueryFormat(data.fastestLapTime))
+                sb.append("," + stringHandler.getQueryFormat(data.fastestSpeedInKPH))
+
+                db.insertSQL(tbl_currentAllResults, tbl_currentAllResultsCols, sb.toString())
+            }
+
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+
+    }
+
     override fun checkIfDataIsAvailable(db: DbHandler){
         try{
             db.openDB()
             val c1 = db.selectSql("SELECT * FROM DriverMaster")
             if(c1 != null){
                 while(c1.moveToNext()){
-                    flag = true
+                    isDataExists = true
                 }
             }
             val c2 = db.selectSql("SELECT * FROM ConstructorMaster")
             if(c2 != null){
                 while(c2.moveToNext()){
-                    flag = true
+                    isDataExists = true
                 }
             }
 
             val c3 = db.selectSql("SELECT * FROM RaceScheduleMaster")
             if(c3 != null){
                 while(c3.moveToNext()){
-                    flag = true
+                    isDataExists = true
                 }
             }
 
             val c4 = db.selectSql("SELECT * FROM LatestResultMaster")
             if(c4 != null){
                 while(c4.moveToNext()){
-                    flag =  true
+                    isDataExists =  true
                 }
             }
 
-            if(flag){
+            if(isDataExists){
                 view?.showDialog()
             }else{
                 view?.showAlert()
@@ -489,12 +615,9 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
             )
 
         }
-        db.closeDB()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            view!!.hideLoading()
-            view!!.moveToNextScreen()
-        }
+        doNextSteps()
+        db.closeDB()
     }
 
     fun getRaceDetails(rc: RaceScheduleBO): StringBuffer {
@@ -512,4 +635,13 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
         sb.append("," + stringHandler.getQueryFormat(rc.country))
         return sb
     }
+
+    fun doNextSteps(){
+       CoroutineTools.main {
+           view!!.hideLoading()
+           view!!.moveToNextScreen()
+       }
+    }
+
+    var nextStep : Boolean? = null
 }

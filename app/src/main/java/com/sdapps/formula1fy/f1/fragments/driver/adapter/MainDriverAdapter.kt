@@ -33,6 +33,14 @@ class MainDriverAdapter(private var data: ArrayList<DriverBO>, val view: DriverI
 
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun getItemCount(): Int {
         return data.size
     }
@@ -46,7 +54,7 @@ class MainDriverAdapter(private var data: ArrayList<DriverBO>, val view: DriverI
 
             holder.mainDriverName.text = data[position].driverName
             holder.driverTeamName.text = data[position].constructorName
-            holder.driverTotalPoints.text = StringBuilder().append(data[position].totalPoints.toString()).append(" Pts")
+            holder.driverTotalPoints.text = StringBuilder().append(data[position].totalPoints.toString()).append(" pts")
 
             holder.cardView.setOnClickListener{
                 view.onCardClick(data[position])

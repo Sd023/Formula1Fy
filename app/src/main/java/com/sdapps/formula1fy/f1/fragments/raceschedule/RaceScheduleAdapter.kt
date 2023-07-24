@@ -50,6 +50,13 @@ class RaceScheduleAdapter(private val data: ArrayList<RaceScheduleBO>, private v
         return data.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
