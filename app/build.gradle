@@ -31,10 +31,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(RELEASE_STORE_FILE_PATH)
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
-            storePassword RELEASE_STORE_PASSWORD
+            storeFile file("D:\\test_project\\Android\\key\\sdappsf1.keystore")
+            keyAlias "key0"
+            keyPassword "23022302"
+            storePassword "23022302"
         }
     }
     buildTypes {
