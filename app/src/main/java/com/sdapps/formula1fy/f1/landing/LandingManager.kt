@@ -5,10 +5,7 @@ import com.sdapps.formula1fy.core.dbUtil.DbHandler
 import com.sdapps.formula1fy.core.utils.NetworkTools
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LandingManager(val presenter: LandingPresenter, val dbHandler: DbHandler) {
 
@@ -26,7 +23,7 @@ class LandingManager(val presenter: LandingPresenter, val dbHandler: DbHandler) 
                 presenter.fetchDriverData()
                 presenter.fetchConstructorData()
                 presenter.fetchLatestResults()
-                presenter.fetchRaceData()
+                presenter.fetchRaceScheduleData()
                /* val fetchAllSeasonData = async(Dispatchers.IO){
                     presenter.fetchAllCurrentSeasonResult(dbHandler)
                 }

@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -26,6 +28,9 @@ import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.fragments.driver.DriverInteractor
 import com.sdapps.formula1fy.f1.fragments.home.HomeContractor
 import java.lang.StringBuilder
+import com.github.mikephil.charting.formatter.DefaultValueFormatter
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.utils.ViewPortHandler
 
 
 class BottomModal(val driverBo: DriverBO): BottomSheetDialogFragment(), BottomModalInteractor.View{
@@ -122,15 +127,11 @@ class BottomModal(val driverBo: DriverBO): BottomSheetDialogFragment(), BottomMo
         val teamColor = F1Contants.teamColorMap.getOrDefault(teamColorId,ContextCompat.getColor(context, R.color.card_color))
 
         val dataSet = LineDataSet(dataPoints, "Driver")
-        if(teamColor== null){
-            dataSet.color = Color.RED
-        }else{
-            dataSet.color = ContextCompat.getColor(context,teamColor)
-        }
+
         dataSet.setDrawCircles(true)
         dataSet.setCircleColor(Color.RED)
         dataSet.lineWidth = 3f
-
+        dataSet.color = ContextCompat.getColor(context,teamColor)
         val data : ArrayList<ILineDataSet>  = ArrayList()
         data.add(dataSet)
 
@@ -143,14 +144,15 @@ class BottomModal(val driverBo: DriverBO): BottomSheetDialogFragment(), BottomMo
 
     fun prepareLineChartData(lineData: LineData){
         val sb = StringBuilder()
-        sb.append("Points scored by ").append(" ${driverBo.driverCode} ").append("this season")
+        sb.append("Race Finish position by ").append(" ${driverBo.driverCode} ").append("this season")
         binding!!.lineChartTitle.text  = sb.toString()
         binding!!.lineChart.data = lineData
+        val xAxis: XAxis = binding!!.lineChart.xAxis
         binding!!.lineChart.description.isEnabled = false
         binding!!.lineChart.xAxis.textSize = 12f
         binding!!.lineChart.axisLeft.textSize = 12f
         binding!!.lineChart.xAxis.setDrawGridLines(false)
-        binding!!.lineChart.axisRight.setDrawGridLines(false)
+        binding!!.lineChart.axisRight.isEnabled = false
         binding!!.lineChart.legend.isEnabled = false
         binding!!.lineChart.invalidate()
     }

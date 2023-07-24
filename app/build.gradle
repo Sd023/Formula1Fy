@@ -5,14 +5,9 @@ plugins {
 
 }
 
-def majorVersion = 1
+def majorVersion = 2
 def appVersion = 1
 
-def gitRevision() {
-    def result = "git rev-parse --short=8 HEAD".execute([], project.rootDir).text.trim()
-    if(result==null) throw new RuntimeException("Could not fetch the revision!")
-    return result.toString()
-}
 
 def gitNumber(){
     def result = "git rev-list --count HEAD".execute([],project.rootDir).text.trim()
@@ -24,26 +19,11 @@ android {
     namespace 'com.sdapps.formula1fy'
     compileSdk 33
 
-    def versionPropsFile = file('version.properties')
-    def Properties versionProp = new Properties()
-
-    if(versionPropsFile.canRead()){
-        versionProp.load(new FileInputStream(versionPropsFile))
-    }else {
-        versionProp['VERSION_CODE'] = 0
-        throw new GradleException("Could not read File!")
-    }
-    def code = versionProp['VERSION_CODE'].toInteger() + 1
-
-    versionProp['VERSION_CODE'] = code.toString()
-    versionProp.store(versionPropsFile.newWriter(), null)
-
-
     defaultConfig {
         applicationId "com.sdapps.formula1fy"
         minSdk 22
         targetSdk 33
-        versionCode code
+        versionCode 20
         versionName "${appVersion}.${majorVersion}.${gitNumber()}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -66,13 +46,13 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("boolean", "ACTIVATION", "true")
+            buildConfigField("String", "BASE_URL", "${BASE_ERGAST_API_URL}")
             signingConfig signingConfigs.release
         }
 
         debug {
             debuggable true
-            buildConfigField("boolean", "ACTIVATION", "false")
+            buildConfigField("String", "BASE_URL", "${BASE_ERGAST_API_URL}")
             testCoverageEnabled = true
 
         }
@@ -86,7 +66,7 @@ android {
         variant.outputs.all {
             def versionName = variant.versionName
 
-            outputFileName = "Formula1Fy_${versionName}_${gitRevision()}.apk"
+            outputFileName = "Formula1Fy_${versionName}_${gitNumber()}.apk"
         }
     }
     compileOptions {

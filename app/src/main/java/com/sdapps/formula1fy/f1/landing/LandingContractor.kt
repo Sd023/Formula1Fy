@@ -27,7 +27,7 @@ interface LandingContractor {
         fun insertDriverData(list: ArrayList<DriverBO>)
         fun insertConstructorData(list: ArrayList<ConstructorBO>)
 
-        suspend fun fetchRaceData()
+        suspend fun fetchRaceScheduleData()
         suspend fun fetchConstructorData()
 
         suspend fun fetchLatestResults()
