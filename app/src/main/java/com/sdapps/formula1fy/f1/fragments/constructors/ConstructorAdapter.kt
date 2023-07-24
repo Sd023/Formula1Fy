@@ -60,6 +60,15 @@ class ConstructorAdapter(private val data: ArrayList<ConstructorBO>, val listVal
         return data.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
+
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var driverMainName: TextView

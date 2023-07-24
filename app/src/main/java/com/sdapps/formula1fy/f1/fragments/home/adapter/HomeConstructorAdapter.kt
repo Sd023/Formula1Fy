@@ -58,6 +58,14 @@ class HomeConstructorAdapter(private val data: ArrayList<ConstructorBO>,val list
         return 5
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var constructor_name: TextView

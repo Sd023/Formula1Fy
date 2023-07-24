@@ -31,7 +31,13 @@ class HomeNextRaceListAdapter(private var data: ArrayList<RaceScheduleBO>) :
     override fun getItemCount(): Int {
         return data.size
     }
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
 

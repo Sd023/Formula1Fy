@@ -33,6 +33,14 @@ class MainDriverAdapter(private var data: ArrayList<DriverBO>, val view: DriverI
 
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun getItemCount(): Int {
         return data.size
     }
