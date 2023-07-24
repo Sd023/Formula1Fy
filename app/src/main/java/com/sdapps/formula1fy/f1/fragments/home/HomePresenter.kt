@@ -199,7 +199,7 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
         db.openDB()
         val c1 =
             db.selectSql("SELECT DM.driver_name,CM.constructor_id,CM.constructor_name,CM.constructor_wins,CM.constructor_points," +
-                    "CM.constructor_position,CM.constructor_nationality from ConstructorMaster CM INNER JOIN DriverMaster DM ON CM.constructor_id = DM.driver_constructor ORDER BY CM.constructor_position ASC ")
+                    "CM.constructor_position,CM.constructor_nationality from ConstructorMaster CM INNER JOIN DriverMaster DM ON CM.constructor_id = DM.driver_constructor INNER JOIN LatestResultMaster LRM ON DM.driver_id = LRM.driver_id ORDER BY CM.constructor_position ASC ")
         if (c1 != null) {
             var driverLists = arrayListOf<String>()
             var constructorName = String()
