@@ -46,7 +46,7 @@ class MainDriverAdapter(private var data: ArrayList<DriverBO>, val view: DriverI
 
             holder.mainDriverName.text = data[position].driverName
             holder.driverTeamName.text = data[position].constructorName
-            holder.driverTotalPoints.text = StringBuilder().append(data[position].totalPoints.toString()).append(" Pts")
+            holder.driverTotalPoints.text = StringBuilder().append(data[position].totalPoints.toString()).append(" pts")
 
             holder.cardView.setOnClickListener{
                 view.onCardClick(data[position])

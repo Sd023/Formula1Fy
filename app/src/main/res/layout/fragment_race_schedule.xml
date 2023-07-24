@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    tools:context=".f1.fragments.driver.view.DriverFragment"
-    tools:ignore="ScrollViewCount">
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/screenTitleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
+        tools:context=".f1.fragments.driver.view.DriverFragment"
         >
         <TextView
             android:id="@+id/screenTitle"
@@ -44,5 +40,3 @@
             android:padding="5dp"
             />
     </RelativeLayout>
-
-</ScrollView>

@@ -135,13 +135,17 @@ class BottomModal(val driverBo: DriverBO): BottomSheetDialogFragment(), BottomMo
         data.add(dataSet)
 
         val lineChartData = LineData(data)
+        prepareLineChartData(lineChartData)
 
+
+    }
+
+
+    fun prepareLineChartData(lineData: LineData){
         val sb = StringBuilder()
-
         sb.append("Points scored by ").append(" ${driverBo.driverCode} ").append("this season")
-
         binding!!.lineChartTitle.text  = sb.toString()
-        binding!!.lineChart.data = lineChartData
+        binding!!.lineChart.data = lineData
         binding!!.lineChart.description.isEnabled = false
         binding!!.lineChart.xAxis.textSize = 12f
         binding!!.lineChart.axisLeft.textSize = 12f
@@ -150,5 +154,4 @@ class BottomModal(val driverBo: DriverBO): BottomSheetDialogFragment(), BottomMo
         binding!!.lineChart.legend.isEnabled = false
         binding!!.lineChart.invalidate()
     }
-
 }

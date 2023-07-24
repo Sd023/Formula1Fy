@@ -7,6 +7,10 @@ import com.sdapps.formula1fy.f1.bo.ConstructorBO
 import com.sdapps.formula1fy.f1.bo.DriverBO
 import com.sdapps.formula1fy.f1.bo.LatestResult
 import com.sdapps.formula1fy.f1.bo.RaceScheduleBO
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.sql.Driver
 import java.time.LocalDate
 
@@ -73,7 +77,10 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
         } catch (ex: Exception) {
             Commons().printException(ex)
         }
-        view!!.setNextRaceAdapter(nextRoundList)
+        CoroutineScope(Dispatchers.Main).launch{
+            view!!.setNextRaceAdapter(nextRoundList)
+        }
+
     }
 
     override suspend fun getLatestRound(db: DbHandler) {
@@ -98,7 +105,9 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
                     }
                     latestList.add(resultBo)
                 }
-                view?.setLatestResults(latestList)
+                CoroutineScope(Dispatchers.Main).launch {
+                    view?.setLatestResults(latestList)
+                }
             }
             cursor.close()
             db.closeDB()
@@ -135,8 +144,9 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
 
                     driverList.add(driverBO)
                 }
-
-                view?.setDriverAdapter(driverList)
+                CoroutineScope(Dispatchers.Main).launch {
+                    view?.setDriverAdapter(driverList)
+                }
 
 
             }
@@ -171,7 +181,9 @@ class HomePresenter(val context: Context) : HomeContractor.Presenter {
                     }
                     c.close()
                 }
-                view?.setConstructorAdapter(constructorList)
+                CoroutineScope(Dispatchers.Main).launch {
+                    view?.setConstructorAdapter(constructorList)
+                }
             }catch (ex: Exception){
                 Commons().printException(ex)
             }

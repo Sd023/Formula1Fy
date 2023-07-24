@@ -82,6 +82,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
             val teamBO = ConstructorNewBO(entry.key,entry.value)
             listValues.add(teamBO)
         }
+        binding!!.constructorStandingsLbl.visibility = View.VISIBLE
         binding!!.constructorRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val homeConstructorAdapter = HomeConstructorAdapter(list, listValues)
         binding!!.constructorRecyclerView.isNestedScrollingEnabled = false
@@ -90,6 +91,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
     }
 
     override fun setDriverAdapter(list: ArrayList<DriverBO>) {
+        binding!!.driverStandingsLbl.visibility = View.VISIBLE
         binding!!.driverRecyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val adapter = HomeDriverAdapter(list)
@@ -100,6 +102,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
 
     override fun setNextRaceAdapter(list: ArrayList<RaceScheduleBO>) {
         if(list!=null){
+            binding!!.nextRaceLbl.visibility = View.VISIBLE
             binding!!.nextRaceCard.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             val adapter = HomeNextRaceListAdapter(list)
@@ -110,6 +113,7 @@ class HomeFragment : Fragment(), HomeContractor.View {
     }
 
     override fun setLatestResults(list: MutableList<LatestResult>) {
+        binding!!.latestResultLbl.visibility = View.VISIBLE
         binding!!.latestResultView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val adapter = HomeLatestResultAdapter(list)

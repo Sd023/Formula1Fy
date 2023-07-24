@@ -16,6 +16,7 @@
             android:text="@string/home_latest_results"
             android:fontFamily="@font/regular"
             android:textColor="@color/black"
+            android:visibility="gone"
             android:textSize="16sp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp" />
@@ -35,6 +36,7 @@
             android:layout_height="wrap_content"
             android:text="@string/home_next_race"
             android:layout_below="@+id/latestResultView"
+            android:visibility="gone"
             android:textSize="16sp"
             android:fontFamily="@font/regular"
             android:textColor="@color/black"
@@ -59,6 +61,7 @@
             android:textColor="@color/black"
             android:id="@+id/driverStandingsLbl"
             android:layout_below="@+id/nextRaceCard"
+            android:visibility="gone"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"/>
 
@@ -78,6 +81,7 @@
             android:layout_below="@+id/driverRecyclerView"
             android:fontFamily="@font/regular"
             android:textColor="@color/black"
+            android:visibility="gone"
             android:textSize="16sp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"/>

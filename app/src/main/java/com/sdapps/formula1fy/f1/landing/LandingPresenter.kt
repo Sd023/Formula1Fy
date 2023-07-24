@@ -339,7 +339,6 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
                     for(i in 0 until latestRaceJson.length()){
                         val data = latestRaceJson.getJSONObject(i)
-                        val jsonData = data.getJSONObject("FastestLap")
 
                         val latestBO = Results().apply {
                             driverSeasonNumber = data.getInt("number")
@@ -351,11 +350,13 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
                             totalLaps = data.getString("laps")
                             status = data.getString("status")
 
-                            rank = jsonData.getString("rank")
-                            fastestLapOn = jsonData.getString("lap")
-                            fastestLapTime = jsonData.getJSONObject("Time").getString("time")
-                            speedUnit = jsonData.getJSONObject("AverageSpeed").getString("units")
-                            avgSpeed = jsonData.getJSONObject("AverageSpeed").getString("speed")
+                            if(data.has("FastestLap") && !data.isNull("FastestLap")){
+                                rank = data.getJSONObject("FastestLap").getString("rank")
+                                fastestLapOn = data.getJSONObject("FastestLap").getString("lap")
+                                fastestLapTime = data.getJSONObject("FastestLap").getJSONObject("Time").getString("time")
+                                speedUnit = data.getJSONObject("FastestLap").getJSONObject("AverageSpeed").getString("units")
+                                avgSpeed = data.getJSONObject("FastestLap").getJSONObject("AverageSpeed").getString("speed")
+                            }
                         }
                         latestRoundResult.add(latestBO)
 
