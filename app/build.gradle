@@ -31,15 +31,10 @@ android {
 
     signingConfigs {
         release {
-            def StorePassword = "23012301"
-            def password = "23012301"
-            def alias = "key0"
-            def keyStorePath = "/Users/sd046/Desktop/Formula1Fy/app/sdapps_formula1fy.keystore"
-
-            storeFile file("${keyStorePath}")
-            keyAlias "${alias}"
-            keyPassword "${password}"
-            storePassword "${StorePassword}"
+            storeFile file("D:\\test_project\\Android\\key\\sdappsf1.keystore")
+            keyAlias "key0"
+            keyPassword "23022302"
+            storePassword "23022302"
         }
     }
     buildTypes {
