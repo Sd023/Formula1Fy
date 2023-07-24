@@ -1,7 +1,18 @@
 package com.sdapps.formula1fy.core.models
 
+import com.sdapps.formula1fy.BuildConfig
+
 object DataMembers {
     const val DB_NAME: String = "sd_f1.sqlite"
+
+
+    var SERVER_URL :String = BuildConfig.BASE_URL
+
+    var DRIVER_API : String = "/f1/current/driverStandings.json"
+    var RACE_SCHEDULE : String = "/f1/current.json"
+    var CONSTRUCTOR_API : String = "/f1/current/constructorStandings.json"
+    var LATEST_API : String = "/f1/current/last/results.json"
+    var TOTAL_SEASON : String = "/f1/current/results.json?limit=300"
 
     const val tbl_driverMaster: String = "DriverMaster"
     const val tbl_constructorMaster: String = "ConstructorMaster"

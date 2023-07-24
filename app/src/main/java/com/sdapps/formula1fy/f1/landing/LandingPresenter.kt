@@ -69,7 +69,7 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
         db = DbHandler(context.applicationContext, DataMembers.DB_NAME)
         requestQueue = Volley.newRequestQueue(context)
 
-        val url = "http://ergast.com/api/f1/current/driverStandings.json"
+        val url = DataMembers.SERVER_URL + DataMembers.DRIVER_API
         val driverList = ArrayList<DriverBO>()
 
         val jsonReq = JsonObjectRequest(
@@ -207,11 +207,11 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
         }
     }
 
-    override suspend fun fetchRaceData() {
+    override suspend fun fetchRaceScheduleData() {
 
         try {
             db = DbHandler(context, DataMembers.DB_NAME)
-            val url = "http://ergast.com/api/f1/current.json"
+            val url = DataMembers.SERVER_URL + DataMembers.RACE_SCHEDULE
             requestQueue = Volley.newRequestQueue(context)
 
             val raceList = ArrayList<RaceScheduleBO>()
@@ -268,7 +268,7 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
     override suspend fun fetchConstructorData() {
         db = DbHandler(context, DataMembers.DB_NAME)
-        val url = "http://ergast.com/api/f1/current/constructorStandings.json"
+        val url = DataMembers.SERVER_URL + DataMembers.CONSTRUCTOR_API
         requestQueue = Volley.newRequestQueue(context)
 
         val constructorList = ArrayList<ConstructorBO>()
@@ -323,7 +323,7 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
     override suspend fun fetchLatestResults() {
         db = DbHandler(context, DataMembers.DB_NAME)
-        val url = "http://ergast.com/api/f1/current/last/results.json"
+        val url = DataMembers.SERVER_URL + DataMembers.LATEST_API
         requestQueue = Volley.newRequestQueue(context)
         latestRoundResult = mutableListOf()
 
@@ -382,7 +382,7 @@ class LandingPresenter(val appContext: Context) : LandingContractor.Presenter {
 
     override suspend fun fetchAllCurrentSeasonResult(db: DbHandler) {
         CoroutineTools.io {
-           val url = "http://ergast.com/api/f1/current/results.json?limit=300"
+           val url = DataMembers.SERVER_URL + DataMembers.TOTAL_SEASON
             currentAllRaceResult = arrayListOf()
             requestQueue = Volley.newRequestQueue(context)
 
