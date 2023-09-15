@@ -30,19 +30,13 @@ android {
     }
 
     signingConfigs {
-        release {
-            storeFile file("D:\\test_project\\Android\\key\\sdappsf1.keystore")
-            keyAlias "key0"
-            keyPassword "23022302"
-            storePassword "23022302"
-        }
+
     }
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BASE_URL", "${BASE_ERGAST_API_URL}")
-            signingConfig signingConfigs.release
         }
 
         debug {
